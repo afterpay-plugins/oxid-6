@@ -1,0 +1,31 @@
+{
+  "outcome": "Accepted",
+  "customer": {
+    "firstName": "FIRSTNAME",
+    "lastName": "LASTNAME",
+    "addressList": [
+      {
+        "street": "Street",
+        "streetNumber": "1",
+        "postalCode": "12345",
+        "postalPlace": "FARSTA",
+        "countryCode": "DE"
+      }
+    ]
+  },
+  "deliveryCustomer": {
+    "firstName": "FIRSTNAME",
+    "lastName": "LASTNAME",
+    "addressList": [
+      {
+        "street": "Street",
+        "streetNumber": "1",
+        "postalCode": "12345",
+        "postalPlace": "FARSTA",
+        "countryCode": "DE"
+      }
+    ]
+  },
+  "reservationId": "reservationId12345",
+  "checkoutId": "checkoutId12345"
+}

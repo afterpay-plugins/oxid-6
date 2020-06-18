@@ -1,0 +1,8 @@
+# Autodetect text files and force the use of LF line endings
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.bz2 binary
+*.ttf binary
+*.exe binary

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<OX>
+    <OXMENU id="NAVIGATION_ESHOPADMIN">
+        <MAINMENU id="mxorders">
+            <SUBMENU id="mxdisplayorders" cl="admin_order" list="order_list">
+                <TAB id="arvato_afterpay_controllers_admin_order_afterpay"
+                     cl="orderafterpay"/>
+            </SUBMENU>
+        </MAINMENU>
+    </OXMENU>
+</OX>

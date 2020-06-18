@@ -1,0 +1,8 @@
+[
+  {
+    "type": "BusinessError",
+    "code": "400.117",
+    "message": "Some ErrorMessage",
+    "actionCode": "Unavailable"
+  }
+]
