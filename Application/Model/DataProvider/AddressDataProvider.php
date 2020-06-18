@@ -30,7 +30,7 @@ class AddressDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
      */
     public function getUserAddress(\OxidEsales\Eshop\Application\Model\User $user)
     {
-        $dataObject = oxNew(\AfterpayModule\Application\Model\Entity\AddressEntity::class);
+        $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AddressEntity::class);
         $dataObject->setCountryCode($this->getCountryCode($user->oxuser__oxcountryid->value));
         $dataObject->setPostalCode($user->oxuser__oxzip->value);
         $dataObject->setStreet($user->oxuser__oxstreet->value);
