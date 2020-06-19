@@ -71,16 +71,16 @@ class OrderController extends OrderController_parent
         $smarty->assign('afterpayInstallmentProfileId', $selectedInstallmentPlanProfileIdInSession);
 
         // ... and available installment plans...
-        $aAvailableInstallmentPlans = $this->getAvailableInstallmentPlans();
-        $smarty->assign('aAvailableAfterpayInstallmentPlans', $aAvailableInstallmentPlans);
+        $availableInstallmentPlans = $this->getAvailableInstallmentPlans();
+        $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... make sure we redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected ...
-        $this->redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected($aAvailableInstallmentPlans);
+        $this->redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected($availableInstallmentPlans);
 
         // Ok, here we either have not selected an installment plan, or there are installment plans available.
-        if ($aAvailableInstallmentPlans) {
+        if ($availableInstallmentPlans) {
             $this->smartyAssignAvailableInstallmentPlans(
-                $aAvailableInstallmentPlans,
+                $availableInstallmentPlans,
                 $selectedInstallmentPlanProfileIdInSession
             );
         }
@@ -100,19 +100,19 @@ class OrderController extends OrderController_parent
         }
 
         $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-        $oAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-        $aAvailableInstallmentPlans = $oAvailableInstallmentPlans->getAvailableInstallmentPlans();
+        $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
+        $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
 
-        if (is_array($aAvailableInstallmentPlans) && count($aAvailableInstallmentPlans)) {
-            foreach ($aAvailableInstallmentPlans  as &$plan) {
+        if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
+            foreach ($availableInstallmentPlans  as &$plan) {
                 unset($plan->effectiveAnnualPercentageRate);
             }
 
             // Make Array keys equal profile Id
             $availableInstallmentPlansWithProfileIdAsKey = [];
 
-            foreach ($aAvailableInstallmentPlans as &$plan) {
+            foreach ($availableInstallmentPlans as &$plan) {
                 $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
             }
 
@@ -155,25 +155,25 @@ class OrderController extends OrderController_parent
     /**
      * redirect To Payment If No Installment Plan Available Although Selected
      *
-     * @param $aAvailableInstallmentPlans
+     * @param $availableInstallmentPlans
      */
-    protected function redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected($aAvailableInstallmentPlans)
+    protected function redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected($availableInstallmentPlans)
     {
 
         $isInstallmentPlanSelected = 'afterpayinstallment' == $this->getSession()->getVariable('paymentid');
 
-        if ($isInstallmentPlanSelected && (!is_array($aAvailableInstallmentPlans) || !count($aAvailableInstallmentPlans))) {
+        if ($isInstallmentPlanSelected && (!is_array($availableInstallmentPlans) || !count($availableInstallmentPlans))) {
             // redirecting to payment step on error ..
             $this->redirectToPayment();
         }
     }
 
     /**
-     * @param $aAvailableInstallmentPlans
+     * @param $availableInstallmentPlans
      * @param $selectedInstallmentPlanProfileIdInSession
      */
     public function smartyAssignAvailableInstallmentPlans(
-        $aAvailableInstallmentPlans,
+        $availableInstallmentPlans,
         $selectedInstallmentPlanProfileIdInSession
     ) {
 
@@ -184,11 +184,11 @@ class OrderController extends OrderController_parent
         $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
 
         // ... and the URL to the legal documents, based upon current plan choice ...
-        $selectedInstallmentPlan = isset($aAvailableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession])
+        $selectedInstallmentPlan = isset($availableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession])
             ?
-            $aAvailableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession]
+            $availableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession]
             :
-            reset( $aAvailableInstallmentPlans);
+            reset( $availableInstallmentPlans);
 
         $smarty->assign('afterpayReadMoreLink', $selectedInstallmentPlan->readMore);
 

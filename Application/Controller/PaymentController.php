@@ -43,8 +43,8 @@ class PaymentController extends PaymentController_parent
         $smarty = Registry::getUtilsView()->getSmarty();
 
         // Gather available installment plans...
-        $aAvailableInstallmentPlans = $this->getAvailableInstallmentPlans();
-        $smarty->assign('aAvailableAfterpayInstallmentPlans', $aAvailableInstallmentPlans);
+        $availableInstallmentPlans = $this->getAvailableInstallmentPlans();
+        $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... their formatting ...
         $aAvailableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
@@ -144,18 +144,18 @@ class PaymentController extends PaymentController_parent
         }
 
         $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-        $oAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-        $aAvailableInstallmentPlans  = $oAvailableInstallmentPlans->getAvailableInstallmentPlans();
+        $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
+        $availableInstallmentPlans  = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
-        if (is_array($aAvailableInstallmentPlans) && count($aAvailableInstallmentPlans)) {
-            foreach ($aAvailableInstallmentPlans as &$plan) {
+        if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
+            foreach ($availableInstallmentPlans as &$plan) {
                 unset($plan->effectiveAnnualPercentageRate);
             }
 
             // Make Array keys equal profile Id
             $availableInstallmentPlansWithProfileIdAsKey = [];
 
-            foreach ($aAvailableInstallmentPlans as &$plan) {
+            foreach ($availableInstallmentPlans as &$plan) {
                 $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
             }
 
