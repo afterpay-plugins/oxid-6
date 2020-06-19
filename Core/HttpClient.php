@@ -10,12 +10,15 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Core\Exception\CurlException;
+use stdClass;
 
 /**
  * Class HttpClient: Client for the afterpay webservice.

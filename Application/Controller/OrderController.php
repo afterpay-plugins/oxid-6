@@ -1,23 +1,26 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Controller;
 
+use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Request;
 
 /**
  * Class OrderController : Extends order controller with AfterPay service call.
@@ -36,7 +39,7 @@ class OrderController extends OrderController_parent
      * Send this code as result of paymentGateway::getLastErrorNo()
      * to redirect User to address page
      */
-    public const ARVATO_ORDER_STATE_CHECKADDRESS = 41470; // Completely random code
+    const ARVATO_ORDER_STATE_CHECKADDRESS = 41470; // Completely random code
 
     /**
      * @var string[] Error messages from the AfterPay service.
@@ -61,15 +64,15 @@ class OrderController extends OrderController_parent
      */
     public function renderSelectedInstallmentPlan()
     {
-        $oSmarty = Registry::getUtilsView()->getSmarty();
+        $smarty = Registry::getUtilsView()->getSmarty();
 
         // Gather and update currently selected installment plan profile id ...
         $selectedInstallmentPlanProfileIdInSession = $this->updateSelectedInstallmentPlanProfileIdInSession(true);
-        $oSmarty->assign('afterpayInstallmentProfileId', $selectedInstallmentPlanProfileIdInSession);
+        $smarty->assign('afterpayInstallmentProfileId', $selectedInstallmentPlanProfileIdInSession);
 
         // ... and available installment plans...
         $aAvailableInstallmentPlans = $this->getAvailableInstallmentPlans();
-        $oSmarty->assign('aAvailableAfterpayInstallmentPlans', $aAvailableInstallmentPlans);
+        $smarty->assign('aAvailableAfterpayInstallmentPlans', $aAvailableInstallmentPlans);
 
         // ... make sure we redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected ...
         $this->redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected($aAvailableInstallmentPlans);
@@ -89,19 +92,20 @@ class OrderController extends OrderController_parent
     public function getAvailableInstallmentPlans()
     {
 
-        $dAmount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
+        $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
 
-        if (!$dAmount) {
+        if (!$amount) {
             // Session lost.
             return false;
         }
 
         $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-        $oAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($dAmount);
+        $oAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
         $aAvailableInstallmentPlans = $oAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
+
         if (is_array($aAvailableInstallmentPlans) && count($aAvailableInstallmentPlans)) {
-            foreach ($aAvailableInstallmentPlans as &$plan) {
+            foreach ($aAvailableInstallmentPlans  as &$plan) {
                 unset($plan->effectiveAnnualPercentageRate);
             }
 
@@ -122,28 +126,28 @@ class OrderController extends OrderController_parent
      * Update InstallmentPlan Id in session, based upon resquest param.
      * If Session-Stored Profiole ID would be empty, enforce "1".
      *
-     * @param bool $bReturnNewProfileId false for frontend form call, set true for in-code-Usage
+     * @param bool $returnNewProfileId false for frontend form call, set true for in-code-Usage
      *
      * @return int afterpayInstallmentProfileId
      */
-    public function updateSelectedInstallmentPlanProfileIdInSession($bReturnNewProfileId = false)
+    public function updateSelectedInstallmentPlanProfileIdInSession($returnNewProfileId = false)
     {
-        $aDynValue = $this->getSession()->getVariable('dynvalue');
+        $dynValue = $this->getSession()->getVariable('dynvalue');
 
         if ($newInstallmentId = $this->getRequestParameter('afterpayInstallmentProfileId')) {
             // Set to request value
-            $aDynValue['afterpayInstallmentProfileId'] = $newInstallmentId;
+            $dynValue['afterpayInstallmentProfileId'] = $newInstallmentId;
         }
 
-        if (!$aDynValue['afterpayInstallmentProfileId']) {
+        if (!$dynValue['afterpayInstallmentProfileId']) {
             // If empty, set to 1
-            $aDynValue['afterpayInstallmentProfileId'] = 1;
+            $dynValue['afterpayInstallmentProfileId'] = 1;
         }
 
-        $this->getSession()->setVariable('dynvalue', $aDynValue);
+        $this->getSession()->setVariable('dynvalue', $dynValue);
 
-        if ($bReturnNewProfileId) {
-            return $aDynValue['afterpayInstallmentProfileId'];
+        if ($returnNewProfileId) {
+            return $dynValue['afterpayInstallmentProfileId'];
         }
         return null;
     }
@@ -156,9 +160,9 @@ class OrderController extends OrderController_parent
     protected function redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected($aAvailableInstallmentPlans)
     {
 
-        $bIsInstallmentPlanSelected = 'afterpayinstallment' == $this->getSession()->getVariable('paymentid');
+        $isInstallmentPlanSelected = 'afterpayinstallment' == $this->getSession()->getVariable('paymentid');
 
-        if ($bIsInstallmentPlanSelected && (!is_array($aAvailableInstallmentPlans) || !count($aAvailableInstallmentPlans))) {
+        if ($isInstallmentPlanSelected && (!is_array($aAvailableInstallmentPlans) || !count($aAvailableInstallmentPlans))) {
             // redirecting to payment step on error ..
             $this->redirectToPayment();
         }
@@ -173,52 +177,52 @@ class OrderController extends OrderController_parent
         $selectedInstallmentPlanProfileIdInSession
     ) {
 
-        $oSmarty = Registry::getUtilsView()->getSmarty();
+        $smarty = Registry::getUtilsView()->getSmarty();
 
         // Assign installment plan formatting ...
         $aAvailableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
-        $oSmarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
+        $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
 
         // ... and the URL to the legal documents, based upon current plan choice ...
-        $oSelectedInstallmentPlan = isset($aAvailableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession])
+        $selectedInstallmentPlan = isset($aAvailableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession])
             ?
             $aAvailableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession]
             :
-            reset($aAvailableInstallmentPlans);
+            reset( $aAvailableInstallmentPlans);
 
-        $oSmarty->assign('afterpayReadMoreLink', $oSelectedInstallmentPlan->readMore);
+        $smarty->assign('afterpayReadMoreLink', $selectedInstallmentPlan->readMore);
 
         // ... and price info for interests ...
-        $oSmarty->assign('afterpayTotalInterestAmount', $oSelectedInstallmentPlan->totalInterestAmount);
-        $oSmarty->assign('afterpayNewGrandTotal', $oSelectedInstallmentPlan->totalAmount);
+        $smarty->assign('afterpayTotalInterestAmount', $selectedInstallmentPlan->totalInterestAmount);
+        $smarty->assign('afterpayNewGrandTotal', $selectedInstallmentPlan->totalAmount);
 
         // ... and whether we need to show SECCI
-        $bSecciPriceMet = 200 <= $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
-        $bSecciAnnualRateMet = 0 < $oSelectedInstallmentPlan->effectiveInterestRate;
-        $bShowSecci = $bSecciPriceMet && $bSecciAnnualRateMet;
+        $secciPriceMet = 200 <= $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
+        $secciAnnualRateMet = 0 < $selectedInstallmentPlan->effectiveInterestRate;
+        $showSecci = $secciPriceMet && $secciAnnualRateMet;
 
-        $oSmarty->assign('afterpayShowSecci', $bShowSecci);
+        $smarty->assign('afterpayShowSecci', $showSecci);
     }
 
     /**
      * self::ARVATO_ORDER_STATE_CHECKADDRESS makes user check his address
      *
-     * @param int $iSuccess status code
+     * @param int $success status code
      *
      * @return  string  $sNextStep  partial parameter url for next step
      * @phpcs:disable
      */
-    protected function _getNextStep($iSuccess)
+    protected function _getNextStep($success)
     {
-        if ($iSuccess === self::ARVATO_ORDER_STATE_CHECKADDRESS) {
+        if ($success === self::ARVATO_ORDER_STATE_CHECKADDRESS) {
             return 'user?wecorrectedyouraddress=1';
-        } elseif (is_string($iSuccess) && 10 < strlen($iSuccess)) {
-            $oxSession = Registry::getSession();
-            $oxSession->setVariable('arvatoAfterpayCustomerFacingMessage', $iSuccess);
+        } elseif (is_string($success) && 10 < strlen($success)) {
+            $session = Registry::getSession();
+            $session->setVariable('arvatoAfterpayCustomerFacingMessage', $success);
             return 'user?cfm=1';
         }
 
-        return parent::_getNextStep($iSuccess);
+        return parent::_getNextStep($success);
     }
 
     /**
@@ -229,11 +233,11 @@ class OrderController extends OrderController_parent
      */
     public function _validateTermsAndConditions()
     {
-        $oConfig = Registry::getConfig();
-        $sPaymentId = $this->getSession()->getVariable('paymentid');
-        $bIsAfterpay = (false !== strpos($sPaymentId, 'afterpay'));
+        $config = Registry::getConfig();
+        $paymentId = $this->getSession()->getVariable('paymentid');
+        $isAfterpay = (false !== strpos($paymentId, 'afterpay'));
 
-        if ($bIsAfterpay && !$oConfig->getRequestParameter('ord_afterpay_agb')) {
+        if ($isAfterpay && !$config->getRequestParameter('ord_afterpay_agb')) {
             return false;
         }
 
@@ -264,12 +268,13 @@ class OrderController extends OrderController_parent
     }
 
     /**
+     * @param $paramName
      * @return mixed
      * @codeCoverageIgnore Deliberately untested, since mocked
      */
-    protected function getRequestParameter($sParamName)
+    protected function getRequestParameter($paramName)
     {
-        return Registry::getConfig()->getRequestParameter($sParamName);
+        return Registry::get(Request::class)->getRequestEscapedParameter($paramName);
     }
 
     /**

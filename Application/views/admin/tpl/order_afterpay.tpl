@@ -127,7 +127,7 @@
         <form name="myedit" action="[{$oViewConf->getSelfLink()}]" method="get">
             [{$oViewConf->getHiddenSid()}]
             <input type="hidden" name="cl" value="orderafterpay">
-            <input type="hidden" name="fnc" value="captureshipping">
+            <input type="hidden" name="fnc" value="captureShipping">
             <input type="hidden" name="oxid" value="[{$oxid}]">
             *Track Code:<input type="text" name="oxtrackcode" value=""><br>
             *Track Company:<input type="text" name="shippingcompany" value="[{$oView->getDefaultShippingCompany()}]"><br>

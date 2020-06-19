@@ -1,22 +1,24 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 
+use Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity;
+use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Core\Registry;
 
 /**
@@ -51,21 +53,21 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
         /////////////////////////
         // Handle Dyn Values
 
-        $aDynValues = Registry::getSession()->getVariable('dynvalue');
+        $dynValues = Registry::getSession()->getVariable('dynvalue');
 
-        $aPaymentIdMapping = [
+        $paymentIdMapping = [
             'afterpayinstallment' => 'Installments',
             'afterpayinvoice'     => 'Invoice',
             'afterpaydebitnote'   => 'Debit'
         ];
 
-        $sPaymentId = $aPaymentIdMapping[Registry::getSession()->getVariable('paymentid')];
+        $paymentId = $paymentIdMapping[Registry::getSession()->getVariable('paymentid')];
 
         // Phone
 
         ($phone = $user->oxuser__oxmobfon->value) || ($phone = $user->oxuser__oxfon->value) || ($phone = $user->oxuser__oxprivfon->value);
-        if (isset($aDynValues['apfon'][$sPaymentId])) {
-            $phone = $aDynValues['apfon'][$sPaymentId];
+        if (isset($dynValues['apfon'][$paymentId])) {
+            $phone = $dynValues['apfon'][$paymentId];
         }
         $dataObject->setPhone($phone);
 
@@ -73,18 +75,18 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
         $birthdate = $user->oxuser__oxbirthdate->value;
 
-        if (isset($aDynValues['apbirthday'][$sPaymentId])) {
-            $birthdate = $aDynValues['apbirthday'][$sPaymentId];
+        if (isset($dynValues['apbirthday'][$paymentId])) {
+            $birthdate = $dynValues['apbirthday'][$paymentId];
 
             // Target: yyyy-mm-dd
 
-            $aBirthdateEN = explode('-', $birthdate); //mm-dd-yyyy
-            $aBirthdateDE = explode('.', $birthdate); //dd.mm.yyyy
+            $birthdateEN = explode('-', $birthdate); //mm-dd-yyyy
+            $birthdateDE = explode('.', $birthdate); //dd.mm.yyyy
 
-            if ($aBirthdateEN && is_array($aBirthdateEN) && 3 == count($aBirthdateEN)) {
-                $birthdate = $aBirthdateEN[2] . '-' . $aBirthdateEN[0] . '-' . $aBirthdateEN[1];
-            } elseif ($aBirthdateDE && is_array($aBirthdateDE) && 3 == count($aBirthdateDE)) {
-                $birthdate = $aBirthdateDE[2] . '-' . $aBirthdateDE[1] . '-' . $aBirthdateDE[0];
+            if ($birthdateEN && is_array($birthdateEN) && 3 == count($birthdateEN)) {
+                $birthdate = $birthdateEN[2] . '-' . $birthdateEN[0] . '-' . $birthdateEN[1];
+            } elseif ($aBirthdateDE && is_array($birthdateDE) && 3 == count($birthdateDE)) {
+                $birthdate = $birthdateDE[2] . '-' . $birthdateDE[1] . '-' . $birthdateDE[0];
             }
         }
 
@@ -94,8 +96,8 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
         // SSN
 
-        if (isset($aDynValues['apssn'][$sPaymentId])) {
-            $ssn = $aDynValues['apssn'][$sPaymentId];
+        if (isset($dynValues['apssn'][$paymentId])) {
+            $ssn = $dynValues['apssn'][$paymentId];
             $dataObject->setIdentificationNumber($ssn);
         }
 
@@ -121,7 +123,7 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
      */
     public function getDeliveryCustomer(\OxidEsales\Eshop\Application\Model\User $user, $language)
     {
-        /** @var oxAddress $address */
+        /** @var Address $address */
         $address = $user->getSelectedAddress();
 
         if (!empty($address)) {

@@ -1,21 +1,25 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
+
+use Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity;
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\BasketItem;
 
 /**
  * Class AvailableInstallmentPlansDataProvider
@@ -29,7 +33,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
     /**
      * Returns AfterPay order items from a given OXID basket.
      *
-     * @param oxBasket $basket
+     * @param Basket $basket
      *
      * @return OrderItemEntity[]
      */
@@ -64,8 +68,8 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
             $orderItem->setVatAmount($basket->getDeliveryCost()->getVatValue());
 
             // Set group ID if any item has a group id.
-            foreach ($list as $oArticle) {
-                if ($oArticle->hasGroupId() && $oArticle->getGroupId() !== null) {
+            foreach ($list as $article) {
+                if ($article->hasGroupId() && $article->getGroupId() !== null) {
                     $orderItem->setGroupId('0');
                     break;
                 }
@@ -90,8 +94,8 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
             $orderItem->setVatAmount($grossVaucher - $netVaucher);
 
             // Set group ID if any item has a group id.
-            foreach ($list as $oArticle) {
-                if ($oArticle->hasGroupId() && $oArticle->getGroupId() !== null) {
+            foreach ($list as $article) {
+                if ($article->hasGroupId() && $article->getGroupId() !== null) {
                     $orderItem->setGroupId('0');
                     break;
                 }
@@ -101,24 +105,24 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         }
 
         // Add discounts
-        $fGrossDiscount = abs($basket->getBruttoSum()) - abs($basket->getDiscountedProductsBruttoPrice()) - abs($grossVaucher);
+        $grossDiscount = abs($basket->getBruttoSum()) - abs($basket->getDiscountedProductsBruttoPrice()) - abs($grossVaucher);
 
-        if ($fGrossDiscount) {
-            $fGrossDiscount = 0 - abs(round($fGrossDiscount, 2));
-            $fNetDiscount = round($fGrossDiscount * ($sumNetto / $sumBrutto), 2);
+        if ($grossDiscount) {
+            $grossDiscount = 0 - abs(round($grossDiscount, 2));
+            $netDiscount = round($grossDiscount * ($sumNetto / $sumBrutto), 2);
 
             $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
             $orderItem->setProductId('Discount');
             $orderItem->setDescription('Discount');
             $orderItem->setQuantity(1);
-            $orderItem->setGrossUnitPrice($fGrossDiscount);
-            $orderItem->setNetUnitPrice($fNetDiscount);
-            $orderItem->setVatPercent(round(100 * (($fGrossDiscount / $fNetDiscount) - 1)));
-            $orderItem->setVatAmount($fGrossDiscount - $fNetDiscount);
+            $orderItem->setGrossUnitPrice($grossDiscount);
+            $orderItem->setNetUnitPrice($netDiscount);
+            $orderItem->setVatPercent(round(100 * (($grossDiscount / $netDiscount) - 1)));
+            $orderItem->setVatAmount($grossDiscount - $netDiscount);
 
             // Set group ID if any item has a group id.
-            foreach ($list as $oArticle) {
-                if ($oArticle->hasGroupId() && $oArticle->getGroupId() !== null) {
+            foreach ($list as $article) {
+                if ($article->hasGroupId() && $article->getGroupId() !== null) {
                     $orderItem->setGroupId('0');
                     break;
                 }
@@ -133,7 +137,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
     /**
      * Transforms a basket item into an AfterPay order item.
      *
-     * @param oxBasketItem $item
+     * @param BasketItem $item
      *
      * @return OrderItemEntity
      */
@@ -161,7 +165,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
     /**
      * Returns the description of an basket item as title and select values.
      *
-     * @param oxBasketItem $item
+     * @param BasketItem $item
      *
      * @return string
      */

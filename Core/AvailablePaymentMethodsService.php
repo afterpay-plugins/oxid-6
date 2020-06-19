@@ -10,12 +10,16 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Session;
+use stdClass;
 
 /**
  * Class AvailablePaymentMethodsService
@@ -31,8 +35,8 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Standard constructor.
      *
-     * @param oxSession $session
-     * @param oxLang $lang
+     * @param Session $session
+     * @param Language $lang
      */
     public function __construct(\OxidEsales\Eshop\Core\Session $session, \OxidEsales\Eshop\Core\Language $lang, \OxidEsales\Eshop\Application\Model\Order $oOrder)
     {
@@ -82,12 +86,12 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
     }
 
     /**
-     * @param $iProfileId
-     * @param bool $bRequireDirectDebit
+     * @param $profileId
+     * @param bool $requireDirectDebit
      *
      * @return bool
      */
-    public function isSpecificInstallmentAvailable($iProfileId, $bRequireDirectDebit = true)
+    public function isSpecificInstallmentAvailable($profileId, $requireDirectDebit = true)
     {
 
         $aPaymentMethods = $this->getAvailablePaymentMethods();
@@ -101,12 +105,12 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
                 $stdClassMethod->type == 'Installment' &&
                 isset($stdClassMethod->installment) &&
                 isset($stdClassMethod->installment->installmentProfileNumber) &&
-                (!$bRequireDirectDebit || $stdClassMethod->directDebit->available)
+                (!$requireDirectDebit || $stdClassMethod->directDebit->available)
             ) {
                 $this->_mappingInstallmentPfofileId2NumberOfInstallments[$stdClassMethod->installment->installmentProfileNumber]
                     = $stdClassMethod->installment->numberOfInstallments;
 
-                if ($iProfileId == $stdClassMethod->installment->installmentProfileNumber) {
+                if ($profileId == $stdClassMethod->installment->installmentProfileNumber) {
                     return true;
                 }
             }
@@ -153,18 +157,18 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Returns the number of installments (used for createContract) by profileId
      *
-     * @param $iProfileId
+     * @param $profileId
      *
      * @return null|int
      */
-    public function getNumberOfInstallmentsByProfileId($iProfileId)
+    public function getNumberOfInstallmentsByProfileId($profileId)
     {
 
         if (!$this->_mappingInstallmentPfofileId2NumberOfInstallments) {
             $this->isSpecificInstallmentAvailable(1);
         }
-        if (isset($this->_mappingInstallmentPfofileId2NumberOfInstallments[$iProfileId])) {
-            return $this->_mappingInstallmentPfofileId2NumberOfInstallments[$iProfileId];
+        if (isset($this->_mappingInstallmentPfofileId2NumberOfInstallments[$profileId])) {
+            return $this->_mappingInstallmentPfofileId2NumberOfInstallments[$profileId];
         }
         return null;
     }
@@ -178,14 +182,14 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
             return parent::getLastErrorNo();
         }
 
-        $aErrors = $this->_entity->getErrors();
+        $errors = $this->_entity->getErrors();
 
-        if (is_array($aErrors)) {
-            $aErrors = reset($aErrors);
-            if (is_array($aErrors)) {
-                $oError = reset($aErrors);
-                if (isset($oError->actionCode)) {
-                    if ('AskConsumerToReEnterData' == $oError->actionCode || 'AskConsumerToConfirm' == $oError->actionCode) {
+        if (is_array($errors)) {
+            $errors = reset($errors);
+            if (is_array($errors)) {
+                $error = reset($errors);
+                if (isset($error->actionCode)) {
+                    if ('AskConsumerToReEnterData' == $error->actionCode || 'AskConsumerToConfirm' == $error->actionCode) {
                         $this->_iLastErrorNo = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class)->getOrderStateCheckAddressConstant();
                     }
                 }

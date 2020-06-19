@@ -10,12 +10,16 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Application\Model\Entity\RefundResponseEntity;
+use Arvato\AfterpayModule\Core\Exception\CurlException;
+use OxidEsales\Eshop\Application\Model\Order;
 
 /**
  * Class CaptureShippingService: Service for capturing a shipping.
@@ -26,52 +30,52 @@ class RefundService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Standard constructor.
      *
-     * @param Order $oxOrder
+     * @param Order $order
      *
      * @internal param oxSession $session
      * @internal param oxLang $lang
      */
-    public function __construct(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_oxOrder = $oxOrder;
-        $this->_afterpayOrder = $oxOrder->getAfterpayOrder();
+        $this->_oxOrder = $order;
+        $this->_afterpayOrder = $order->getAfterpayOrder();
     }
 
     /**
      * Performs the refund call.
      *
      * @param $vatSplittedRefunds
-     * @param $sRecordedApiKey
-     * @param array|null $aOrderItems
-     * @param string $sCaptureNo Omit to use last recorded Capture No.
+     * @param $recordedApiKey
+     * @param array|null $orderItems
+     * @param string $captureNo Omit to use last recorded Capture No.
      *
      * @return RefundResponseEntity
      * @throws CurlException
      */
-    public function refund($vatSplittedRefunds, $sRecordedApiKey, array $aOrderItems = null, $sCaptureNo = null)
+    public function refund($vatSplittedRefunds, $recordedApiKey, array $orderItems = null, $captureNo = null)
     {
 
-        if ($vatSplittedRefunds && $aOrderItems) {
-            throw new \Arvato\AfterpayModule\Core\Exception\CurlException('Provide either $vatSplittedRefunds or $aOrderItems, not both');
+        if ($vatSplittedRefunds && $orderItems) {
+            throw new \Arvato\AfterpayModule\Core\Exception\CurlException('Provide either $vatSplittedRefunds or $orderItems, not both');
         }
 
-        if (!$vatSplittedRefunds && !$aOrderItems) {
+        if (!$vatSplittedRefunds && !$orderItems) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('vatSplittedRefunds and aOrderItems were empty');
         }
 
         if ($vatSplittedRefunds) {
             $response = $this->executeRequestFromVatSplittedRefundFields(
                 $this->_oxOrder->oxorder__oxordernr->value,
-                $sCaptureNo ?: $this->_afterpayOrder->getCaptureNo(),
+                $captureNo ?: $this->_afterpayOrder->getCaptureNo(),
                 $vatSplittedRefunds,
-                $sRecordedApiKey
+                $recordedApiKey
             );
         } else {
             $response = $this->executeRequestFromOrderItems(
                 $this->_oxOrder->oxorder__oxordernr->value,
-                $sCaptureNo ?: $this->_afterpayOrder->getCaptureNo(),
-                $aOrderItems,
-                $sRecordedApiKey
+                $captureNo ?: $this->_afterpayOrder->getCaptureNo(),
+                $orderItems,
+                $recordedApiKey
             );
         }
 
@@ -81,34 +85,34 @@ class RefundService extends \Arvato\AfterpayModule\Core\Service
     }
 
     /**
-     * @param string $sOrderNr
-     * @param string $sLastCaptureId
+     * @param string $orderNr
+     * @param string $lastCaptureId
      * @param array $vatSplittedRefunds
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
      * @return mixed
      * @codeCoverageIgnore Untested, since it contains only mockled-away oxNew-Calls.
      */
     protected function executeRequestFromVatSplittedRefundFields(
-        $sOrderNr,
-        $sLastCaptureId,
+        $orderNr,
+        $lastCaptureId,
         $vatSplittedRefunds,
-        $sRecordedApiKey
+        $recordedApiKey
     ) {
         $data = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)->getRefundDataFromVatSplittedRefunds(
-            $sLastCaptureId,
+            $lastCaptureId,
             $vatSplittedRefunds
         )->exportData();
-        $client = oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getRefundClient($sOrderNr, $sRecordedApiKey);
+        $client = oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getRefundClient($orderNr, $recordedApiKey);
         return $client->execute($data);
     }
 
     /**
-     * @param string $sOrderNr
-     * @param string $sLastCaptureId
-     * @param $aOrderItems
-     * @param $sRecordedApiKey
+     * @param string $orderNr
+     * @param string $lastCaptureId
+     * @param $orderItems
+     * @param $recordedApiKey
      *
      * @return mixed
      * @internal param array $vatSplittedRefunds
@@ -116,16 +120,16 @@ class RefundService extends \Arvato\AfterpayModule\Core\Service
      * @codeCoverageIgnore Untested, since it contains only mockled-away oxNew-Calls.
      */
     protected function executeRequestFromOrderItems(
-        $sOrderNr,
-        $sLastCaptureId,
-        $aOrderItems,
-        $sRecordedApiKey
+        $orderNr,
+        $lastCaptureId,
+        $orderItems,
+        $recordedApiKey
     ) {
         $data = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)->getRefundDataFromOrderItems(
-            $sLastCaptureId,
-            $aOrderItems
+            $lastCaptureId,
+            $orderItems
         )->exportData();
-        $client = oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getRefundClient($sOrderNr, $sRecordedApiKey);
+        $client = oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getRefundClient($orderNr, $recordedApiKey);
         return $client->execute($data);
     }
 }

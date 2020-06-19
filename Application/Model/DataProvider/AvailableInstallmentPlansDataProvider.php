@@ -1,21 +1,23 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
+
+use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansEntity;
 
 /**
  * Class AvailableInstallmentPlansDataProvider
@@ -26,14 +28,14 @@ namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 class AvailableInstallmentPlansDataProvider extends \Arvato\AfterpayModule\Application\Model\DataProvider\DataProvider
 {
     /**
-     * @param double $dAmount
+     * @param double $amount
      *
      * @return AvailableInstallmentPlansEntity
      */
-    public function getDataObject($dAmount)
+    public function getDataObject($amount)
     {
         $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansEntity::class);
-        $dataObject->setAmount($dAmount);
+        $dataObject->setAmount($amount);
         return $dataObject;
     }
 }

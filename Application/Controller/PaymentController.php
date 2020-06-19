@@ -1,23 +1,26 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Controller;
 
+use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Request;
 
 /**
  * Class PaymentController : Extends payment controller with AfterPay validation call.
@@ -28,7 +31,7 @@ use OxidEsales\Eshop\Core\Registry;
 class PaymentController extends PaymentController_parent
 {
 
-    public const ARVATO_ORDER_STATE_SELECTINSTALLMENT = -13337;
+    const ARVATO_ORDER_STATE_SELECTINSTALLMENT = -13337;
 
     /**
      * @var string[] Error messages from the AfterPay service.
@@ -37,19 +40,19 @@ class PaymentController extends PaymentController_parent
 
     public function render()
     {
-        $oSmarty = Registry::getUtilsView()->getSmarty();
+        $smarty = Registry::getUtilsView()->getSmarty();
 
         // Gather available installment plans...
         $aAvailableInstallmentPlans = $this->getAvailableInstallmentPlans();
-        $oSmarty->assign('aAvailableAfterpayInstallmentPlans', $aAvailableInstallmentPlans);
+        $smarty->assign('aAvailableAfterpayInstallmentPlans', $aAvailableInstallmentPlans);
 
         // ... their formatting ...
         $aAvailableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
-        $oSmarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
+        $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
 
         // ... and currently selected installment plan (if there is a selected one)
         $selectedInstallmentPlanProfileIdInSession = $this->updateSelectedInstallmentPlanProfileIdInSession();
-        $oSmarty->assign('afterpayInstallmentProfileId', $selectedInstallmentPlanProfileIdInSession);
+        $smarty->assign('afterpayInstallmentProfileId', $selectedInstallmentPlanProfileIdInSession);
 
         // Assign required fields
         $this->assignRequiredDynValue();
@@ -70,30 +73,30 @@ class PaymentController extends PaymentController_parent
             return null;
         }
 
-        $oSmarty = Registry::getUtilsView()->getSmarty();
-        $aRequirements = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $requirements = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
 
         // SSN
 
         $oxcmp_user = $this->getUser();
-        $bAlreadyHaveBirthdate = false !== strpos($oxcmp_user->oxuser__oxbirthdate->value, '19');
-        $bAlreadyHavePhone = $oxcmp_user->oxuser__oxfon->value || $oxcmp_user->oxuser__oxmob->value || $oxcmp_user->oxuser__oxprivfon->value;
+        $alreadyHaveBirthdate = false !== strpos($oxcmp_user->oxuser__oxbirthdate->value, '19');
+        $alreadyHavePhone = $oxcmp_user->oxuser__oxfon->value || $oxcmp_user->oxuser__oxmob->value || $oxcmp_user->oxuser__oxprivfon->value;
 
-        foreach (array_keys($aRequirements) as $sPayment) {
-            $aRequirements[$sPayment]['SSN'] =
+        foreach (array_keys($requirements) as $sPayment) {
+            $requirements[$sPayment]['SSN'] =
                 Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresSSN');
 
-            $aRequirements[$sPayment]['Birthdate'] =
-                (!$bAlreadyHaveBirthdate && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresBirthdate'));
+            $requirements[$sPayment]['Birthdate'] =
+                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresBirthdate'));
 
-            $aRequirements[$sPayment]['Fon'] =
-                (!$bAlreadyHavePhone && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresBirthdate'));
+            $requirements[$sPayment]['Fon'] =
+                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresBirthdate'));
         }
 
-        $oSmarty->assign('aAfterpayRequiredFields', $aRequirements);
+        $smarty->assign('aAfterpayRequiredFields', $requirements);
 
         // Return value solely for unit testing
-        return $aRequirements;
+        return $requirements;
     }
 
     /**
@@ -107,24 +110,24 @@ class PaymentController extends PaymentController_parent
     {
         $parentReturn = $this->parentValidatePayment();
 
-        $sPaymentId = $this->getRequestOrSessionParameter('paymentid');
-        $aDynvalue = $this->getRequestOrSessionParameter('dynvalue');
+        $paymentId = $this->getRequestOrSessionParameter('paymentid');
+        $dynValue = $this->getRequestOrSessionParameter('dynvalue');
 
-        $iError = 0;
+        $error = 0;
 
-        if ($sPaymentId == "afterpaydebitnote") {
-            $iError = $this->validateDebitNote($aDynvalue);
+        if ($paymentId == "afterpaydebitnote") {
+            $error = $this->validateDebitNote($dynValue);
         }
 
-        if ($sPaymentId == "afterpayinstallment") {
-            $this->validateAndSaveSelectedInstallmentPforileId($aDynvalue);
-            $iError = $this->validateInstallment($aDynvalue);
+        if ($paymentId == "afterpayinstallment") {
+            $this->validateAndSaveSelectedInstallmentPforileId($dynValue);
+            $error = $this->validateInstallment($dynValue);
         }
 
-        $this->_sPaymentError = $iError;
+        $this->_sPaymentError = $error;
 
         // Everything null on error, return parent::return if everything is ok.
-        return $iError ? null : $parentReturn;
+        return $error ? null : $parentReturn;
     }
 
     /**
@@ -133,16 +136,16 @@ class PaymentController extends PaymentController_parent
     public function getAvailableInstallmentPlans()
     {
 
-        $dAmount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
+        $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
 
-        if (!$dAmount) {
+        if (!$amount) {
             // Session lost.
             return false;
         }
 
         $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-        $oAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($dAmount);
-        $aAvailableInstallmentPlans = $oAvailableInstallmentPlans->getAvailableInstallmentPlans();
+        $oAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
+        $aAvailableInstallmentPlans  = $oAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
         if (is_array($aAvailableInstallmentPlans) && count($aAvailableInstallmentPlans)) {
             foreach ($aAvailableInstallmentPlans as &$plan) {
@@ -169,24 +172,24 @@ class PaymentController extends PaymentController_parent
      */
     public function updateSelectedInstallmentPlanProfileIdInSession()
     {
-        $OrderController = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class);
-        return $OrderController->updateSelectedInstallmentPlanProfileIdInSession(true);
+        $orderController = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class);
+        return $orderController->updateSelectedInstallmentPlanProfileIdInSession(true);
     }
 
     /**
      * Validates Debit note for required parameters
      *
-     * @param $aDynvalue
+     * @param $dynValue
      *
      * @return int Error
      */
-    protected function validateDebitNote($aDynvalue)
+    protected function validateDebitNote($dynValue)
     {
         if (
-            !isset($aDynvalue['apdebitbankaccount'])
-            || !isset($aDynvalue['apdebitbankcode'])
-            || !$aDynvalue['apdebitbankaccount']
-            || !$aDynvalue['apdebitbankcode']
+            !isset($dynValue['apdebitbankaccount'])
+            || !isset($dynValue['apdebitbankcode'])
+            || !$dynValue['apdebitbankaccount']
+            || !$dynValue['apdebitbankcode']
         ) {
             return 1; //Complete fields correctly
         }
@@ -196,17 +199,17 @@ class PaymentController extends PaymentController_parent
     /**
      * Validates Installment for required parameters
      *
-     * @param $aDynvalue
+     * @param $dynValue
      *
      * @return int Error
      */
-    protected function validateInstallment($aDynvalue)
+    protected function validateInstallment($dynValue)
     {
         if (
-            !isset($aDynvalue['apinstallmentbankaccount'])
-            || !isset($aDynvalue['apinstallmentbankcode'])
-            || !$aDynvalue['apinstallmentbankaccount']
-            || !$aDynvalue['apinstallmentbankcode']
+            !isset($dynValue['apinstallmentbankaccount'])
+            || !isset($dynValue['apinstallmentbankcode'])
+            || !$dynValue['apinstallmentbankaccount']
+            || !$dynValue['apinstallmentbankcode']
         ) {
             return 1; //Complete fields correctly
         }
@@ -214,16 +217,16 @@ class PaymentController extends PaymentController_parent
     }
 
     /**
-     * @param $aDynvalue
+     * @param $dynValue
      *
      * @return int
      */
-    protected function validateAndSaveSelectedInstallmentPforileId($aDynvalue)
+    protected function validateAndSaveSelectedInstallmentPforileId($dynValue)
     {
-        if (isset($aDynvalue['afterpayInstallmentProfileId']) && $aDynvalue['afterpayInstallmentProfileId']) {
+        if (isset($dynValue['afterpayInstallmentProfileId']) && $dynValue['afterpayInstallmentProfileId']) {
             $this->getSession()->setVariable(
                 'arvatoAfterpayInstallmentProfileId',
-                $aDynvalue['afterpayInstallmentProfileId']
+                $dynValue['afterpayInstallmentProfileId']
             );
             return 0;
         }
@@ -275,11 +278,12 @@ class PaymentController extends PaymentController_parent
 
     /**
      * @codeCoverageIgnore Deliberately untested, since mocked
+     * @param $paramName
      * @return mixed
      */
-    protected function getRequestOrSessionParameter($sParamName)
+    protected function getRequestOrSessionParameter($paramName)
     {
-        $requestReturn = Registry::getConfig()->getRequestParameter($sParamName);
-        return $requestReturn ?: $this->getSession()->getVariable($sParamName);
+        $requestReturn = Registry::get(Request::class)->getRequestEscapedParameter($paramName);
+        return $requestReturn ?: $this->getSession()->getVariable($paramName);
     }
 }

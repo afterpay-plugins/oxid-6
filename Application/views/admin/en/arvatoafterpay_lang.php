@@ -1,8 +1,8 @@
 <?php
 
-$sLangName = 'English';
+$langName = 'English';
 
-$aLang = [
+$lang = [
     'charset' => 'UTF-8',
 
     'ORDER_OVERVIEW_APBIRTHDAY' => 'Birthdate',

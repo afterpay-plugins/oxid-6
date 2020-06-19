@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
@@ -42,10 +42,10 @@ class Article extends Article_parent
         }
 
         // Any Category
-        $oCatTmp = oxNew(\OxidEsales\Eshop\Application\Model\Category::class);
+        $catTmp = oxNew(\OxidEsales\Eshop\Application\Model\Category::class);
         foreach ($this->getCategoryIds() as $sID) {
-            if ($oCatTmp->load($sID) && $oCatTmp->oxcategories__aapproductgroup->value) {
-                return $oCatTmp->oxcategories__aapproductgroup->value;
+            if ($catTmp->load($sID) && $catTmp->oxcategories__aapproductgroup->value) {
+                return $catTmp->oxcategories__aapproductgroup->value;
             }
         }
         return null;

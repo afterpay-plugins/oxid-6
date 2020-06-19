@@ -10,8 +10,8 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
@@ -30,13 +30,13 @@ class Events
     public static function onActivate()
     {
         $db = DatabaseProvider::getDb();
-        $Logging = oxNew(\Arvato\AfterpayModule\Core\Logging::class);
+        $logging = oxNew(\Arvato\AfterpayModule\Core\Logging::class);
 
         foreach (self::getSQLs() as $sql) {
             try {
                 $db->execute($sql);
             } catch (\Exception $e) {
-                 $Logging->logInstallation('SQL-ERROR ON ACTIVATE: ' . $e->getMessage());
+                 $logging->logInstallation('SQL-ERROR ON ACTIVATE: ' . $e->getMessage());
             }
         }
 
@@ -81,7 +81,7 @@ class Events
                 try {
                     $db->execute($sql);
                 } catch (\Exception $e) {
-                     $Logging->logInstallation('SQL-ERROR ON ACTIVATE: ' . $e->getMessage());
+                     $logging->logInstallation('SQL-ERROR ON ACTIVATE: ' . $e->getMessage());
                 }
             }
         }

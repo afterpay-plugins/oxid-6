@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
@@ -25,18 +25,18 @@ class ResponseMessageEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Constants for type property.
      */
-    public const TYPE_BUSINESS_ERROR = 'BusinessError';
-    public const TYPE_TECHNICAL_ERROR = 'TechnicalError';
-    public const TYPE_NOTIFICATION_MESSAGE = 'NotificationMessage';
+    const TYPE_BUSINESS_ERROR = 'BusinessError';
+    const TYPE_TECHNICAL_ERROR = 'TechnicalError';
+    const TYPE_NOTIFICATION_MESSAGE = 'NotificationMessage';
 
     /**
      * Constants for action code property.
      */
-    public const ACTION_CODE_UNAVAILABLE = 'Unavailable';
-    public const ACTION_CODE_ASK_CONSUMER_TO_CONFIRM = 'AskConsumerToConfirm';
-    public const ACTION_CODE_ASK_CONSUMER_TO_REENTER_DATA = 'AskConsumerToReEnterData';
-    public const ACTION_CODE_OFFER_SECURE_PAYMENT_METHODS = 'OfferSecurePaymentMethods';
-    public const ACTION_CODE_REQUIRES_SSN = 'RequiresSsn';
+    const ACTION_CODE_UNAVAILABLE = 'Unavailable';
+    const ACTION_CODE_ASK_CONSUMER_TO_CONFIRM = 'AskConsumerToConfirm';
+    const ACTION_CODE_ASK_CONSUMER_TO_REENTER_DATA = 'AskConsumerToReEnterData';
+    const ACTION_CODE_OFFER_SECURE_PAYMENT_METHODS = 'OfferSecurePaymentMethods';
+    const ACTION_CODE_REQUIRES_SSN = 'RequiresSsn';
 
     /**
      * Getter for type property.

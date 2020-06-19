@@ -10,12 +10,18 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Application\Model\DataProvider\AuthorizePaymentDataProvider;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Session;
+use stdClass;
 
 /**
  * Class AuthorizePaymentService: Service for external autorization of payments with AfterPay.
@@ -26,8 +32,8 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Standard constructor.
      *
-     * @param oxSession $session
-     * @param oxLang $lang
+     * @param Session $session
+     * @param Language $lang
      */
     public function __construct(\OxidEsales\Eshop\Core\Session $session, \OxidEsales\Eshop\Core\Language $lang)
     {
@@ -63,7 +69,7 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
 
     /**
      *
-     * @param oxOrder $oOrder
+     * @param Order $oOrder
      *
      * @return stdClass|stdClass[]
      */
@@ -95,28 +101,28 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
             return;
         }
 
-        $oUser = $this->_session->getUser();
+        $user = $this->_session->getUser();
 
-        if (!$oUser) {
+        if (!$user) {
             // Session lost or UnitTest
             return;
         }
 
         if (!$bIsDeliveryAddress) {
-            isset($stdClassAddress->street) && $oUser->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field($stdClassAddress->street);
-            isset($stdClassAddress->streetNumber) && $oUser->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field($stdClassAddress->streetNumber);
-            isset($stdClassAddress->postalCode) && $oUser->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalCode);
-            isset($stdClassAddress->postalPlace) && $oUser->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalPlace);
-            isset($stdClassAddress->countryCode) && $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field(oxNew(\OxidEsales\Eshop\Application\Model\Country::class)->getIdByCode($stdClassAddress->countryCode));
-            $oUser->save();
+            isset($stdClassAddress->street) && $user->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field($stdClassAddress->street);
+            isset($stdClassAddress->streetNumber) && $user->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field($stdClassAddress->streetNumber);
+            isset($stdClassAddress->postalCode) && $user->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalCode);
+            isset($stdClassAddress->postalPlace) && $user->oxuser__oxcity = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalPlace);
+            isset($stdClassAddress->countryCode) && $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field(oxNew(\OxidEsales\Eshop\Application\Model\Country::class)->getIdByCode($stdClassAddress->countryCode));
+            $user->save();
         } else {
-            $oxAddress = $oUser->getSelectedAddress();
-            isset($stdClassAddress->street) && $oxAddress->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field($stdClassAddress->street);
-            isset($stdClassAddress->streetNumber) && $oxAddress->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field($stdClassAddress->streetNumber);
-            isset($stdClassAddress->postalCode) && $oxAddress->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalCode);
-            isset($stdClassAddress->postalPlace) && $oxAddress->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalPlace);
-            isset($stdClassAddress->countryCode) && $oxAddress->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field(oxNew(\OxidEsales\Eshop\Application\Model\Country::class)->getIdByCode($stdClassAddress->countryCode));
-            $oxAddress->save();
+            $address = $user->getSelectedAddress();
+            isset($stdClassAddress->street) && $address->oxaddress__oxstreet = new \OxidEsales\Eshop\Core\Field($stdClassAddress->street);
+            isset($stdClassAddress->streetNumber) && $address->oxaddress__oxstreetnr = new \OxidEsales\Eshop\Core\Field($stdClassAddress->streetNumber);
+            isset($stdClassAddress->postalCode) && $address->oxaddress__oxzip = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalCode);
+            isset($stdClassAddress->postalPlace) && $address->oxaddress__oxcity = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalPlace);
+            isset($stdClassAddress->countryCode) && $address->oxaddress__oxcountryid = new \OxidEsales\Eshop\Core\Field(oxNew(\OxidEsales\Eshop\Application\Model\Country::class)->getIdByCode($stdClassAddress->countryCode));
+            $address->save();
         }
 
         $this->_iLastErrorNo = oxNew(\OxidEsales\Eshop\Application\Controller\OrderController::class)->getOrderStateCheckAddressConstant();

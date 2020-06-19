@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
@@ -56,25 +56,25 @@ class Order extends Order_parent
         $session = Registry::getSession();
         $session->setVariable('OrderControllerId', 'resetIn' . __FILE__ . __LINE__);
 
-        $sIdent = $this->_getCounterIdent();
+        $ident = $this->_getCounterIdent();
 
-        $oDb = DatabaseProvider::getDb();
-        $oDb->startTransaction();
+        $db = DatabaseProvider::getDb();
+        $db->startTransaction();
 
-        $sQ = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = " . $oDb->quote($sIdent) . " FOR UPDATE";
+        $q = "SELECT `oxcount` FROM `oxcounters` WHERE `oxident` = " . $db->quote($ident) . " FOR UPDATE";
 
-        $iCnt = $oDb->getOne($sQ, false, false);
+        $cnt = $db->getOne($q, false);
 
-        if (!(int)$iCnt || (int)$this->oxorder__oxordernr->value !== (int)$iCnt) {
+        if (!(int)$cnt || (int)$this->oxorder__oxordernr->value !== (int)$cnt) {
             // Meanwhile there was another order
             return;
         }
 
-        $iCnt = ((int)$iCnt) - 1;
-        $sQ = "UPDATE `oxcounters` SET `oxcount` = ? WHERE `oxident` = ?";
-        $oDb->execute($sQ, [$iCnt, $sIdent]);
+        $cnt = ((int)$cnt) - 1;
+        $q = "UPDATE `oxcounters` SET `oxcount` = ? WHERE `oxident` = ?";
+        $db->execute($q, [$cnt, $ident]);
 
-        $oDb->commitTransaction();
+        $db->commitTransaction();
     }
 
     /**

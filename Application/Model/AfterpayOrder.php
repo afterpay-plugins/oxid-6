@@ -1,21 +1,23 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
+
+use OxidEsales\Eshop\Core\Session;
 
 /**
  * Class AfterpayOrder
@@ -27,10 +29,10 @@ namespace Arvato\AfterpayModule\Application\Model;
  */
 class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
 {
-    public const AFTERPAYSTATUS_AUTHORIZED = 'authorized';
-    public const AFTERPAYSTATUS_AUTHORIZATIONVOIDED = 'authorizationvoided';
-    public const AFTERPAYSTATUS_CAPTURED = 'captured';
-    public const AFTERPAYSTATUS_REFUNDED = 'refunded';
+    const AFTERPAYSTATUS_AUTHORIZED = 'authorized';
+    const AFTERPAYSTATUS_AUTHORIZATIONVOIDED = 'authorizationvoided';
+    const AFTERPAYSTATUS_CAPTURED = 'captured';
+    const AFTERPAYSTATUS_REFUNDED = 'refunded';
 
     /**
      * @var string Name of current class
@@ -43,19 +45,19 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
     protected $_sCoreTable = 'arvatoafterpayafterpayorder';
 
     /**
-     * @var oxOrder The oxorder to bind this class to. (1:1 similar to orartextends)
+     * @var Order The oxorder to bind this class to. (1:1 similar to orartextends)
      */
     protected $_sOxOrder = null;
 
     /**
      * Class constructor
      *
-     * @param oxOrder The oxorder to bind this class to. (1:1 similar to orartextends)
+     * @param Order The oxorder to bind this class to. (1:1 similar to orartextends)
      */
-    public function __construct(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_sOxOrder = $oxOrder;
-        $this->setId($oxOrder->getId());
+        $this->_sOxOrder = $order;
+        $this->setId($order->getId());
         parent::__construct();
         $this->init();
         return;
@@ -65,7 +67,7 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
      * Fill this order-bound entity by data out of the session
      * since the order is not yet available during finalizeOrder()
      *
-     * @param oxSession $session
+     * @param Session $session
      */
     public function fillBySession(\OxidEsales\Eshop\Core\Session $session)
     {
@@ -141,7 +143,7 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
     }
 
     /**
-     * @return oxOrder
+     * @return Order
      * @codeCoverageIgnore
      */
     public function getOxOrder()

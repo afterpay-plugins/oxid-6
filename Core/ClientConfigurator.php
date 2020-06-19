@@ -10,13 +10,14 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
 
+use Arvato\AfterpayModule\Core\Exception\CurlException;
 use OxidEsales\Eshop\Core\Registry;
 
 /**
@@ -27,11 +28,11 @@ class ClientConfigurator
     /**
      * Saves used API key to session, ensuring that subsequent calls will be made to the same API key.
      * It also enables saving of API key into AfterpayOrder table for backend usage
-     * @param $bIsInstallmentApi
+     * @param $isInstallmentApi
      */
-    public function saveApiKeyToSession($bIsInstallmentApi)
+    public function saveApiKeyToSession($isInstallmentApi)
     {
-        list($url, $key) = $this->getApiCredentials($bIsInstallmentApi);
+        list($url, $key) = $this->getApiCredentials($isInstallmentApi);
 
         if (!isAdmin()) {
             Registry::getSession()->setVariable('arvatoAfterpayApiKey', $key);
@@ -55,58 +56,58 @@ class ClientConfigurator
     /**
      * Returns a configured webservice client for the capture webservice.
      *
-     * @param $sOrderNr
+     * @param $orderNr
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @throws CurlException
-     * @internal param $bIsInstallmentApi
-     * @internal param $sRecordedApiKey
+     * @internal param $isInstallmentApi
+     * @internal param $recordedApiKey
      *
      */
-    public function getCaptureClient($sOrderNr, $sRecordedApiKey)
+    public function getCaptureClient($orderNr, $recordedApiKey)
     {
-        if (!$sOrderNr) {
+        if (!$orderNr) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('sOrderNr was empty');
         }
 
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_CAPTURE,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_CAPTURE,
-            [$sOrderNr],
+            [$orderNr],
             null,
-            $sRecordedApiKey
+            $recordedApiKey
         );
     }
 
     /**
      * Returns a configured webservice client for the void webservice.
      *
-     * @param $sOrderNr
+     * @param $orderNr
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @throws CurlException
-     * @internal param $bIsInstallmentApi
-     * @internal param $sRecordedApiKey
+     * @internal param $isInstallmentApi
+     * @internal param $recordedApiKey
      *
      * @codeCoverageIgnore Live API connection - Mocked away in tests
      *
      */
-    public function getVoidClient($sOrderNr, $sRecordedApiKey)
+    public function getVoidClient($orderNr, $recordedApiKey)
     {
-        if (!$sOrderNr) {
+        if (!$orderNr) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('sOrderNr was empty');
         }
 
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_VOID,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_VOID,
-            [$sOrderNr],
+            [$orderNr],
             null,
-            $sRecordedApiKey
+            $recordedApiKey
         );
     }
 
@@ -114,8 +115,8 @@ class ClientConfigurator
      * Returns a configured webservice client for the GetOrder webservice.
      * @url https://developer.afterpay.io/api/method/ordermanagement/getorder
      *
-     * @param $sOrderNr
-     * @param $sRecordedApiKey
+     * @param $orderNr
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @throws CurlException
@@ -123,43 +124,43 @@ class ClientConfigurator
      * @codeCoverageIgnore Live API connection - Mocked away in tests
      *
      */
-    public function getOrderDetailsClient($sOrderNr, $sRecordedApiKey)
+    public function getOrderDetailsClient($orderNr, $recordedApiKey)
     {
-        if (!$sOrderNr) {
+        if (!$orderNr) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('sOrderNr was empty');
         }
-        if (!$sRecordedApiKey) {
-            throw new \Arvato\AfterpayModule\Core\Exception\CurlException('$sRecordedApiKey was empty');
+        if (!$recordedApiKey) {
+            throw new \Arvato\AfterpayModule\Core\Exception\CurlException('$recordedApiKey was empty');
         }
 
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_ORDERDETAILS,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_ORDERDETAILS,
-            [$sOrderNr],
+            [$orderNr],
             null,
-            $sRecordedApiKey
+            $recordedApiKey
         );
     }
 
     /**
      * Returns a configured webservice client for the capture shipping webservice.
      *
-     * @param $sOrderNr
+     * @param $orderNr
      * @param $lastCaptureId
      *
-     * @param $bIsInstallmentApi
-     * @param $sRecordedApiKey
+     * @param $isInstallmentApi
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @throws CurlException
      */
     public function getCaptureShippingClient(
-        $sOrderNr,
+        $orderNr,
         $lastCaptureId,
-        $bIsInstallmentApi = false,
-        $sRecordedApiKey = ''
+        $isInstallmentApi = false,
+        $recordedApiKey = ''
     ) {
-        if (!$sOrderNr) {
+        if (!$orderNr) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('sOrderNr was empty');
         }
         if (!$lastCaptureId) {
@@ -169,88 +170,88 @@ class ClientConfigurator
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_CAPTURESHIPPING,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_CAPTURESHIPPING,
-            [$sOrderNr, $lastCaptureId],
-            $bIsInstallmentApi,
-            $sRecordedApiKey
+            [$orderNr, $lastCaptureId],
+            $isInstallmentApi,
+            $recordedApiKey
         );
     }
 
     /**
      * Returns a configured webservice client
      *
-     * @param bool $bIsInstallmentApi
-     * @param string $sRecordedApiKey
+     * @param bool $isInstallmentApi
+     * @param string $recordedApiKey
      *
      * @return WebServiceClient
      */
     public function getValidateBankAccountClient(
-        $bIsInstallmentApi = false,
-        $sRecordedApiKey = ''
+        $isInstallmentApi = false,
+        $recordedApiKey = ''
     ) {
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_VALIDATEBANKACCOUNT,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_VALIDATEBANKACCOUNT,
             null,
-            $bIsInstallmentApi,
-            $sRecordedApiKey
+            $isInstallmentApi,
+            $recordedApiKey
         );
     }
 
     /**
-     * @param string $sOrderNr
-     * @param $sRecordedApiKey
+     * @param string $orderNr
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @throws CurlException
      */
-    public function getRefundClient($sOrderNr, $sRecordedApiKey = '')
+    public function getRefundClient($orderNr, $recordedApiKey = '')
     {
-        if (!$sOrderNr) {
+        if (!$orderNr) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('sOrderNr was empty');
         }
 
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_REFUND,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_REFUND,
-            [$sOrderNr],
+            [$orderNr],
             null,
-            $sRecordedApiKey
+            $recordedApiKey
         );
     }
 
     /**
-     * @param $bIsInstallmentApi
-     * @param $sRecordedApiKey
+     * @param $isInstallmentApi
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      */
-    public function getAvailablePaymentMethodsClient($bIsInstallmentApi = false, $sRecordedApiKey = '')
+    public function getAvailablePaymentMethodsClient($isInstallmentApi = false, $recordedApiKey = '')
     {
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_AVAILABLEPAYMENTMETHODS,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_AVAILABLEPAYMENTMETHODS,
             null,
-            $bIsInstallmentApi,
-            $sRecordedApiKey
+            $isInstallmentApi,
+            $recordedApiKey
         );
     }
 
     /**
      * @param $checkoutId
      *
-     * @param $bIsInstallmentApi
-     * @param $sRecordedApiKey
+     * @param $isInstallmentApi
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      */
-    public function getCreateContractClient($checkoutId, $bIsInstallmentApi = false, $sRecordedApiKey = '')
+    public function getCreateContractClient($checkoutId, $isInstallmentApi = false, $recordedApiKey = '')
     {
         return $this->getBaseClient(
             \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_CREATECONTRACT,
             \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_CREATECONTRACT,
             [$checkoutId],
-            $bIsInstallmentApi,
-            $sRecordedApiKey
+            $isInstallmentApi,
+            $recordedApiKey
         );
     }
 
@@ -273,8 +274,8 @@ class ClientConfigurator
      * @param string $httpmethod POST or GET
      * @param string $function
      * @param array $sprintfArgs non-assoc array of arguments to be unpacked for sprintf, e.g. order-id for capture
-     * @param bool $bIsInstallmentApi IsInstallmentApi
-     * @param string $sRecordedApiKey RecorderdApiKey
+     * @param bool $isInstallmentApi IsInstallmentApi
+     * @param string $recordedApiKey RecorderdApiKey
      *
      * @return WebServiceClient
      * @throws CurlException
@@ -283,8 +284,8 @@ class ClientConfigurator
         $httpmethod,
         $function,
         $sprintfArgs = null,
-        $bIsInstallmentApi = false,
-        $sRecordedApiKey = ''
+        $isInstallmentApi = false,
+        $recordedApiKey = ''
     ) {
         if (!$httpmethod) {
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('httpmethod was empty');
@@ -293,7 +294,7 @@ class ClientConfigurator
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('function was empty');
         }
 
-        list($url, $key) = $this->getApiCredentials($bIsInstallmentApi, $sRecordedApiKey);
+        list($url, $key) = $this->getApiCredentials($isInstallmentApi, $recordedApiKey);
 
         $client = oxNew(\Arvato\AfterpayModule\Core\WebServiceClient::class);
         $client->setBaseUrl($url);
@@ -307,17 +308,17 @@ class ClientConfigurator
     }
 
     /**
-     * @param bool $bIsInstallmentApi
-     * @param string $sRecordedApiKey
+     * @param bool $isInstallmentApi
+     * @param string $recordedApiKey
      *
      * @return array
      */
     protected function getApiCredentials(
-        $bIsInstallmentApi = false,
-        $sRecordedApiKey = ''
+        $isInstallmentApi = false,
+        $recordedApiKey = ''
     ) {
 
-        $sIsInstallmentApi = $bIsInstallmentApi ? 'Installment' : '';
+        $sIsInstallmentApi = $isInstallmentApi ? 'Installment' : '';
 
         $customerCountryCode = $this->getUserCountryCodeIdFromSession();
 
@@ -333,12 +334,12 @@ class ClientConfigurator
             $url .= '/';
         }
 
-        $sSessionApiKey = Registry::getSession()->getVariable('arvatoAfterpayApiKey');
+        $sessionApiKey = Registry::getSession()->getVariable('arvatoAfterpayApiKey');
 
-        if ($sRecordedApiKey) {
-            $key = $sRecordedApiKey;
-        } elseif ($sSessionApiKey && !isAdmin()) {
-            $key = $sSessionApiKey;
+        if ($recordedApiKey) {
+            $key = $recordedApiKey;
+        } elseif ($sessionApiKey && !isAdmin()) {
+            $key = $sessionApiKey;
         }
 
         return [$url, $key];

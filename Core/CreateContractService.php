@@ -10,12 +10,15 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Core\Exception\PaymentException;
+use stdClass;
 
 /**
  * Class CreateContractService
@@ -39,10 +42,10 @@ class CreateContractService extends \Arvato\AfterpayModule\Core\Service
      * Performs the autorize payment call.
      *
      * @param string $paymentId paymentId               - Used for Debit and Installment
-     * @param string $sIBAN - Used for Debit and Installment
-     * @param string $sBIC - Used for Debit and Installment
-     * @param int $iSelectedInstallmentPlanProfileId - Used for           Installment
-     * @param int $iNumberOfInstallments - Used for           Installment
+     * @param string $IBAN - Used for Debit and Installment
+     * @param string $BIC - Used for Debit and Installment
+     * @param int $selectedInstallmentPlanProfileId - Used for           Installment
+     * @param int $numberOfInstallments - Used for           Installment
      *
      * @return string contractId
      *
@@ -51,12 +54,12 @@ class CreateContractService extends \Arvato\AfterpayModule\Core\Service
      */
     public function createContract(
         $paymentId,
-        $sIBAN,
-        $sBIC,
-        $iSelectedInstallmentPlanProfileId = null,
-        $iNumberOfInstallments = null
+        $IBAN,
+        $BIC,
+        $selectedInstallmentPlanProfileId = null,
+        $numberOfInstallments = null
     ) {
-        $response = $this->executeRequest($this->_afterpayCheckoutId, $paymentId, $sIBAN, $sBIC, $iSelectedInstallmentPlanProfileId, $iNumberOfInstallments);
+        $response = $this->executeRequest($this->_afterpayCheckoutId, $paymentId, $IBAN, $BIC, $selectedInstallmentPlanProfileId, $numberOfInstallments);
         $this->_entity = $this->parseResponse($response);
         return $this->_entity->getContractId();
     }
@@ -66,11 +69,11 @@ class CreateContractService extends \Arvato\AfterpayModule\Core\Service
      *
      * @param string $paymentId paymentId               - Used for Debit and Installment
      *
-     * @param string $sIBAN - Used for Debit and Installment
-     * @param string $sBIC - Used for Debit and Installment
+     * @param string $IBAN - Used for Debit and Installment
+     * @param string $BIC - Used for Debit and Installment
      *
-     * @param int $iSelectedInstallmentPlanProfileId - Used for           Installment
-     * @param int $iNumberOfInstallments - Used for           Installment
+     * @param int $selectedInstallmentPlanProfileId - Used for           Installment
+     * @param int $numberOfInstallments - Used for           Installment
      *
      * @return stdClass|stdClass[]
      * @throws PaymentException
@@ -78,19 +81,19 @@ class CreateContractService extends \Arvato\AfterpayModule\Core\Service
     public function executeRequest(
         $afterpayCheckoutID,
         $paymentId,
-        $sIBAN,
-        $sBIC,
-        $iSelectedInstallmentPlanProfileId = null,
-        $iNumberOfInstallments = null
+        $IBAN,
+        $BIC,
+        $selectedInstallmentPlanProfileId = null,
+        $numberOfInstallments = null
     ) {
-        if (!$afterpayCheckoutID || !$paymentId || !$sIBAN || !$sBIC) {
+        if (!$afterpayCheckoutID || !$paymentId || !$IBAN || !$BIC) {
             throw new \Arvato\AfterpayModule\Core\Exception\PaymentException(
-                'Missing either of $afterpayCheckoutID, $paymentId, $sIBAN, $sBIC: '
-                . "$afterpayCheckoutID, $paymentId, $sIBAN, $sBIC"
+                'Missing either of $afterpayCheckoutID, $paymentId, $IBAN, $BIC: '
+                . "$afterpayCheckoutID, $paymentId, $IBAN, $BIC"
             );
         }
 
-        $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\PaymentDataProvider::class)->getPayment($paymentId, $sIBAN, $sBIC, $iSelectedInstallmentPlanProfileId, $iNumberOfInstallments);
+        $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\PaymentDataProvider::class)->getPayment($paymentId, $IBAN, $BIC, $selectedInstallmentPlanProfileId, $numberOfInstallments);
         $data = $dataObject->exportData('paymentInfo');
         return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getCreateContractClient($afterpayCheckoutID)->execute($data);
     }

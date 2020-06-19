@@ -1,21 +1,23 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
+
+use Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountEntity;
 
 /**
  * Class ValidateBankAccountDataProvider
@@ -26,16 +28,16 @@ namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 class ValidateBankAccountDataProvider extends \Arvato\AfterpayModule\Application\Model\DataProvider\DataProvider
 {
     /**
-     * @param string $sIBAN
-     * @param string $sBIC
+     * @param string $IBAN
+     * @param string $BIC
      *
      * @return ValidateBankAccountEntity
      */
-    public function getDataObject($sIBAN, $sBIC)
+    public function getDataObject($IBAN, $BIC)
     {
         $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountEntity::class);
-        $dataObject->setBankAccount($sIBAN);
-        $dataObject->setBankCode($sBIC);
+        $dataObject->setBankAccount($IBAN);
+        $dataObject->setBankCode($BIC);
         return $dataObject;
     }
 }

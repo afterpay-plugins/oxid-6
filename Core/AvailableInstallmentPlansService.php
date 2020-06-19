@@ -10,12 +10,15 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Application\Model\DataProvider\AvailableInstallmentPlansDataProvider;
+use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
 
 /**
  * Class AvailableInstallmentPlansService
@@ -24,16 +27,16 @@ class AvailableInstallmentPlansService extends \Arvato\AfterpayModule\Core\Servi
 {
 
     /**
-     * @param double $dAmount
+     * @param double $amount
      *
      * @return AvailableInstallmentPlansResponseEntity
-     * @internal param string $sIBAN
-     * @internal param string $sBIC
+     * @internal param string $IBAN
+     * @internal param string $BIC
      *
      */
-    public function getAvailableInstallmentPlans($dAmount)
+    public function getAvailableInstallmentPlans($amount)
     {
-        $dataObject = $this->getAvailableInstallmentPlansDataProvider()->getDataObject($dAmount);
+        $dataObject = $this->getAvailableInstallmentPlansDataProvider()->getDataObject($amount);
         $data = $dataObject->exportData();
         $client = $this->getAvailableInstallmentPlansClient();
         $response = $client->execute($data);

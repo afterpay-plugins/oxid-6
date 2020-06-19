@@ -1,23 +1,31 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Controller\Admin;
 
+use Arvato\AfterpayModule\Core\CaptureService;
+use Arvato\AfterpayModule\Core\CaptureShippingService;
+use Arvato\AfterpayModule\Core\OrderDetailsService;
+use Arvato\AfterpayModule\Core\RefundService;
+use Arvato\AfterpayModule\Core\VoidService;
+use OxidEsales\Eshop\Application\Controller\Admin\OrderArticle;
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Request;
 
 /**
  * Order class wrapper for Afterpay module
@@ -38,13 +46,13 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
         $this->_aViewData["sOxid"] = $this->getEditObjectId();
 
         /**
-         * @var $oxorder \Order
+         * @var $order Order
          */
-        $oxorder = $this->getEditObject();
+        $order = $this->getEditObject();
 
-        if ($oxorder->getAfterpayOrder()->isLoaded()) {
-            $this->_aViewData["oOrder"] = $oxorder;
-            $this->_aViewData["oAfterpayOrder"] = $oxorder->getAfterpayOrder();
+        if ($order->getAfterpayOrder()->isLoaded()) {
+            $this->_aViewData["oOrder"] = $order;
+            $this->_aViewData["oAfterpayOrder"] = $order->getAfterpayOrder();
             $this->smartyAssignOrderDetails();
         } else {
             $this->_aViewData['sMessage'] = Registry::getLang()->translateString("AFTERPAY_ONLY_FOR_AFTERPAY_PAYMENT");
@@ -60,10 +68,10 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
      */
     public function getEditObject()
     {
-        $soxId = $this->getEditObjectId();
-        if ($this->_oEditObject === null && isset($soxId) && $soxId != "-1") {
+        $oxId = $this->getEditObjectId();
+        if ($this->_oEditObject === null && isset($oxId) && $oxId != "-1") {
             $this->_oEditObject = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-            $this->_oEditObject->load($soxId);
+            $this->_oEditObject->load($oxId);
         }
 
         return $this->_oEditObject;
@@ -121,135 +129,135 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
      *
      * @return null and irrelevant, all return data passed via smarty
      */
-    public function orderitemaction()
+    public function orderItemAction()
     {
 
-        $aOrderItemQuantities = $this->getFromRequest('orderitemquantity');
-        $sOderItemAction = $this->getFromRequest('oderitemaction');
+        $orderItemQuantities = $this->getFromRequest('orderitemquantity');
+        $orderItemAction = $this->getFromRequest('oderitemaction');
 
         $orderDetailsResponse = $this->getOrderDetailsService()->getOrderDetails();
 
-        if ('capture' == $sOderItemAction) {
-            return $this->orderitemactionCapture($orderDetailsResponse, $aOrderItemQuantities);
+        if ('capture' == $orderItemAction) {
+            return $this->orderItemActionCapture($orderDetailsResponse, $orderItemQuantities);
         }
 
-        if ('refund' == $sOderItemAction) {
-            return $this->orderitemactionRefund($orderDetailsResponse, $aOrderItemQuantities);
+        if ('refund' == $orderItemAction) {
+            return $this->orderItemActionRefund($orderDetailsResponse, $orderItemQuantities);
         }
 
-        if ('void' == $sOderItemAction) {
-            return $this->orderitemactionVoid($orderDetailsResponse, $aOrderItemQuantities);
+        if ('void' == $orderItemAction) {
+            return $this->orderItemActionVoid($orderDetailsResponse, $orderItemQuantities);
         }
         return null;
     }
 
     /**
-     * @see oreritemaction()
+     * @see orderItemAction()
      *
      * @param $orderDetailsResponse
-     * @param $aOrderItemQuantities
+     * @param $orderItemQuantities
      *
      * @return null No return value
      */
-    protected function orderitemactionCapture($orderDetailsResponse, $aOrderItemQuantities)
+    protected function orderItemActionCapture($orderDetailsResponse, $orderItemQuantities)
     {
         // Get full data set of every order item
-        $aApiOrderItems = $orderDetailsResponse->getOrderItems(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::ORDERITEM_FILTER_CANCAPTUREORVOID);
+        $apiOrderItems = $orderDetailsResponse->getOrderItems(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::ORDERITEM_FILTER_CANCAPTUREORVOID);
 
         // Set the capture quantity of every item to 0
-        array_walk($aApiOrderItems, function (&$e) {
+        array_walk($apiOrderItems, function (&$e) {
             $e->quantity = 0;
         });
 
         // Apply quantites from shop owners request
-        foreach ($aOrderItemQuantities as $sProductId => $fQuantity) {
-            $aApiOrderItems[$sProductId]->quantity = (float)$fQuantity;
+        foreach ($orderItemQuantities as $productId => $quantity) {
+            $apiOrderItems[$productId]->quantity = (float)$quantity;
         }
 
         // Unset all order items that have no quantity to capture
-        $aApiOrderItems = array_filter($aApiOrderItems, function ($e) {
+        $apiOrderItems = array_filter($apiOrderItems, function ($e) {
             return (bool)$e->quantity;
         });
 
         // Run capture with order items set
-        $this->capture($aApiOrderItems);
+        $this->capture($apiOrderItems);
 
         return null;
     }
 
     /**
-     * @see orderitemaction()
+     * @see orderItemAction()
      *
      * @param $orderDetailsResponse
-     * @param $aOrderItemQuantities
+     * @param $orderItemQuantities
      *
      * @return null|void
      */
-    protected function orderitemactionRefund($orderDetailsResponse, $aOrderItemQuantities)
+    protected function orderItemActionRefund($orderDetailsResponse, $orderItemQuantities)
     {
-        $sCaptureNo = $this->getFromRequest('captureNo');
+        $captureNo = $this->getFromRequest('captureNo');
 
         // Get full data set of every order item
-        $aApiOrderItems = $orderDetailsResponse->getOrderItems(
+        $apiOrderItems = $orderDetailsResponse->getOrderItems(
             \Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::ORDERITEM_FILTER_ALLITEMS,
             true
         );
 
         // Set the capture quantity of every item to 0
-        array_walk($aApiOrderItems, function (&$e) {
+        array_walk($apiOrderItems, function (&$e) {
             $e->quantity = 0;
         });
         unset($e);
 
         // Apply quantites from shop owners request
-        foreach ($aOrderItemQuantities as $sProductId => $fQuantity) {
-            $aApiOrderItems[$sProductId]->quantity = (float)$fQuantity;
+        foreach ($orderItemQuantities as $productId => $quantity) {
+            $apiOrderItems[$productId]->quantity = (float)$quantity;
         }
 
         // Unset all order items that have no quantity to capture
-        $aApiOrderItems = array_filter($aApiOrderItems, function ($e) {
+        $apiOrderItems = array_filter($apiOrderItems, function ($e) {
             return 0 < $e->quantity;
         });
 
-        if (!count($aApiOrderItems)) {
+        if (!count($apiOrderItems)) {
             $this->_aViewData['aErrorMessages'] = 'No items selected for refund.';
             return;
         }
 
         // Run capture with order items set
-        $this->refund(null, $aApiOrderItems, $sCaptureNo);
+        $this->refund(null, $apiOrderItems, $captureNo);
 
         return null;
     }
 
     /**
-     * @see orderitemaction()
+     * @see orderItemAction()
      *
      * @param $orderDetailsResponse
-     * @param $aOrderItemQuantities
+     * @param $orderItemQuantities
      */
-    protected function orderitemactionVoid($orderDetailsResponse, $aOrderItemQuantities)
+    protected function orderItemActionVoid($orderDetailsResponse, $orderItemQuantities)
     {
         // Get full data set of every order item
-        $aApiOrderItems = $orderDetailsResponse->getOrderItems(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::ORDERITEM_FILTER_CANCAPTUREORVOID);
+        $apiOrderItems = $orderDetailsResponse->getOrderItems(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::ORDERITEM_FILTER_CANCAPTUREORVOID);
 
         // Set the capture quantity of every item to 0
-        array_walk($aApiOrderItems, function (&$e) {
+        array_walk($apiOrderItems, function (&$e) {
             $e->quantity = 0;
         });
 
         // Apply quantites from shop owners request
-        foreach ($aOrderItemQuantities as $sProductId => $fQuantity) {
-            $aApiOrderItems[$sProductId]->quantity = (float)$fQuantity;
+        foreach ($orderItemQuantities as $productId => $quantity) {
+            $apiOrderItems[$productId]->quantity = (float)$quantity;
         }
 
         // Unset all order items that have no quantity to capture
-        $aApiOrderItems = array_filter($aApiOrderItems, function ($e) {
+        $apiOrderItems = array_filter($apiOrderItems, function ($e) {
             return (bool)$e->quantity;
         });
 
         // Run capture with order items set
-        $this->void($aApiOrderItems);
+        $this->void($apiOrderItems);
 
         return;
     }
@@ -257,21 +265,21 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
     /**
      * Capture editObjects AfterpayPayment completely, or selected items only.
      *
-     * @param array|null $aOrderItems Skip for full capture
+     * @param array|null $orderItems Skip for full capture
      */
-    public function capture(array $aOrderItems = null)
+    public function capture(array $orderItems = null)
     {
         /**
          * @var CaptureService $service
          */
         $service = $this->getCapturePaymentService();
 
-        $sRecordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
+        $recordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
 
-        $response = $service->capture($sRecordedApiKey, $aOrderItems);
-        $capturedAmout = $response->getCapturedAmount();
+        $response = $service->capture($recordedApiKey, $orderItems);
+        $capturedAmount = $response->getCapturedAmount();
 
-        if (is_numeric($capturedAmout) && $capturedAmout > 0) {
+        if (is_numeric($capturedAmount) && $capturedAmount > 0) {
             $this->_aViewData['oCaptureSuccess'] = $response;
             return;
         }
@@ -285,18 +293,18 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
     /**
      * Void editObjects AfterpayPayment completely, or selected items only
      *
-     * @param array|null $aOrderItems Skip for full capture
+     * @param array|null $orderItems Skip for full capture
      */
-    public function void(array $aOrderItems = null)
+    public function void(array $orderItems = null)
     {
         /**
          * @var CaptureService $service
          */
         $service = $this->getVoidPaymentService();
 
-        $sRecordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
+        $recordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
 
-        $response = $service->void($sRecordedApiKey, $aOrderItems);
+        $response = $service->void($recordedApiKey, $orderItems);
 
         $totalAuthorizedAmount = $response->getTotalAuthorizedAmount();
 
@@ -318,9 +326,9 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
      * @param string|null $shippingCompany Tracking company name. Leave empty to get from request or settings, fill for
      *     unit tests.
      */
-    public function captureshipping($trackingId = null, $shippingCompany = null)
+    public function captureShipping($trackingId = null, $shippingCompany = null)
     {
-        $sRecordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
+        $recordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
 
         $trackingId = $this->getFromRequest('oxtrackcode', $trackingId);
         $shippingCompany = $this->getFromRequest('shippingcompany', $shippingCompany);
@@ -330,7 +338,7 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
          * @var CaptureShippingService $service
          */
         $service = $this->getCaptureShippingService();
-        $response = $service->captureShipping($trackingId, $sRecordedApiKey, $shippingCompany);
+        $response = $service->captureShipping($trackingId, $recordedApiKey, $shippingCompany);
 
         $shippingNumber = $response->getShippingNumber();
 
@@ -349,24 +357,24 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
      * Execute refund with data provided by backends html form.
      *
      * @param null $vatSplittedRefunds
-     * @param array $aOrderItems
+     * @param array $orderItems
      *
      * @return null , Feedback provided via template vars
      * @throws \OxidEsales\Eshop\Core\Exception\StandardException::class
-     * @internal param array|null $aApiOrderItems
+     * @internal param array|null $apiOrderItems
      *
      */
-    public function refund($vatSplittedRefunds = null, array $aOrderItems = null, $sCaptureNo = null)
+    public function refund($vatSplittedRefunds = null, array $orderItems = null, $captureNo = null)
     {
-        $sRecordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
+        $recordedApiKey = $this->getEditObject()->getAfterpayOrder()->arvatoafterpayafterpayorder__apusedapikey->getRawValue();
 
-        if ($vatSplittedRefunds && $aOrderItems) {
-            throw new \OxidEsales\Eshop\Core\Exception\StandardException('Provide either $vatSplittedRefunds or $aOrderItems, not both');
+        if ($vatSplittedRefunds && $orderItems) {
+            throw new \OxidEsales\Eshop\Core\Exception\StandardException('Provide either $vatSplittedRefunds or $orderItems, not both');
         }
 
-        $vatSplittedRefunds = $vatSplittedRefunds ?: Registry::getConfig()->getRequestParameter('refunds');
+        $vatSplittedRefunds = $vatSplittedRefunds ?: Registry::get(Request::class)->getRequestEscapedParameter('refunds');
         $service = $this->getRefundService();
-        $response = $service->refund($vatSplittedRefunds, $sRecordedApiKey, $aOrderItems, $sCaptureNo);
+        $response = $service->refund($vatSplittedRefunds, $recordedApiKey, $orderItems, $captureNo);
         $refundNumbers = $response->getRefundNumbers();
 
         if (is_array($refundNumbers) && count($refundNumbers) > 0) {
@@ -396,35 +404,35 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
     }
 
     /**
-     * @param array $aOrderArticles
+     * @param array $orderArticles
      *
      * @return array An array with all the vat percentages used in current edit object, e.g. [19] or [7,19]
      */
     public function getRefundVatPercentages(
-        $aOrderArticles = null
+        $orderArticles = null
     ) {
-        $aOrderArticles = $aOrderArticles ?: $this->getEditObject()->getOrderArticles();
-        $aVatPercentages = [];
-        foreach ($aOrderArticles as $orderArticle) {
-            /** @var oxOrderArticle $orderArticle */
-            $aVatPercentages[] = $orderArticle->oxorderarticles__oxvat->value;
+        $orderArticles = $orderArticles ?: $this->getEditObject()->getOrderArticles();
+        $vatPercentages = [];
+        foreach ($orderArticles as $orderArticle) {
+            /** @var OrderArticle $orderArticle */
+            $vatPercentages[] = $orderArticle->oxorderarticles__oxvat->value;
         }
-        $aVatPercentages = array_unique($aVatPercentages);
-        $aVatPercentages = array_values($aVatPercentages);
-        return $aVatPercentages;
+        $vatPercentages = array_unique($vatPercentages);
+        $vatPercentages = array_values($vatPercentages);
+        return $vatPercentages;
     }
 
     /**
      * Template getter for price formatting
      *
-     * @param double $dPrice price
+     * @param double $price price
      *
      * @return string
      */
     public function formatPrice(
-        $dPrice
+        $price
     ) {
-        return Registry::getLang()->formatCurrency($dPrice);
+        return Registry::getLang()->formatCurrency($price);
     }
 
     /**

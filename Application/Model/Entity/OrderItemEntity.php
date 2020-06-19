@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
@@ -25,12 +25,12 @@ class OrderItemEntity extends \Arvato\AfterpayModule\Application\Model\Entity\En
     /**
      * Constants for vat category property.
      */
-    public const VAT_CATEGORY_HIGH = 'HighCategory';
-    public const VAT_CATEGORY_LOW = 'LowCategory';
-    public const VAT_CATEGORY_NULL = 'NullCategory';
-    public const VAT_CATEGORY_NO = 'NoCategory';
-    public const VAT_CATEGORY_MIDDLE = 'MiddleCategory';
-    public const VAT_CATEGORY_OTHER = 'OtherCategory';
+    const VAT_CATEGORY_HIGH = 'HighCategory';
+    const VAT_CATEGORY_LOW = 'LowCategory';
+    const VAT_CATEGORY_NULL = 'NullCategory';
+    const VAT_CATEGORY_NO = 'NoCategory';
+    const VAT_CATEGORY_MIDDLE = 'MiddleCategory';
+    const VAT_CATEGORY_OTHER = 'OtherCategory';
 
     /**
      * Getter for product id property.

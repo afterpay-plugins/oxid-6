@@ -1,27 +1,33 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 
+use Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\OrderEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentEntity;
 use Arvato\AfterpayModule\Application\Model\DataProvider\OrderDataProvider;
 use Arvato\AfterpayModule\Application\Model\DataProvider\CheckoutCustomerDataProvider;
 use Arvato\AfterpayModule\Application\Model\DataProvider\PaymentDataProvider;
+use OxidEsales\Eshop\Core\Session;
 
 /**
  * Class AuthorizePaymentDataProvider: Data provider for autorize payment data.
@@ -31,10 +37,10 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
     /**
      * Gets the data object for an AfterPay authorize payment request.
      *
-     * @param oxSession $session
-     * @param oxLang $lang
+     * @param Session $session
+     * @param Language $lang
      *
-     * @param oxOrder $oOrder
+     * @param Order $oOrder
      *
      * @return AuthorizePaymentEntity|object
      */
@@ -59,13 +65,13 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
         $arvatoAfterpayCheckoutId = $session->getVariable('arvatoAfterpayCheckoutId');
 
         $afterpayContractId = $session->getVariable('arvatoAfterpayContractId');
-        $aDynValue = $session->getVariable('dynvalue');
+        $dynValue = $session->getVariable('dynvalue');
 
-        if ($aDynValue && isset($aDynValue['afterpayInstallmentProfileId'])) {
-            $iSelectedInstallmentPlanProfileId = $aDynValue['afterpayInstallmentProfileId'];
+        if ($dynValue && isset($dynValue['afterpayInstallmentProfileId'])) {
+            $selectedInstallmentPlanProfileId = $dynValue['afterpayInstallmentProfileId'];
         }
 
-        $payment = $this->getPayment($session, $basket, $iSelectedInstallmentPlanProfileId);
+        $payment = $this->getPayment($session, $basket, $selectedInstallmentPlanProfileId);
 
         $risk = new \stdClass();
         $risk->channelType = Registry::getConfig()->getConfigParam('arvatoAfterpayRiskChannelType') ?: 'Internet';
@@ -92,7 +98,7 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
      * @param $basket
      * @param $orderId
      *
-     * @param oxOrder $oOrder
+     * @param Order $oOrder
      *
      * @return OrderEntity
      * @codeCoverageIngore Mocking helper
@@ -115,20 +121,20 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
     }
 
     /**
-     * @param oxSession $session
+     * @param Session $session
      * @param $basket
-     * @param $iSelectedInstallmentPlanProfileId
+     * @param $selectedInstallmentPlanProfileId
      *
      * @return PaymentEntity
      * @codeCoverageIngore Mocking helper
      */
-    protected function getPayment(\OxidEsales\Eshop\Core\Session $session, $basket, $iSelectedInstallmentPlanProfileId)
+    protected function getPayment(\OxidEsales\Eshop\Core\Session $session, $basket, $selectedInstallmentPlanProfileId)
     {
         return oxNew(PaymentDataProvider::class)->getPayment(
             $basket->getPaymentId(),
             $session->getVariable('arvatoAfterpayIBAN'),
             $session->getVariable('arvatoAfterpayBIC'),
-            $iSelectedInstallmentPlanProfileId
+            $selectedInstallmentPlanProfileId
         );
     }
 

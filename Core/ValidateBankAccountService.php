@@ -10,13 +10,14 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
 
+use Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountResponseEntity;
 use OxidEsales\Eshop\Core\Registry;
 
 /**
@@ -26,14 +27,14 @@ class ValidateBankAccountService extends \Arvato\AfterpayModule\Core\Service
 {
 
     /**
-     * @param string $sIBAN
-     * @param string $sBIC
+     * @param string $IBAN
+     * @param string $BIC
      *
      * @return ValidateBankAccountResponseEntity
      */
-    public function validate($sIBAN, $sBIC)
+    public function validate($IBAN, $BIC)
     {
-        $data = $this->getRequestData($sIBAN, $sBIC);
+        $data = $this->getRequestData($IBAN, $BIC);
         $client = $this->getClient();
         $response = $client->execute($data);
         $this->_entity = $this->parseResponse($response);
@@ -43,36 +44,36 @@ class ValidateBankAccountService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Returns hardcoded "true" if in sandbox mode, since sandbox would always fail.
      *
-     * @param string $sIBAN
-     * @param string $sBIC
+     * @param string $IBAN
+     * @param string $BIC
      *
      * @return bool
      */
-    public function isValid($sIBAN, $sBIC)
+    public function isValid($IBAN, $BIC)
     {
         if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxMode')) {
             return true;
         }
 
-        $ValidateBankAccountResponseEntity = $this->validate($sIBAN, $sBIC);
+        $validateBankAccountResponseEntity = $this->validate($IBAN, $BIC);
 
-        if ($ValidateBankAccountResponseEntity instanceof ValidateBankAccountResponseEntity) {
-            return $ValidateBankAccountResponseEntity->getIsValid();
+        if ($validateBankAccountResponseEntity instanceof ValidateBankAccountResponseEntity) {
+            return $validateBankAccountResponseEntity->getIsValid();
         }
 
         return false;
     }
 
     /**
-     * @param $sIBAN
-     * @param $sBIC
+     * @param $IBAN
+     * @param $BIC
      *
      * @return object
      * @codeCoverageIgnore mock helper method
      */
-    protected function getRequestData($sIBAN, $sBIC)
+    protected function getRequestData($IBAN, $BIC)
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\ValidateBankAccountDataProvider::class)->getDataObject($sIBAN, $sBIC)->exportData();
+        return oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\ValidateBankAccountDataProvider::class)->getDataObject($IBAN, $BIC)->exportData();
     }
 
     /**

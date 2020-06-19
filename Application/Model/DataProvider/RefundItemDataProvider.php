@@ -1,21 +1,24 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
+
+use Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity;
+use OxidEsales\Eshop\Application\Model\BasketItem;
 
 /**
  * Class RefundItemDataProvider: Data provider to convert backend refund item array to request objects
@@ -23,22 +26,22 @@ namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 class RefundItemDataProvider extends \Arvato\AfterpayModule\Application\Model\DataProvider\DataProvider
 {
 
-    public function getRefundDataFromOrderItems($captureNumber, $aOrderItems)
+    public function getRefundDataFromOrderItems($captureNumber, $orderItems)
     {
-        if (!count($aOrderItems)) {
+        if (!count($orderItems)) {
             throw new \OxidEsales\Eshop\Core\Exception\StandardException('No valid refund itemd defined. They must contain a gross price at least.');
         }
-        $RefundEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\RefundEntity::class);
+        $refundEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\RefundEntity::class);
 
-        foreach ($aOrderItems as &$item) {
+        foreach ($orderItems as &$item) {
             unset($item->oxArticle);
         }
-        $aOrderItems = array_values($aOrderItems);
+        $orderItems = array_values($orderItems);
 
-        $RefundEntity->setOrderItems($aOrderItems);
-        $RefundEntity->setCaptureNumber($captureNumber);
+        $refundEntity->setOrderItems($orderItems);
+        $refundEntity->setCaptureNumber($captureNumber);
 
-        return $RefundEntity;
+        return $refundEntity;
     }
 
     public function getRefundDataFromVatSplittedRefunds($captureNumber, $vatSplittedRefunds)
@@ -48,11 +51,11 @@ class RefundItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Da
         if (!count($items)) {
             throw new \OxidEsales\Eshop\Core\Exception\StandardException('No valid refund itemd defined. They must contain a gross price at least.');
         }
-        $RefundEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\RefundEntity::class);
-        $RefundEntity->setItems($items);
-        $RefundEntity->setCaptureNumber($captureNumber);
+        $refundEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\RefundEntity::class);
+        $refundEntity->setItems($items);
+        $refundEntity->setCaptureNumber($captureNumber);
 
-        return $RefundEntity;
+        return $refundEntity;
     }
 
     /**
@@ -76,7 +79,7 @@ class RefundItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Da
     /**
      * Transforms a basket item into an AfterPay order item.
      *
-     * @param oxBasketItem[] $item
+     * @param BasketItem[] $item
      *
      * @return OrderItemEntity
      */

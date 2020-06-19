@@ -1,22 +1,25 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
 
+use Arvato\AfterpayModule\Core\Exception\PaymentException;
+use Arvato\AfterpayModule\Core\ValidateBankAccountService;
+use Exception;
 use OxidEsales\Eshop\Core\Registry;
 use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
 use Arvato\AfterpayModule\Core\AuthorizePaymentService;
@@ -40,13 +43,13 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     /**
      * Executes payment, returns true on success.
      *
-     * @param double $dAmount Goods amount
+     * @param double $amount Goods amount
      * @param Order &$oOrder User ordering object
      *
      * @return bool Success, false on error
      * @extend executePayment
      */
-    public function executePayment($dAmount, &$oOrder) //Superfluous ampersand to match parents definition
+    public function executePayment($amount, &$oOrder) //Superfluous ampersand to match parents definition
     {
 
         try {
@@ -56,11 +59,11 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
             // If we are not in an afterpay payment (how did we get here in the first place?)
             // just go with the default payment gateway.
             if (!$oOrder->isAfterpayPaymentType()) {
-                return $this->dereferToOtherPaymentProviders($dAmount, $oOrder);
+                return $this->dereferToOtherPaymentProviders($amount, $oOrder);
             }
 
             if (!$oOrder->isAfterpayDebitNote() && !$oOrder->isAfterpayInvoice() && !$oOrder->isAfterpayInstallment()) {
-                return $this->dereferToOtherPaymentProviders($dAmount, $oOrder);
+                return $this->dereferToOtherPaymentProviders($amount, $oOrder);
             }
 
             $result = $this->dereferToPaymentHandling($oOrder);
@@ -126,16 +129,16 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     }
 
     /**
-     * @param $dAmount
+     * @param $amount
      * @param $oOrder
      *
      * @return bool Success
      * @codeCoverageIgnore Mocking helper
      */
-    protected function dereferToOtherPaymentProviders($dAmount, $oOrder)
+    protected function dereferToOtherPaymentProviders($amount, $oOrder)
     {
         $defaultPaymentGateway = oxNew(\OxidEsales\Eshop\Application\Model\PaymentGateway::class);
-        return $defaultPaymentGateway->executePayment($dAmount, $oOrder);
+        return $defaultPaymentGateway->executePayment($amount, $oOrder);
     }
 
     /**
@@ -165,7 +168,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     }
 
     /**
-     * @param oxOrder $oOrder
+     * @param Order $oOrder
      *
      * @return string $contractId False on Error
      */
@@ -214,7 +217,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     }
 
     /**
-     * @param oxOrder $oOrder
+     * @param Order $oOrder
      *
      * @return string $contractId False on error
      */
@@ -223,25 +226,25 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         // Bank account ok? - Redundant to former call but makes process tamper-proof
 
-        list($sBIC, $sIBAN) = $this->gatherIBANandBIC();
+        list($BIC, $IBAN) = $this->gatherIBANandBIC();
 
-        if (!$sIBAN || !$sBIC || !$this->getValidateBankAccountService()->isValid($sIBAN, $sBIC)) {
+        if (!$IBAN || !$BIC || !$this->getValidateBankAccountService()->isValid($IBAN, $BIC)) {
             return false;
         }
 
-        $this->getSession()->setVariable('arvatoAfterpayIBAN', $sIBAN);
-        $this->getSession()->setVariable('arvatoAfterpayBIC', $sBIC);
+        $this->getSession()->setVariable('arvatoAfterpayIBAN', $IBAN);
+        $this->getSession()->setVariable('arvatoAfterpayBIC', $BIC);
 
         // Installment profile selected?
 
-        $aDynValue = $this->getSession()->getVariable('dynvalue');
+        $dynValue = $this->getSession()->getVariable('dynvalue');
 
-        if (!isset($aDynValue['afterpayInstallmentProfileId'])) {
+        if (!isset($dynValue['afterpayInstallmentProfileId'])) {
             $this->_sLastError = 'NO INSTALLMENT PLAN SELECTED';
             return false;
         }
 
-        $iSelectedInstallmentPlanProfileId = $aDynValue['afterpayInstallmentProfileId'];
+        $selectedInstallmentPlanProfileId = $dynValue['afterpayInstallmentProfileId'];
 
         // Is selected installment plan available?
 
@@ -249,7 +252,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         if (
             !($AvailablePaymentMethodsService
-            ->isSpecificInstallmentAvailable($iSelectedInstallmentPlanProfileId))
+            ->isSpecificInstallmentAvailable($selectedInstallmentPlanProfileId))
         ) {
             $this->_iLastErrorNo = $AvailablePaymentMethodsService->getLastErrorNo();
             $this->_sLastError = $AvailablePaymentMethodsService->getErrorMessages();
@@ -257,17 +260,17 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         }
 
         $afterpayCheckoutId = Registry::getSession()->getVariable('arvatoAfterpayCheckoutId');
-        $iNumberOfInstallments = $AvailablePaymentMethodsService
-            ->getNumberOfInstallmentsByProfileId($iSelectedInstallmentPlanProfileId);
+        $numberOfInstallments = $AvailablePaymentMethodsService
+            ->getNumberOfInstallmentsByProfileId($selectedInstallmentPlanProfileId);
 
         /*
         * @deprecated since version 2.0.5
         $contractId = $this->createContract(
             $afterpayCheckoutId,
-            $iSelectedInstallmentPlanProfileId,
-            $iNumberOfInstallments,
-            $sIBAN,
-            $sBIC
+            $selectedInstallmentPlanProfileId,
+            $numberOfInstallments,
+            $IBAN,
+            $BIC
         );
 
         Registry::getSession()->setVariable('arvatoAfterpayContractId', $contractId);
@@ -340,13 +343,13 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
      */
     protected function resetArvatoSessionVars()
     {
-        $oxSession = Registry::getSession();
-        $oxSession->deleteVariable('arvatoAfterpayCheckoutId');
-        $oxSession->deleteVariable('arvatoAfterpayContractId');
-        $oxSession->deleteVariable('arvatoAfterpayIBAN');
-        $oxSession->deleteVariable('arvatoAfterpayBIC');
-        $oxSession->deleteVariable('arvatoAfterpayApiKey');
-        $oxSession->deleteVariable('arvatoAfterpayCustomerFacingMessage');
+        $session = Registry::getSession();
+        $session->deleteVariable('arvatoAfterpayCheckoutId');
+        $session->deleteVariable('arvatoAfterpayContractId');
+        $session->deleteVariable('arvatoAfterpayIBAN');
+        $session->deleteVariable('arvatoAfterpayBIC');
+        $session->deleteVariable('arvatoAfterpayApiKey');
+        $session->deleteVariable('arvatoAfterpayCustomerFacingMessage');
     }
 
     /**
@@ -354,25 +357,25 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
      */
     protected function gatherIBANandBIC()
     {
-        $sIBAN = $sBIC = null;
+        $IBAN = $BIC = null;
 
         foreach ($this->_oPaymentInfo->_aDynValues as $dynValue) {
             if ('apinstallmentbankaccount' === $dynValue->name) {
-                $sIBAN = $dynValue->value;
+                $IBAN = $dynValue->value;
             }
             if ('apinstallmentbankcode' === $dynValue->name) {
-                $sBIC = $dynValue->value;
+                $BIC = $dynValue->value;
             }
         }
-        return [$sBIC, $sIBAN];
+        return [$BIC, $IBAN];
     }
 
     /**
      * @param $afterpayCheckoutId
-     * @param $iSelectedInstallmentPlanProfileId
-     * @param $iNumberOfInstallments
-     * @param $sIBAN
-     * @param $sBIC
+     * @param $selectedInstallmentPlanProfileId
+     * @param $numberOfInstallments
+     * @param $IBAN
+     * @param $BIC
      *
      * @return string
      * @codeCoverageIgnore Mocking helper
@@ -380,18 +383,18 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
      */
     protected function createContract(
         $afterpayCheckoutId,
-        $iSelectedInstallmentPlanProfileId,
-        $iNumberOfInstallments,
-        $sIBAN,
-        $sBIC
+        $selectedInstallmentPlanProfileId,
+        $numberOfInstallments,
+        $IBAN,
+        $BIC
     ) {
         $service = oxNew(CreateContractService::class, $afterpayCheckoutId);
         return $service->createContract(
             'afterpayinstallment',
-            $sIBAN,
-            $sBIC,
-            $iSelectedInstallmentPlanProfileId,
-            $iNumberOfInstallments
+            $IBAN,
+            $BIC,
+            $selectedInstallmentPlanProfileId,
+            $numberOfInstallments
         );
     }
 }

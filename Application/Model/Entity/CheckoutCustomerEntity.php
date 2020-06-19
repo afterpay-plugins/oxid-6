@@ -1,39 +1,39 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
 
 /**
- * Class arvatoAfterpayCustomerEntity: Entitiy for customer Data.
+ * Class arvatoAfterpayCustomerEntity: Entity for customer Data.
  */
 class CheckoutCustomerEntity extends \Arvato\AfterpayModule\Application\Model\Entity\Entity
 {
     /**
      * Constants for customer category property.
      */
-    public const CUSTOMER_CATEGORY_COMPANY = 'Company';
-    public const CUSTOMER_CATEGORY_PERSON = 'Person';
+    const CUSTOMER_CATEGORY_COMPANY = 'Company';
+    const CUSTOMER_CATEGORY_PERSON = 'Person';
 
     /**
      * Constants for salutation property.
      */
-    public const SALUTATION_MR = 'Mr';
-    public const SALUTATION_MRS = 'Mrs';
-    public const SALUTATION_MISS = 'Miss';
+    const SALUTATION_MR = 'Mr';
+    const SALUTATION_MRS = 'Mrs';
+    const SALUTATION_MISS = 'Miss';
 
     /**
      * Getter for salutation property.

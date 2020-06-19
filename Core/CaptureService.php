@@ -10,12 +10,16 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureResponseEntity;
+use OxidEsales\Eshop\Application\Model\Order;
+use stdClass;
 
 /**
  * Class CaptureService: Service for capturing autorized payments with AfterPay.
@@ -26,38 +30,38 @@ class CaptureService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Standard constructor.
      *
-     * @param oxOrder $oxOrder
+     * @param Order $order
      *
      * @internal param oxSession $session
      * @internal param oxLang $lang
      */
-    public function __construct(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_oxOrder = $oxOrder;
-        $this->_afterpayOrder = $oxOrder->getAfterpayOrder();
+        $this->_oxOrder = $order;
+        $this->_afterpayOrder = $order->getAfterpayOrder();
     }
 
     /**
      * Performs the capture call.
      * If successfull sets status to captured.
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
-     * @param array|null $aOrderItems
+     * @param array|null $orderItems
      *
      * @return CaptureResponseEntity
      */
-    public function capture($sRecordedApiKey, array $aOrderItems = null)
+    public function capture($recordedApiKey, array $orderItems = null)
     {
-        $response = $this->executeRequestFromOrderData($sRecordedApiKey, $aOrderItems);
+        $response = $this->executeRequestFromOrderData($recordedApiKey, $orderItems);
 
         $this->_entity = $this->parseResponse($response);
 
-        $capturedAmout = $this->getEntity()->getCapturedAmount();
+        $capturedAmount = $this->getEntity()->getCapturedAmount();
         $remainingAuthorizedAmount = $this->getEntity()->getRemainingAuthorizedAmount();
         $captureNumber = $this->getEntity()->getCaptureNumber();
         if (
-            is_numeric($capturedAmout) && $capturedAmout > 0
+            is_numeric($capturedAmount) && $capturedAmount > 0
             && is_numeric($remainingAuthorizedAmount)
         ) {
             $this->_afterpayOrder->setStatus(\Arvato\AfterpayModule\Application\Model\AfterpayOrder::AFTERPAYSTATUS_CAPTURED, $captureNumber);
@@ -68,16 +72,16 @@ class CaptureService extends \Arvato\AfterpayModule\Core\Service
     }
 
     /**
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
-     * @param array|null $aOrderItems
+     * @param array|null $orderItems
      *
      * @return stdClass|stdClass[]
      */
-    protected function executeRequestFromOrderData($sRecordedApiKey, array $aOrderItems = null)
+    protected function executeRequestFromOrderData($recordedApiKey, array $orderItems = null)
     {
-        $data = $this->getCaptureDataForApi($aOrderItems);
-        $client = $this->getCaptureClientForApi($sRecordedApiKey);
+        $data = $this->getCaptureDataForApi($orderItems);
+        $client = $this->getCaptureClientForApi($recordedApiKey);
         return $response = $client->execute($data);
     }
 
@@ -88,36 +92,36 @@ class CaptureService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Elevating visibility
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
      * @return stdClass|stdClass[]
      */
-    public function testexecuteRequestFromOrderData($sRecordedApiKey)
+    public function testexecuteRequestFromOrderData($recordedApiKey)
     {
-        return $this->executeRequestFromOrderData($sRecordedApiKey);
+        return $this->executeRequestFromOrderData($recordedApiKey);
     }
 
     /**
      * @codeCoverageIgnore Deliberately uncovered unit test helper
      *
-     * @param array|null $aOrderItems
+     * @param array|null $orderItems
      *
      * @return stdClass
      */
-    protected function getCaptureDataForApi(array $aOrderItems = null)
+    protected function getCaptureDataForApi(array $orderItems = null)
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\CaptureDataProvider::class)->getDataObject($this->_oxOrder, $aOrderItems)->exportData();
+        return oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\CaptureDataProvider::class)->getDataObject($this->_oxOrder, $orderItems)->exportData();
     }
 
     /**
      * @codeCoverageIgnore Deliberately uncovered unit test helper
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      */
-    protected function getCaptureClientForApi($sRecordedApiKey)
+    protected function getCaptureClientForApi($recordedApiKey)
     {
-        return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getCaptureClient($this->_oxOrder->oxorder__oxordernr->value, $sRecordedApiKey);
+        return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getCaptureClient($this->_oxOrder->oxorder__oxordernr->value, $recordedApiKey);
     }
 }

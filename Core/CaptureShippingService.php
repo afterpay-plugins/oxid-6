@@ -10,14 +10,18 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
 
+use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity;
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Registry;
+use stdClass;
 
 /**
  * Class CaptureShippingService: Service for capturing a shipping.
@@ -28,29 +32,29 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Standard constructor.
      *
-     * @param oxOrder $oxOrder
+     * @param Order $order
      *
      * @internal param oxSession $session
      * @internal param oxLang $lang
      */
-    public function __construct(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_oxOrder = $oxOrder;
-        $this->_afterpayOrder = $oxOrder->getAfterpayOrder();
+        $this->_oxOrder = $order;
+        $this->_afterpayOrder = $order->getAfterpayOrder();
     }
 
     /**
      * Performs the capture shipping call.
      *
      * @param string $trackingId as provided by the carrier company
-     * @param string $sRecordedApiKey
+     * @param string $recordedApiKey
      * @param string $shippingCompany e.g. dhl, ups, dpd
      * @param string $type Shipment / Return
      *
      * @return CaptureShippingResponseEntity
      * @throws \OxidEsales\Eshop\Core\Exception\StandardException::class
      */
-    public function captureShipping($trackingId, $sRecordedApiKey, $shippingCompany = 'Others', $type = 'Shipment')
+    public function captureShipping($trackingId, $recordedApiKey, $shippingCompany = 'Others', $type = 'Shipment')
     {
 
         if (!$this->_afterpayOrder->getCaptureNo()) {
@@ -59,7 +63,7 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
             );
         }
 
-        $response = $this->executeRequestFromOrderData($this->_afterpayOrder, $trackingId, $sRecordedApiKey, $shippingCompany, $type);
+        $response = $this->executeRequestFromOrderData($this->_afterpayOrder, $trackingId, $recordedApiKey, $shippingCompany, $type);
 
         $this->_entity = $this->parseResponse($response);
 
@@ -79,7 +83,7 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
     /**
      * @param AfterpayOrder $AfterpayOrder
      * @param string $trackingId as provided by the carrier company
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      * @param string $shippingCompany e.g. dhl, ups, dpd
      * @param string $type Shipment / Return
      *
@@ -89,12 +93,12 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
     protected function executeRequestFromOrderData(
         \Arvato\AfterpayModule\Application\Model\AfterpayOrder $AfterpayOrder,
         $trackingId,
-        $sRecordedApiKey,
+        $recordedApiKey,
         $shippingCompany,
         $type
     ) {
         $data = $this->getData($trackingId, $shippingCompany, $type);
-        return $this->getClient($AfterpayOrder, $sRecordedApiKey)->execute($data);
+        return $this->getClient($AfterpayOrder, $recordedApiKey)->execute($data);
     }
 
     /**
@@ -117,18 +121,18 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
     /**
      * @param AfterpayOrder $AfterpayOrder
      *
-     * @param $sRecordedApiKey
+     * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @codeCoverageIgnore Mocked away
      */
-    protected function getClient(\Arvato\AfterpayModule\Application\Model\AfterpayOrder $AfterpayOrder, $sRecordedApiKey)
+    protected function getClient(\Arvato\AfterpayModule\Application\Model\AfterpayOrder $AfterpayOrder, $recordedApiKey)
     {
         return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getCaptureShippingClient(
             $AfterpayOrder->getOxOrder()->oxorder__oxordernr->value,
             $AfterpayOrder->arvatoafterpayafterpayorder__apcaptureno->value,
             null,
-            $sRecordedApiKey
+            $recordedApiKey
         );
     }
 }

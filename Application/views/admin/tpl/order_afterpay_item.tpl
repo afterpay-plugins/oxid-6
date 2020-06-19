@@ -21,7 +21,7 @@
 >
     [{$oViewConf->getHiddenSid()}]
     <input type="hidden" name="cl" value="orderafterpay">
-    <input type="hidden" name="fnc" value="orderitemaction">
+    <input type="hidden" name="fnc" value="orderItemAction">
     <input type="hidden" name="oderitemaction" value="[{$form}]">
     <input type="hidden" name="oxid" value="[{$oxid}]">
     [{if $form eq "refund"}]

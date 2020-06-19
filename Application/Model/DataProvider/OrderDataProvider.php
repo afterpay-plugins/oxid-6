@@ -1,21 +1,25 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
+
+use Arvato\AfterpayModule\Application\Model\Entity\OrderEntity;
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\Order;
 
 /**
  * Class AvailableInstallmentPlansDataProvider
@@ -29,9 +33,9 @@ class OrderDataProvider extends \Arvato\AfterpayModule\Application\Model\DataPro
     /**
      * Gets an order request object from the basket.
      *
-     * @param oxBasket $basket
+     * @param Basket $basket
      * @param $orderId
-     * @param oxOrder $oOrder
+     * @param Order $oOrder
      *
      * @return OrderEntity
      */
@@ -39,11 +43,11 @@ class OrderDataProvider extends \Arvato\AfterpayModule\Application\Model\DataPro
     {
         $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderEntity::class);
 
-        $fNettoSum = round($oOrder->getOrderNetSum(), 2);
-        $fBruttoSum = round($oOrder->getTotalOrderSum(), 2);
+        $nettoSum = round($oOrder->getOrderNetSum(), 2);
+        $bruttoSum = round($oOrder->getTotalOrderSum(), 2);
 
-        $dataObject->setTotalGrossAmount($fBruttoSum);
-        $dataObject->setTotalNetAmount($fNettoSum);
+        $dataObject->setTotalGrossAmount($bruttoSum);
+        $dataObject->setTotalNetAmount($nettoSum);
 
         $dataObject->setCurrency($basket->getBasketCurrency()->name);
         $dataObject->setItems(oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\OrderItemDataProvider::class)->getOrderItemList($basket));
@@ -55,7 +59,7 @@ class OrderDataProvider extends \Arvato\AfterpayModule\Application\Model\DataPro
     /**
      * Gets an order request object from the oxorder.
      *
-     * @param oxBasket $basket
+     * @param Basket $basket
      *
      * @return OrderEntity
      */

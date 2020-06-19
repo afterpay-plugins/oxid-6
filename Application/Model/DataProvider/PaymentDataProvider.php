@@ -1,21 +1,24 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
+
+use Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity;
+use Arvato\AfterpayModule\Core\Exception\PaymentException;
 
 /**
  * Class PaymentDataProvider: Data provider for payment data.
@@ -27,32 +30,32 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
      *
      * @param string $paymentId paymentId - Used for Installment, Debit and Installment
      *
-     * @param string $sIBAN - Used for Debit and Installment
-     * @param string $sBIC - Used for Debit and Installment
+     * @param string $IBAN - Used for Debit and Installment
+     * @param string $BIC - Used for Debit and Installment
      *
-     * @param int $iSelectedInstallmentPlanProfileId - Used for Installment
-     * @param int $iNumberOfInstallments - Used for Installment
+     * @param int $selectedInstallmentPlanProfileId - Used for Installment
+     * @param int $numberOfInstallments - Used for Installment
      *
      * @return PaymentEntity
      * @throws PaymentException
      */
     public function getPayment(
         $paymentId,
-        $sIBAN = null,
-        $sBIC = null,
-        $iSelectedInstallmentPlanProfileId = null,
-        $iNumberOfInstallments = null
+        $IBAN = null,
+        $BIC = null,
+        $selectedInstallmentPlanProfileId = null,
+        $numberOfInstallments = null
     ) {
         if ('afterpayinvoice' === $paymentId) {
             $payment = $this->createInvoicePayment();
         } elseif ('afterpaydebitnote' === $paymentId) {
-            $payment = $this->createDebitNotePayment($sIBAN, $sBIC);
+            $payment = $this->createDebitNotePayment($IBAN, $BIC);
         } elseif ('afterpayinstallment' === $paymentId) {
             $payment = $this->createInstallmentPayment(
-                $sIBAN,
-                $sBIC,
-                $iSelectedInstallmentPlanProfileId,
-                $iNumberOfInstallments
+                $IBAN,
+                $BIC,
+                $selectedInstallmentPlanProfileId,
+                $numberOfInstallments
             );
         } else {
             throw new \Arvato\AfterpayModule\Core\Exception\PaymentException('Unknown Payment Type ' . $paymentId);
@@ -61,21 +64,21 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
     }
 
     /**
-     * @param $sIBAN
-     * @param $sBIC
+     * @param $IBAN
+     * @param $BIC
      *
      * @return PaymentEntity $payment
      */
-    public function createDebitNotePayment($sIBAN, $sBIC)
+    public function createDebitNotePayment($IBAN, $BIC)
     {
         $payment = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::class);
 
         $payment->setType(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::TYPE_DEBITNOTE);
 
-        if ($sIBAN && $sBIC) {
+        if ($IBAN && $BIC) {
             $directDebit = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\BankAccountEntity::class);
-            $directDebit->setBankAccount($sIBAN);
-            $directDebit->setBankCode($sBIC);
+            $directDebit->setBankAccount($IBAN);
+            $directDebit->setBankCode($BIC);
             $payment->setDirectDebit($directDebit);
         }
 
@@ -93,33 +96,33 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
     }
 
     /**
-     * @param $sIBAN
-     * @param $sBIC
-     * @param $iSelectedInstallmentPlanProfileId
-     * @param $iNumberOfInstallments
+     * @param $IBAN
+     * @param $BIC
+     * @param $selectedInstallmentPlanProfileId
+     * @param $numberOfInstallments
      *
      * @return PaymentEntity
      */
     public function createInstallmentPayment(
-        $sIBAN,
-        $sBIC,
-        $iSelectedInstallmentPlanProfileId,
-        $iNumberOfInstallments
+        $IBAN,
+        $BIC,
+        $selectedInstallmentPlanProfileId,
+        $numberOfInstallments
     ) {
         $payment = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::class);
         $payment->setType(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::TYPE_INSTALLMENT);
 
-        if ($sIBAN && $sBIC) {
+        if ($IBAN && $BIC) {
             $directDebit = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\BankAccountEntity::class);
-            $directDebit->setBankAccount($sIBAN);
-            $directDebit->setBankCode($sBIC);
+            $directDebit->setBankAccount($IBAN);
+            $directDebit->setBankCode($BIC);
             $payment->setDirectDebit($directDebit);
         }
 
-        if ($iSelectedInstallmentPlanProfileId || $iNumberOfInstallments) {
+        if ($selectedInstallmentPlanProfileId || $numberOfInstallments) {
             $installment = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-            $iSelectedInstallmentPlanProfileId && $installment->setProfileNo($iSelectedInstallmentPlanProfileId);
-            $iNumberOfInstallments && $installment->setNumberOfInstallments($iNumberOfInstallments);
+            $selectedInstallmentPlanProfileId && $installment->setProfileNo($selectedInstallmentPlanProfileId);
+            $numberOfInstallments && $installment->setNumberOfInstallments($numberOfInstallments);
             $payment->setInstallment($installment);
         }
         return $payment;

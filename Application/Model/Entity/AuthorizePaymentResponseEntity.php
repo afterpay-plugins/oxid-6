@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
+*
  *
- * @category  module
- * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
@@ -25,9 +25,9 @@ class AuthorizePaymentResponseEntity extends \Arvato\AfterpayModule\Application\
     /**
      * Constants for outcome property.
      */
-    public const OUTCOME_ACCEPTED = 'Accepted';
-    public const OUTCOME_PENDING = 'Pending';
-    public const OUTCOME_REJECTED = 'Rejected';
+    const OUTCOME_ACCEPTED = 'Accepted';
+    const OUTCOME_PENDING = 'Pending';
+    const OUTCOME_REJECTED = 'Rejected';
 
     /**
      * Getter for outcome property.

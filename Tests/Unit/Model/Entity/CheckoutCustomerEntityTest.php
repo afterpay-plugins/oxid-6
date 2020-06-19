@@ -10,7 +10,7 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
+ * @author     ©2020 norisk GmbH
  * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2020
  */

@@ -10,12 +10,23 @@
  *
  * @category  module
  * @package   afterpay
- * @author    OXID Professional services
- * @link      http://www.oxid-esales.com
+ * @author    ©2020 norisk GmbH
+ * @link
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
+
+use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureResponseEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\Entity;
+use Arvato\AfterpayModule\Application\Model\Entity\ResponseMessageEntity;
+use Arvato\AfterpayModule\Core\Exception\CurlException;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Language;
+use OxidEsales\Eshop\Core\Session;
+use stdClass;
 
 /**
  * Class Service
@@ -41,17 +52,17 @@ class Service
     protected $_afterpayOrder;
 
     /**
-     * @var oxOrder
+     * @var Order
      */
     protected $_oxOrder;
 
     /**
-     * @var oxLang Current language.
+     * @var Language Current language.
      */
     protected $_lang;
 
     /**
-     * @var oxSession Current session.
+     * @var Session Current session.
      */
     protected $_session;
 
