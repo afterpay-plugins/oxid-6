@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
@@ -43,8 +32,8 @@ class Article extends Article_parent
 
         // Any Category
         $catTmp = oxNew(\OxidEsales\Eshop\Application\Model\Category::class);
-        foreach ($this->getCategoryIds() as $sID) {
-            if ($catTmp->load($sID) && $catTmp->oxcategories__aapproductgroup->value) {
+        foreach ($this->getCategoryIds() as $id) {
+            if ($catTmp->load($id) && $catTmp->oxcategories__aapproductgroup->value) {
                 return $catTmp->oxcategories__aapproductgroup->value;
             }
         }

@@ -2,17 +2,6 @@
 
 /**
  *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
@@ -134,7 +123,7 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
             }
         }
 
-        foreach ($refundsByCaptureNumber as $sCaptureNumber => $refund) {
+        foreach ($refundsByCaptureNumber as $captureNumber => $refund) {
             $refundItems = $refund->refundItems;
             if (!isset($refundItems) || !is_array($refundItems) || !count($refundItems)) {
                 continue;
@@ -142,7 +131,7 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
 
             // Set left-to-capture quantity
             foreach ($refundItems as $refundItem) {
-                foreach ($capturesByCaptureNumber[$sCaptureNumber]->captureItems as $k => &$captureItem) {
+                foreach ($capturesByCaptureNumber[$captureNumber]->captureItems as $k => &$captureItem) {
                     if ($captureItem->productId === $refundItem->productId) {
                         $captureItem->leftToCaptureQuantity = $captureItem->quantity - $refundItem->quantity;
                     } elseif (!isset($captureItem->leftToCaptureQuantity)) {

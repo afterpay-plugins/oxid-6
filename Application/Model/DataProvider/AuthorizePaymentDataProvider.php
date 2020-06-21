@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
@@ -24,9 +13,6 @@ use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
 use Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentEntity;
-use Arvato\AfterpayModule\Application\Model\DataProvider\OrderDataProvider;
-use Arvato\AfterpayModule\Application\Model\DataProvider\CheckoutCustomerDataProvider;
-use Arvato\AfterpayModule\Application\Model\DataProvider\PaymentDataProvider;
 use OxidEsales\Eshop\Core\Session;
 
 /**
@@ -40,14 +26,14 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
      * @param Session $session
      * @param Language $lang
      *
-     * @param Order $oOrder
+     * @param Order $order
      *
      * @return AuthorizePaymentEntity|object
      */
     public function getDataObject(
         \OxidEsales\Eshop\Core\Session $session,
         \OxidEsales\Eshop\Core\Language $lang,
-        \OxidEsales\Eshop\Application\Model\Order $oOrder
+        \OxidEsales\Eshop\Application\Model\Order $order
     ) {
         // Collect Data
         $user = $session->getUser();
@@ -56,7 +42,7 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
         $deladrid = $session->getVariable('deladrid');
         $languageAbbr = $lang->getLanguageAbbr();
         $billCustomer = $this->getCustomer($user, $languageAbbr);
-        $orderSummary = $this->getOrderSummeryByBasket($basket, $orderId, $oOrder);
+        $orderSummary = $this->getOrderSummeryByBasket($basket, $orderId, $order);
 
         if (isset($deladrid)) {
             $deliveryCustomer = $this->getDelCustomer($user, $languageAbbr);
@@ -98,14 +84,14 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
      * @param $basket
      * @param $orderId
      *
-     * @param Order $oOrder
+     * @param Order $order
      *
      * @return OrderEntity
      * @codeCoverageIngore Mocking helper
      */
-    protected function getOrderSummeryByBasket($basket, $orderId, \OxidEsales\Eshop\Application\Model\Order $oOrder)
+    protected function getOrderSummeryByBasket($basket, $orderId, \OxidEsales\Eshop\Application\Model\Order $order)
     {
-        return oxNew(OrderDataProvider::class)->getOrderSummaryByBasket($basket, $orderId, $oOrder);
+        return oxNew(OrderDataProvider::class)->getOrderSummaryByBasket($basket, $orderId, $order);
     }
 
     /**

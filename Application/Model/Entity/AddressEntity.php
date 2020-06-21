@@ -2,23 +2,12 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
 
 /**
- * Class AddressEntity: Entitiy for address Data.
+ * Class AddressEntity: Entity for address Data.
  */
 class AddressEntity extends \Arvato\AfterpayModule\Application\Model\Entity\Entity
 {

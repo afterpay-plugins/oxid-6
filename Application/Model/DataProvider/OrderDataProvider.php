@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
@@ -35,16 +24,16 @@ class OrderDataProvider extends \Arvato\AfterpayModule\Application\Model\DataPro
      *
      * @param Basket $basket
      * @param $orderId
-     * @param Order $oOrder
+     * @param Order $order
      *
      * @return OrderEntity
      */
-    public function getOrderSummaryByBasket(\OxidEsales\Eshop\Application\Model\Basket $basket, $orderId, \OxidEsales\Eshop\Application\Model\Order $oOrder)
+    public function getOrderSummaryByBasket(\OxidEsales\Eshop\Application\Model\Basket $basket, $orderId, \OxidEsales\Eshop\Application\Model\Order $order)
     {
         $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderEntity::class);
 
-        $nettoSum = round($oOrder->getOrderNetSum(), 2);
-        $bruttoSum = round($oOrder->getTotalOrderSum(), 2);
+        $nettoSum = round($order->getOrderNetSum(), 2);
+        $bruttoSum = round($order->getTotalOrderSum(), 2);
 
         $dataObject->setTotalGrossAmount($bruttoSum);
         $dataObject->setTotalNetAmount($nettoSum);

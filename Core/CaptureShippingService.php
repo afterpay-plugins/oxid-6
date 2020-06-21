@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -39,7 +28,7 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
      */
     public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_oxOrder = $order;
+        $this->_order = $order;
         $this->_afterpayOrder = $order->getAfterpayOrder();
     }
 
@@ -70,18 +59,18 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
         $shippingNumber = $this->getEntity()->getShippingNumber();
 
         if (is_numeric($shippingNumber) && $shippingNumber > 0) {
-            $this->_oxOrder->oxorder__oxtrackcode = new \OxidEsales\Eshop\Core\Field($trackingId);
-            $this->_oxOrder->oxorder__oxsenddate = new \OxidEsales\Eshop\Core\Field(
+            $this->_order->oxorder__oxtrackcode = new \OxidEsales\Eshop\Core\Field($trackingId);
+            $this->_order->oxorder__oxsenddate = new \OxidEsales\Eshop\Core\Field(
                 date("Y-m-d H:i:s", Registry::getUtilsDate()->getTime())
             );
-            $this->_oxOrder->save();
+            $this->_order->save();
         }
 
         return $this->getEntity();
     }
 
     /**
-     * @param AfterpayOrder $AfterpayOrder
+     * @param AfterpayOrder $afterpayOrder
      * @param string $trackingId as provided by the carrier company
      * @param $recordedApiKey
      * @param string $shippingCompany e.g. dhl, ups, dpd
@@ -91,14 +80,14 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
      * @codeCoverageIgnore : Untested since we would have to mock away both lines
      */
     protected function executeRequestFromOrderData(
-        \Arvato\AfterpayModule\Application\Model\AfterpayOrder $AfterpayOrder,
+        \Arvato\AfterpayModule\Application\Model\AfterpayOrder $afterpayOrder,
         $trackingId,
         $recordedApiKey,
         $shippingCompany,
         $type
     ) {
         $data = $this->getData($trackingId, $shippingCompany, $type);
-        return $this->getClient($AfterpayOrder, $recordedApiKey)->execute($data);
+        return $this->getClient($afterpayOrder, $recordedApiKey)->execute($data);
     }
 
     /**
@@ -119,18 +108,18 @@ class CaptureShippingService extends \Arvato\AfterpayModule\Core\Service
     }
 
     /**
-     * @param AfterpayOrder $AfterpayOrder
+     * @param AfterpayOrder $afterpayOrder
      *
      * @param $recordedApiKey
      *
      * @return WebServiceClient
      * @codeCoverageIgnore Mocked away
      */
-    protected function getClient(\Arvato\AfterpayModule\Application\Model\AfterpayOrder $AfterpayOrder, $recordedApiKey)
+    protected function getClient(\Arvato\AfterpayModule\Application\Model\AfterpayOrder $afterpayOrder, $recordedApiKey)
     {
         return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getCaptureShippingClient(
-            $AfterpayOrder->getOxOrder()->oxorder__oxordernr->value,
-            $AfterpayOrder->arvatoafterpayafterpayorder__apcaptureno->value,
+            $afterpayOrder->getOxOrder()->oxorder__oxordernr->value,
+            $afterpayOrder->arvatoafterpayafterpayorder__apcaptureno->value,
             null,
             $recordedApiKey
         );

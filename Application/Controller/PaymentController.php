@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Controller;
@@ -47,8 +36,8 @@ class PaymentController extends PaymentController_parent
         $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... their formatting ...
-        $aAvailableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
-        $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
+        $availableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
+        $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $availableInstallmentPlanFormattings);
 
         // ... and currently selected installment plan (if there is a selected one)
         $selectedInstallmentPlanProfileIdInSession = $this->updateSelectedInstallmentPlanProfileIdInSession();

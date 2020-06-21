@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
@@ -21,7 +10,6 @@ use Arvato\AfterpayModule\Core\Exception\PaymentException;
 use Arvato\AfterpayModule\Core\ValidateBankAccountService;
 use Exception;
 use OxidEsales\Eshop\Core\Registry;
-use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
 use Arvato\AfterpayModule\Core\AuthorizePaymentService;
 use Arvato\AfterpayModule\Core\AvailablePaymentMethodsService;
 use Arvato\AfterpayModule\Core\CreateContractService;
@@ -248,19 +236,19 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         // Is selected installment plan available?
 
-        $AvailablePaymentMethodsService = $this->getAvailablePaymentMethodsService($oOrder);
+        $availablePaymentMethodsService = $this->getAvailablePaymentMethodsService($oOrder);
 
         if (
-            !($AvailablePaymentMethodsService
+            !($availablePaymentMethodsService
             ->isSpecificInstallmentAvailable($selectedInstallmentPlanProfileId))
         ) {
-            $this->_iLastErrorNo = $AvailablePaymentMethodsService->getLastErrorNo();
-            $this->_sLastError = $AvailablePaymentMethodsService->getErrorMessages();
+            $this->_iLastErrorNo = $availablePaymentMethodsService->getLastErrorNo();
+            $this->_sLastError = $availablePaymentMethodsService->getErrorMessages();
             return false;
         }
 
         $afterpayCheckoutId = Registry::getSession()->getVariable('arvatoAfterpayCheckoutId');
-        $numberOfInstallments = $AvailablePaymentMethodsService
+        $numberOfInstallments = $availablePaymentMethodsService
             ->getNumberOfInstallmentsByProfileId($selectedInstallmentPlanProfileId);
 
         /*

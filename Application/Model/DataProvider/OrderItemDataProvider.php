@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
@@ -47,10 +36,10 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         // Add articles
 
         foreach ($basket->getContents() as $item) {
-            $oItem = $this->getOrderItem($item);
-            $sumNetto += $oItem->getNetUnitPrice();
-            $sumBrutto += $oItem->getGrossUnitPrice();
-            $list[] = $oItem;
+            $objItem = $this->getOrderItem($item);
+            $sumNetto += $objItem->getNetUnitPrice();
+            $sumBrutto += $objItem->getGrossUnitPrice();
+            $list[] = $objItem;
         }
 
         // Add delivery costs

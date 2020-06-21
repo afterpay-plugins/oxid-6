@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -69,14 +58,14 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
 
     /**
      *
-     * @param Order $oOrder
+     * @param Order $order
      *
      * @return stdClass|stdClass[]
      */
-    public function executeRequestFromSessionData(\OxidEsales\Eshop\Application\Model\Order $oOrder)
+    public function executeRequestFromSessionData(\OxidEsales\Eshop\Application\Model\Order $order)
     {
         $dataProvider = $this->getAuthorizePaymentDataProvider();
-        $dataObject = $dataProvider->getDataObject($this->_session, $this->_lang, $oOrder);
+        $dataObject = $dataProvider->getDataObject($this->_session, $this->_lang, $order);
         $data = $dataObject->exportData();
 
         $client = $this->getAuthorizePaymentClient();
@@ -88,9 +77,9 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
      *
      * @param stdClass $stdClassAddress E.G.
      *     {"street":"Bahnhofstr.","streetNumber":"123","postalCode":"70736","postalPlace":"Fellbach","countryCode":"DE"}
-     * @param bool $bIsDeliveryAddress billing/delivery
+     * @param bool $isDeliveryAddress billing/delivery
      */
-    public function updateCorrectedCustomerAddress($stdClassAddress, $bIsDeliveryAddress = false)
+    public function updateCorrectedCustomerAddress($stdClassAddress, $isDeliveryAddress = false)
     {
 
         if (is_array($stdClassAddress)) {
@@ -108,7 +97,7 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
             return;
         }
 
-        if (!$bIsDeliveryAddress) {
+        if (!$isDeliveryAddress) {
             isset($stdClassAddress->street) && $user->oxuser__oxstreet = new \OxidEsales\Eshop\Core\Field($stdClassAddress->street);
             isset($stdClassAddress->streetNumber) && $user->oxuser__oxstreetnr = new \OxidEsales\Eshop\Core\Field($stdClassAddress->streetNumber);
             isset($stdClassAddress->postalCode) && $user->oxuser__oxzip = new \OxidEsales\Eshop\Core\Field($stdClassAddress->postalCode);
