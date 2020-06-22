@@ -98,9 +98,9 @@ class Events
      */
     protected static function tableExists($sTableName)
     {
-        $oDbMetaDataHandler = oxNew(DbMetaDataHandler::class );
+        $dbMetaDataHandler = oxNew(DbMetaDataHandler::class );
 
-        return $oDbMetaDataHandler->tableExists($sTableName);
+        return $dbMetaDataHandler->tableExists($sTableName);
     }
 
     /**
@@ -111,15 +111,6 @@ class Events
     private static function executeSQL($sqlQuery)
     {
         DatabaseProvider::getDb()->execute($sqlQuery);
-    }
-
-    /**
-     * Regenerate views for changed tables
-     */
-    protected static function regenerateViews()
-    {
-        $oDbMetaDataHandler = oxNew(DbMetaDataHandler::class );
-        $oDbMetaDataHandler->updateViews();
     }
 
     /**
@@ -149,7 +140,6 @@ class Events
                     $paymentTable->save();
                 }
             }
-            self::regenerateViews();
         }
 
         // Get column if exist
