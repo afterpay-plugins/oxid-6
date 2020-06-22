@@ -17,7 +17,7 @@ abstract class EntityAbstract extends \OxidEsales\TestingLibrary\UnitTestCase
      * @param Entity $testObject
      * @param mixed[] $testData
      */
-    public function testGetSet(= \Arvato\AfterpayModule\Application\Model\Entity\Entity $testObject, $testData)
+    public function testGetSet(\Arvato\AfterpayModule\Application\Model\Entity\Entity $testObject, $testData)
     {
         foreach ($testData as $key => $value) {
             $setter = $this->getSetterName($key);
