@@ -1,26 +1,15 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\Entity;
+namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
 /**
  * Class AuthorizePaymentResponseEntityTest: Tests for AuthorizePaymentResponseEntity.
  */
-class AuthorizePaymentResponseEntityTest extends \OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class AuthorizePaymentResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
 {
     /**
      * Testing all getters and Setters
@@ -29,8 +18,8 @@ class AuthorizePaymentResponseEntityTest extends \OxidProfessionalServices\Arvat
     {
         $testData = [
             'outcome' => 111,
-            'customer' => oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CustomerResponseEntity::class),
-            'deliveryCustomer' => oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CustomerResponseEntity::class),
+            'customer' => oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity::class),
+            'deliveryCustomer' => oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity::class),
             'reservationId' => 444,
             'checkoutId' => 555,
             'riskCheckMessages' => 666
@@ -47,6 +36,6 @@ class AuthorizePaymentResponseEntityTest extends \OxidProfessionalServices\Arvat
      */
     protected function getSUT()
     {
-        return oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\AuthorizePaymentResponseEntity::class);
+        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentResponseEntity::class);
     }
 }

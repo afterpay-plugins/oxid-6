@@ -1,21 +1,10 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\DataProvider;
+namespace Arvato\AfterpayModule\Tests\Unit\Model\DataProvider;
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
 
@@ -53,7 +42,7 @@ class AddressDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $address->assign($testAddressData);
         $address->setUser($user);
 
-        $testObject = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\AddressDataProvider::class);
+        $testObject = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\AddressDataProvider::class);
         $address = $testObject->getUserAddress($user);
 
         $this->assertEquals('DE', $address->getCountryCode());
@@ -93,7 +82,7 @@ class AddressDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $address->assign($testAddressData);
         $address->setUser($user);
 
-        $testObject = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\AddressDataProvider::class);
+        $testObject = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\AddressDataProvider::class);
         $address = $testObject->getDeliveryAddress($user);
 
         $this->assertEquals('DE', $address->getCountryCode());
@@ -122,7 +111,7 @@ class AddressDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $user->assign($testData);
 
 
-        $testObject = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\AddressDataProvider::class);
+        $testObject = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\AddressDataProvider::class);
         $address = $testObject->getDeliveryAddress($user);
 
         $this->assertEquals('DE', $address->getCountryCode());

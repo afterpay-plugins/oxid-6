@@ -11,5 +11,14 @@
                     [{include file="help.tpl" helpid=article_vat}]>
             [{ oxinputhelp ident="HELP_ARTICLE_MAIN_AAPPRODUCTGROUP" }]
         </td>
+
+        <td class="edittext">
+            [{oxmultilang ident="ORDER_AFTERPAY_MAIN_CATEGORY"}]
+        </td>
+        <td class="edittext">
+            <input type="text" class="editinput" size="10"
+                   name="editval[oxcategories__oxtitle]" value="[{$edit->oxcategories__oxtitle->value}]">
+            [{oxinputhelp ident="ORDER_AFTERPAY_CATEGORY_MAIN_HELP"}]
+        </td>
     </tr>
 [{/oxhasrights}]

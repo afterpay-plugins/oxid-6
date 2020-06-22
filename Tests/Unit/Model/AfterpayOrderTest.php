@@ -1,21 +1,10 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model;
+namespace Arvato\AfterpayModule\Tests\Unit\Model;
 
 use OxidEsales\Eshop\Core\Registry;
 
@@ -87,6 +76,6 @@ class AfterpayOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getSUT()
     {
         $dummyOxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        return oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\AfterpayOrder::class, $dummyOxOrder);
+        return oxNew(\Arvato\AfterpayModule\Application\Model\AfterpayOrder::class, $dummyOxOrder);
     }
 }

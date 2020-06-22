@@ -1,21 +1,10 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\DataProvider;
+namespace Arvato\AfterpayModule\Tests\Unit\Model\DataProvider;
 
 class RefundItemDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
@@ -26,7 +15,7 @@ class RefundItemDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $items = [];
 
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRefundItemList'])
             ->getMock();
@@ -39,7 +28,7 @@ class RefundItemDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $items = [1, 2, 3];
 
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRefundItemList'])
             ->getMock();
@@ -56,7 +45,7 @@ class RefundItemDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $items = [['vatPercent' => 19, 'grossUnitPrice' => 99.99]];
 
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRefundItem'])
             ->getMock();
@@ -72,7 +61,7 @@ class RefundItemDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testgetRefundItemOk()
     {
         $items = ['vatPercent' => 19, 'grossUnitPrice' => 99.99];
-        $sut = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class);
+        $sut = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class);
         $sutreturn = $sut->getRefundItem($items);
         $expected = '{"grossUnitPrice":99.99,"netUnitPrice":0,"vatAmount":99.99,"vatPercent":19}';
         $this->assertEquals($expected, json_encode($sutreturn->exportData()));
@@ -81,7 +70,7 @@ class RefundItemDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testgetRefundItemError()
     {
         $items = ['vatPercent' => 19, 'grossUnitPrice' => 0];
-        $sut = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class);
+        $sut = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\RefundItemDataProvider::class);
         $sutreturn = $sut->getRefundItem($items);
         $this->assertNull($sutreturn);
     }

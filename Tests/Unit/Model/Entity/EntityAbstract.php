@@ -1,21 +1,10 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\Entity;
+namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
 /**
  * Class EntityTest: Base class for the entity tests.
@@ -28,7 +17,7 @@ abstract class EntityAbstract extends \OxidEsales\TestingLibrary\UnitTestCase
      * @param Entity $testObject
      * @param mixed[] $testData
      */
-    public function testGetSet(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\Entity $testObject, $testData)
+    public function testGetSet(= \Arvato\AfterpayModule\Application\Model\Entity\Entity $testObject, $testData)
     {
         foreach ($testData as $key => $value) {
             $setter = $this->getSetterName($key);
