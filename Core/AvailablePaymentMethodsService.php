@@ -144,25 +144,6 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
     }
 
     /**
-     * Returns the number of installments (used for createContract) by profileId
-     *
-     * @param $profileId
-     *
-     * @return null|int
-     */
-    public function getNumberOfInstallmentsByProfileId($profileId)
-    {
-
-        if (!$this->_mappingInstallmentPfofileId2NumberOfInstallments) {
-            $this->isSpecificInstallmentAvailable(1);
-        }
-        if (isset($this->_mappingInstallmentPfofileId2NumberOfInstallments[$profileId])) {
-            return $this->_mappingInstallmentPfofileId2NumberOfInstallments[$profileId];
-        }
-        return null;
-    }
-
-    /**
      * @codeCoverageIgnore Works directly on API Server response. Impossible to test without major server mocking.
      */
     public function getLastErrorNo()

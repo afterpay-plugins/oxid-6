@@ -238,10 +238,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
             return false;
         }
 
-        $afterpayCheckoutId = Registry::getSession()->getVariable('arvatoAfterpayCheckoutId');
-        $numberOfInstallments = $availablePaymentMethodsService
-            ->getNumberOfInstallmentsByProfileId($selectedInstallmentPlanProfileId);
-
         return true;
     }
 
@@ -285,18 +281,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         return oxNew(\Arvato\AfterpayModule\Core\ValidateBankAccountService::class);
     }
 
-    /**
-     * @param string $checkoutId
-     *
-     * @return CreateContractService
-     * Cert. Manual p.21: Classes that are pure data containers don’t include any logic
-     * (only getters and setters), can be excluded from test coverage:
-     * @codeCoverageIgnore
-     */
-    protected function getCreateContractService($checkoutId)
-    {
-        return oxNew(\Arvato\AfterpayModule\Core\CreateContractService::class, $checkoutId);
-    }
 
     /**
      * Delets all arvatoAfterpay... session vars that are used to communicate

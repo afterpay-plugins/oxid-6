@@ -105,13 +105,13 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $mockAvailPaymenteService = $this->getMockBuilder(\Arvato\AfterpayModule\Core\ValidateBankAccountService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSpecificInstallmentAvailable','getNumberOfInstallmentsByProfileId'])
+            ->setMethods(['isSpecificInstallmentAvailable'])
             ->getMock();
         $mockAvailPaymenteService
             ->method('isSpecificInstallmentAvailable')
             ->will($this->returnValue(true));
         $mockAvailPaymenteService
-            ->method('getNumberOfInstallmentsByProfileId')
+            // ->method('getNumberOfInstallmentsByProfileId')
             ->will($this->returnValue(9));
 
         $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\PaymentGateway::class)
@@ -147,13 +147,13 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $mockAvailPaymenteService = $this->getMockBuilder(\Arvato\AfterpayModule\Core\Service\AvailablePaymentMethodsService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSpecificInstallmentAvailable','getNumberOfInstallmentsByProfileId'])
+            ->setMethods(['isSpecificInstallmentAvailable'])
             ->getMock();
         $mockAvailPaymenteService
             ->method('isSpecificInstallmentAvailable')
             ->will($this->returnValue(false));
         $mockAvailPaymenteService
-            ->method('getNumberOfInstallmentsByProfileId')
+           // ->method('getNumberOfInstallmentsByProfileId')
             ->will($this->returnValue(9));
 
         $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\PaymentGateway::class)
@@ -220,15 +220,13 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'getValidateBankAccountService',
-                'getAvailablePaymentMethodsService',
-                'getCreateContractService'
+                'getAvailablePaymentMethodsService'
             ])
             ->getMock();
         $sut->setPaymentParams($userPayment);
 
         $sut->method('getValidateBankAccountService')->will($this->returnValue($mockValidateService));
         $sut->method('getAvailablePaymentMethodsService')->will($this->returnValue($mockAvailPaymenteService));
-        $sut->method('getCreateContractService')->will($this->returnValue($mockCCService));
 
         $this->assertEquals(12345, $sut->handleDebitNote(oxNew(\OxidEsales\Eshop\Application\Model\Order::class)));
     }
