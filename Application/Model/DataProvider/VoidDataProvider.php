@@ -40,9 +40,9 @@ class VoidDataProvider extends \Arvato\AfterpayModule\Application\Model\DataProv
             $orderDetails->items = array_values($orderItems); //remove any array keys
             $orderDetails->totalNetAmount = 0;
             $orderDetails->totalGrossAmount = 0;
-            foreach ($orderItems as $oOrderItem) {
-                $orderDetails->totalNetAmount += (float)$oOrderItem->netUnitPrice * $oOrderItem->quantity;
-                $orderDetails->totalGrossAmount += (float)$oOrderItem->grossUnitPrice * $oOrderItem->quantity;
+            foreach ($orderItems as $objOrderItem) {
+                $orderDetails->totalNetAmount += (float)$objOrderItem->netUnitPrice * $objOrderItem->quantity;
+                $orderDetails->totalGrossAmount += (float)$objOrderItem->grossUnitPrice * $objOrderItem->quantity;
             }
         }
 

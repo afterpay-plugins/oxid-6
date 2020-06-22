@@ -132,15 +132,15 @@ class Service
 
     protected function getBaseClassName()
     {
-        $sClassName = str_replace(__NAMESPACE__ . '\\', '', get_class($this));
-        if (0 === strpos($sClassName, 'Mock_')) {
+        $className = str_replace(__NAMESPACE__ . '\\', '', get_class($this));
+        if (0 === strpos($className, 'Mock_')) {
             // Unit Test helper: Turn mocked Mock_someClass_a1b2c3d into someClass
-            $sClassName = substr($sClassName, 5);
-            $sClassName = substr($sClassName, 0, -9);
+            $className = substr($className, 5);
+            $className = substr($className, 0, -9);
         }
 
-        $sClassName = str_replace('Service', '', $sClassName);
+        $className = str_replace('Service', '', $className);
 
-        return $sClassName;
+        return $className;
     }
 }

@@ -71,15 +71,15 @@ class PaymentController extends PaymentController_parent
         $alreadyHaveBirthdate = false !== strpos($oxcmp_user->oxuser__oxbirthdate->value, '19');
         $alreadyHavePhone = $oxcmp_user->oxuser__oxfon->value || $oxcmp_user->oxuser__oxmob->value || $oxcmp_user->oxuser__oxprivfon->value;
 
-        foreach (array_keys($requirements) as $sPayment) {
-            $requirements[$sPayment]['SSN'] =
-                Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresSSN');
+        foreach (array_keys($requirements) as $payment) {
+            $requirements[$payment]['SSN'] =
+                Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresSSN');
 
-            $requirements[$sPayment]['Birthdate'] =
-                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresBirthdate'));
+            $requirements[$payment]['Birthdate'] =
+                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresBirthdate'));
 
-            $requirements[$sPayment]['Fon'] =
-                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $sPayment . 'RequiresBirthdate'));
+            $requirements[$payment]['Fon'] =
+                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresBirthdate'));
         }
 
         $smarty->assign('aAfterpayRequiredFields', $requirements);

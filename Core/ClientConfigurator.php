@@ -307,16 +307,16 @@ class ClientConfigurator
         $recordedApiKey = ''
     ) {
 
-        $sIsInstallmentApi = $isInstallmentApi ? 'Installment' : '';
+        $isInstallmentApi = $isInstallmentApi ? 'Installment' : '';
 
         $customerCountryCode = $this->getUserCountryCodeIdFromSession();
 
         if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxMode')) {
             $url = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxUrl'));
-            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxKey' . $customerCountryCode . $sIsInstallmentApi));
+            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxKey' . $customerCountryCode . $isInstallmentApi));
         } else {
             $url = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiUrl'));
-            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiKey' . $customerCountryCode . $sIsInstallmentApi));
+            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiKey' . $customerCountryCode . $isInstallmentApi));
         }
 
         if (substr($url, -1) != '/') {

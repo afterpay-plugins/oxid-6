@@ -33,13 +33,13 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Performs the autorize payment call.
      *
-     * @param $oOrder
+     * @param $order
      *
      * @return string Outcome
      */
-    public function authorizePayment(\OxidEsales\Eshop\Application\Model\Order $oOrder)
+    public function authorizePayment(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $response = $this->executeRequestFromSessionData($oOrder);
+        $response = $this->executeRequestFromSessionData($order);
 
         $this->_entity = $this->parseResponse($response);
         $this->_session->setVariable('arvatoAfterpayReservationId', $this->_entity->getReservationId());

@@ -92,15 +92,15 @@ class Events
     /**
      * Check if table exists
      *
-     * @param string $sTableName table name
+     * @param string $tableName table name
      *
      * @return bool
      */
-    protected static function tableExists($sTableName)
+    protected static function tableExists($tableName)
     {
         $dbMetaDataHandler = oxNew(DbMetaDataHandler::class );
 
-        return $dbMetaDataHandler->tableExists($sTableName);
+        return $dbMetaDataHandler->tableExists($tableName);
     }
 
     /**

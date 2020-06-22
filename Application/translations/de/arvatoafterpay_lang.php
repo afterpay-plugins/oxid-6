@@ -4,9 +4,9 @@
  * @codeCoverageIgnroeStart
  */
 
-$langName = 'Deutsch';
+$sLangName = 'Deutsch';
 
-$lang = [
+$aLang = [
     'charset'                                     => 'UTF-8',
 
     'ORDER_OVERVIEW_APBIRTHDAY'                   => 'Geburtstag (tt.mm.jjjj)',

@@ -213,11 +213,11 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
                     ->setMethods(['save', 'getSelectedAddress'])
                     ->getMock();
             $mockOxUser
-                ->expects($bIsDeliveryAddress ? $this->never() : $this->once())
+                ->expects($isDeliveryAddress ? $this->never() : $this->once())
                 ->method('save')
                 ->will($this->returnValue(null));
             $mockOxUser
-                ->expects(!$bIsDeliveryAddress ? $this->never() : $this->once())
+                ->expects(!$isDeliveryAddress ? $this->never() : $this->once())
                 ->method('getSelectedAddress')
                 ->will($this->returnValue($mockOxAddress));
         }

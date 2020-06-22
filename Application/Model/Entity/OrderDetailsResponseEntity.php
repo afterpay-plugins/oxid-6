@@ -154,11 +154,11 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
 
         $allItems = [];
 
-        foreach ($this->getOrderDetails()->orderItems as $oItem) {
-            $allItems[$oItem->productId] = clone($oItem);
+        foreach ($this->getOrderDetails()->orderItems as $objItem) {
+            $allItems[$objItem->productId] = clone($objItem);
             $art = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
-            $art->load($oItem->productId);
-            $allItems[$oItem->productId]->oxArticle = $art;
+            $art->load($objItem->productId);
+            $allItems[$objItem->productId]->oxArticle = $art;
         }
 
         return $allItems;

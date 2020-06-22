@@ -32,12 +32,12 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
      * Executes payment, returns true on success.
      *
      * @param double $amount Goods amount
-     * @param Order &$oOrder User ordering object
+     * @param Order &$order User ordering object
      *
      * @return bool Success, false on error
      * @extend executePayment
      */
-    public function executePayment($amount, &$oOrder) //Superfluous ampersand to match parents definition
+    public function executePayment($amount, &$order) //Superfluous ampersand to match parents definition
     {
 
         try {
@@ -46,15 +46,15 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
             // If we are not in an afterpay payment (how did we get here in the first place?)
             // just go with the default payment gateway.
-            if (!$oOrder->isAfterpayPaymentType()) {
-                return $this->dereferToOtherPaymentProviders($amount, $oOrder);
+            if (!$order->isAfterpayPaymentType()) {
+                return $this->dereferToOtherPaymentProviders($amount, $order);
             }
 
-            if (!$oOrder->isAfterpayDebitNote() && !$oOrder->isAfterpayInvoice() && !$oOrder->isAfterpayInstallment()) {
-                return $this->dereferToOtherPaymentProviders($amount, $oOrder);
+            if (!$order->isAfterpayDebitNote() && !$order->isAfterpayInvoice() && !$order->isAfterpayInstallment()) {
+                return $this->dereferToOtherPaymentProviders($amount, $order);
             }
 
-            $result = $this->dereferToPaymentHandling($oOrder);
+            $result = $this->dereferToPaymentHandling($order);
             $this->resetArvatoSessionVars();
 
             if (
@@ -76,41 +76,41 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     }
 
     /**
-     * @param $oOrder
+     * @param $order
      *
      * @return bool False on Error
      * @throws PaymentException
      */
-    protected function dereferToPaymentHandling($oOrder)
+    protected function dereferToPaymentHandling($order)
     {
 
         // Get Order No. so it can be used as request identifier.
         // That might leave a hole in the order numbering if the payment gets rejected.
-        $oOrder->setNumber();
+        $order->setNumber();
 
         $success = true;
 
-        if ($oOrder->isAfterpayDebitNote()) {
+        if ($order->isAfterpayDebitNote()) {
             oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)
                 ->saveApiKeyToSession(false);
             // Call on DebitNote Only
-            $success = $this->handleDebitNote($oOrder);
+            $success = $this->handleDebitNote($order);
         }
 
-        if ($oOrder->isAfterpayInstallment()) {
+        if ($order->isAfterpayInstallment()) {
             oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)
                 ->saveApiKeyToSession(true);
             // Call on DebitNote Only
-            $success = $this->handleInstallment($oOrder);
+            $success = $this->handleInstallment($order);
         }
-        if ($oOrder->isAfterpayInvoice()) {
+        if ($order->isAfterpayInvoice()) {
             oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)
                 ->saveApiKeyToSession(false);
         }
 
         if ($success) {
             // Call on every afterpay payment
-            $success = $this->handleInvoice($oOrder);
+            $success = $this->handleInvoice($order);
         }
 
         return $success;
@@ -118,37 +118,37 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
     /**
      * @param $amount
-     * @param $oOrder
+     * @param $order
      *
      * @return bool Success
      * @codeCoverageIgnore Mocking helper
      */
-    protected function dereferToOtherPaymentProviders($amount, $oOrder)
+    protected function dereferToOtherPaymentProviders($amount, $order)
     {
         $defaultPaymentGateway = oxNew(\OxidEsales\Eshop\Application\Model\PaymentGateway::class);
-        return $defaultPaymentGateway->executePayment($amount, $oOrder);
+        return $defaultPaymentGateway->executePayment($amount, $order);
     }
 
     /**
-     * @param $oOrder
+     * @param $order
      *
      * @return bool Success False on Error
      */
-    protected function handleInvoice($oOrder)
+    protected function handleInvoice($order)
     {
 
-        $service = $this->getAuthorizePaymentService($oOrder);
-        $response = $service->authorizePayment($oOrder);
+        $service = $this->getAuthorizePaymentService($order);
+        $response = $service->authorizePayment($order);
 
         $this->_sLastError = null;
         if ($response != 'Accepted') {
-            $oOrder->resetNumber();
+            $order->resetNumber();
             $this->_sLastError = $service->getErrorMessages();
             $this->_iLastErrorNo = $service->getLastErrorNo();
             return false;
         }
 
-        $aporder = oxNew(AfterpayOrder::class, $oOrder);
+        $aporder = oxNew(AfterpayOrder::class, $order);
         $aporder->fillBySession(Registry::getSession());
         $aporder->save();
 
@@ -156,11 +156,11 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     }
 
     /**
-     * @param Order $oOrder
+     * @param Order $order
      *
      * @return string $contractId False on Error
      */
-    public function handleDebitNote($oOrder)
+    public function handleDebitNote($order)
     {
         // Bank account ok? - Redundant to former call but makes process tamper-proof
 
@@ -184,7 +184,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         // Direct Debit available?
 
-        if (!$this->getAvailablePaymentMethodsService($oOrder)->isDirectDebitAvailable()) {
+        if (!$this->getAvailablePaymentMethodsService($order)->isDirectDebitAvailable()) {
             return false;
         }
 
@@ -197,7 +197,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         // Create Contract
         $afterpayCheckoutId = Registry::getSession()->getVariable('arvatoAfterpayCheckoutId');
         $service = $this->getCreateContractService($afterpayCheckoutId);
-        $paymentType = $oOrder->oxorder__oxpaymenttype->value;
+        $paymentType = $order->oxorder__oxpaymenttype->value;
         return $service->createContract($paymentType, $apdebitbankaccount, $apdebitbankcode);
         */
 
@@ -205,11 +205,11 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     }
 
     /**
-     * @param Order $oOrder
+     * @param Order $order
      *
      * @return string $contractId False on error
      */
-    public function handleInstallment($oOrder)
+    public function handleInstallment($order)
     {
 
         // Bank account ok? - Redundant to former call but makes process tamper-proof
@@ -236,7 +236,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         // Is selected installment plan available?
 
-        $availablePaymentMethodsService = $this->getAvailablePaymentMethodsService($oOrder);
+        $availablePaymentMethodsService = $this->getAvailablePaymentMethodsService($order);
 
         if (
             !($availablePaymentMethodsService
@@ -288,11 +288,11 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
      * (only getters and setters), can be excluded from test coverage:
      * @codeCoverageIgnore
      */
-    protected function getAvailablePaymentMethodsService($oOrder)
+    protected function getAvailablePaymentMethodsService($order)
     {
         $session = Registry::getSession();
         $language = Registry::getLang();
-        return oxNew(AvailablePaymentMethodsService::class, $session, $language, $oOrder);
+        return oxNew(AvailablePaymentMethodsService::class, $session, $language, $order);
     }
 
     /**
