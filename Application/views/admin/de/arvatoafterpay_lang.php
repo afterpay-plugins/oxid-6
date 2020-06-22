@@ -20,7 +20,7 @@ $aLang = [
     'ORDER_AFTERPAY_TITLE_REFUNDPAYMENTFREE' => 'Eingezogene Zahlung erstatten - Frei wählbarer Betrag',
     'ORDER_AFTERPAY_TITLE_VOIDPAYMENT'       => 'Reservierte Zahlung freigeben',
 
-    'ORDER_AFTERPAY_CATEGORY_MAIN_HELP'      => 'Hauptkategorie angeben, mit der der Artikel verknüpft werden soll',
+    'ORDER_AFTERPAY_CATEGORY_MAIN_HELP'      => 'Hier wird die Hauptkategorie angezeigt, mit der der Artikel verknüpft wird',
     'ORDER_AFTERPAY_MAIN_CATEGORY'           => 'Hauptkategorie',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayGeneral'               => 'Allgemeine Einstellungen',
