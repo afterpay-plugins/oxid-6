@@ -170,15 +170,15 @@ class Events
             );
         }
 
-        $aShops = DatabaseProvider::getDb()->getAll('SELECT oxid FROM oxshops');
+        $shops = DatabaseProvider::getDb()->getAll('SELECT oxid FROM oxshops');
 
         foreach (self::getShopSpecificSQLs() as $sql) {
-            foreach ($aShops as $sShopId) {
-                $sShopId = reset($sShopId);
-                if (!$sShopId) {
+            foreach ($shops as $shopId) {
+                $shopId = reset($shopId);
+                if (!$shopId) {
                     continue;
                 }
-                $sql = str_replace('#shop#', $sShopId, $sql);
+                $sql = str_replace('#shop#', $shopId, $sql);
 
                 try {
                     $db->execute($sql);
