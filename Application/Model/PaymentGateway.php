@@ -191,15 +191,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         $this->getSession()->setVariable('arvatoAfterpayIBAN', $apdebitbankaccount);
         $this->getSession()->setVariable('arvatoAfterpayBIC', $apdebitbankcode);
 
-        /*
-        * @deprecated since version 2.0.5
-
-        // Create Contract
-        $afterpayCheckoutId = Registry::getSession()->getVariable('arvatoAfterpayCheckoutId');
-        $service = $this->getCreateContractService($afterpayCheckoutId);
-        $paymentType = $order->oxorder__oxpaymenttype->value;
-        return $service->createContract($paymentType, $apdebitbankaccount, $apdebitbankcode);
-        */
 
         return true;
     }
@@ -251,20 +242,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         $numberOfInstallments = $availablePaymentMethodsService
             ->getNumberOfInstallmentsByProfileId($selectedInstallmentPlanProfileId);
 
-        /*
-        * @deprecated since version 2.0.5
-        $contractId = $this->createContract(
-            $afterpayCheckoutId,
-            $selectedInstallmentPlanProfileId,
-            $numberOfInstallments,
-            $IBAN,
-            $BIC
-        );
-
-        Registry::getSession()->setVariable('arvatoAfterpayContractId', $contractId);
-        */
-
-        return $contractId;
+        return true;
     }
 
     /**
@@ -356,33 +334,5 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
             }
         }
         return [$BIC, $IBAN];
-    }
-
-    /**
-     * @param $afterpayCheckoutId
-     * @param $selectedInstallmentPlanProfileId
-     * @param $numberOfInstallments
-     * @param $IBAN
-     * @param $BIC
-     *
-     * @return string
-     * @codeCoverageIgnore Mocking helper
-     * @deprecated since version 2.0.5
-     */
-    protected function createContract(
-        $afterpayCheckoutId,
-        $selectedInstallmentPlanProfileId,
-        $numberOfInstallments,
-        $IBAN,
-        $BIC
-    ) {
-        $service = oxNew(CreateContractService::class, $afterpayCheckoutId);
-        return $service->createContract(
-            'afterpayinstallment',
-            $IBAN,
-            $BIC,
-            $selectedInstallmentPlanProfileId,
-            $numberOfInstallments
-        );
     }
 }
