@@ -162,27 +162,27 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testgetUserCountryCodeIdFromSessionAT()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6320aeb2ec2.72885259');
-        Registry::getSession()->setUser($oUser);
+       $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+       $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6320aeb2ec2.72885259');
+        Registry::getSession()->setUser($user);
         $sut = $this->getSUT();
         $this->assertEquals('AT', $sut->getUserCountryCodeIdFromSession());
     }
 
     public function testgetUserCountryCodeIdFromSessionCH()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6321c6f6109.43859248');
-        Registry::getSession()->setUser($oUser);
+       $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+       $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6321c6f6109.43859248');
+        Registry::getSession()->setUser($user);
         $sut = $this->getSUT();
         $this->assertEquals('CH', $sut->getUserCountryCodeIdFromSession());
     }
 
     public function testgetUserCountryCodeIdFromSessionDE()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('somethingelse');
-        Registry::getSession()->setUser($oUser);
+       $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+       $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('somethingelse');
+        Registry::getSession()->setUser($user);
         $sut = $this->getSUT();
         $this->assertEquals('DE', $sut->getUserCountryCodeIdFromSession());
     }

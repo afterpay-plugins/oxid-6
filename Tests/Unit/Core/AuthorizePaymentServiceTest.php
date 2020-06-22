@@ -132,23 +132,23 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
 
     public function testupdateCorrectedCustomerAddressBillingAddress()
     {
-        $oAddress = new \stdClass();
-        $oAddress->lorem = 'ipsum';
+        $address = new \stdClass();
+        $address->lorem = 'ipsum';
 
         $sut = $this->getMockForUpdateCorrectedCustomerAddress(true, true, false);
 
-        $sutReturn = $sut->updateCorrectedCustomerAddress([$oAddress], false);
+        $sutReturn = $sut->updateCorrectedCustomerAddress([$address], false);
         // Assertion in mocks method call counter
         $this->assertNull($sutReturn);
     }
 
     public function testupdateCorrectedCustomerAddressDeliveryAddress()
     {
-        $oAddress = new \stdClass();
-        $oAddress->lorem = 'ipsum';
+        $address = new \stdClass();
+        $address->lorem = 'ipsum';
 
         $sut = $this->getMockForUpdateCorrectedCustomerAddress(true, true, true);
-        $sutReturn = $sut->updateCorrectedCustomerAddress([$oAddress], true);
+        $sutReturn = $sut->updateCorrectedCustomerAddress([$address], true);
         // Assertion in mocks method call counter
         $this->assertNull($sutReturn);
     }
@@ -190,13 +190,13 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
     }
 
     /**
-     * @param $bAddressFound
-     * @param $bIsUserFound
-     * @param $bIsDeliveryAddress
+     * @param $addressFound
+     * @param $isUserFound
+     * @param $isDeliveryAddress
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockForUpdateCorrectedCustomerAddress($bAddressFound, $bIsUserFound, $bIsDeliveryAddress)
+    protected function getMockForUpdateCorrectedCustomerAddress($addressFound, $isUserFound, $isDeliveryAddress)
     {
         $mockOxAddress =
             $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Address::class)
@@ -205,7 +205,7 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
                 ->setMethods(['save'])
                 ->getMock();
 
-        if ($bIsUserFound) {
+        if ($isUserFound) {
             $mockOxUser =
                 $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class)
                     ->disableOriginalConstructor()
@@ -229,9 +229,9 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
                 ->setMethods(['getUser'])
                 ->getMock();
         $mockOxSession
-            ->expects($bAddressFound ? $this->once() : $this->never())
+            ->expects($addressFound ? $this->once() : $this->never())
             ->method('getUser')
-            ->will($this->returnValue($bIsUserFound ? $mockOxUser : null));
+            ->will($this->returnValue($isUserFound ? $mockOxUser : null));
 
         return $this->getMockBuilder(\Arvato\AfterpayModule\Core\AuthorizePaymentService::class)
                 ->setConstructorArgs([$mockOxSession, Registry::getLang()])
