@@ -14,6 +14,7 @@ use OxidEsales\Eshop\Core\DbMetaDataHandler;
  */
 class Events
 {
+    // table arvatoafterpayafterpayorder
     private static $createArvatoAfterPay = "CREATE TABLE IF NOT EXISTS `arvatoafterpayafterpayorder` (
               `OXID` varchar(32) NOT NULL COMMENT 'oxorder.oxorderid',
               `APRESERVATIONID` varchar(64) NOT NULL,
@@ -26,22 +27,31 @@ class Events
               PRIMARY KEY (`OXID`)
             ) ENGINE='InnoDB' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
+    // table oxpayments: payment type afterpaydebitnote
+    private static $arvatoAfterpayDebitnote = "REPLACE INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                               VALUES
+              ('afterpaydebitnote',	1,	'AfterPay Lastschrift',	0,	'abs',	0,	0,	0,	1000000,	'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	0,	
+               'AfterPay Direct Debit',
+              'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'','',	'',	'',	3,	'2017-11-08 11:48:51')";
+
+    // table oxpayments: payment type afterpayinvoice
+    private static $arvatoAfterpayInvoice = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                             VALUES
+              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	
+                  '',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51') ";
+
+    // table oxpayments: payment type afterpayinstallment
+    private static $arvatoAfterpayInstallment = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                                VALUES
+              ('afterpayinstallment',	1,	'AfterPay Ratenzahlung',	0,	'abs',	0,	0,	0,	1000000,	'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Installment',
+              'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'','','','',	1,	'',	'2017-11-08 11:48:51');";
+
     /**
      * An array of SQL statements, that will be executed only at the first time of module installation.
      *
      * @var array
      */
-    private static $replaceArvatoAfterPaySQLs = [
-        "REPLACE INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) VALUES
-
-              ('afterpaydebitnote',	1,	'AfterPay Lastschrift',	0,	'abs',	0,	0,	0,	1000000,	'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Direct Debit',
-              'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'','',	'',	'',	3,	'2017-11-08 11:48:51'),
-
-              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51'),
-
-              ('afterpayinstallment',	1,	'AfterPay Ratenzahlung',	0,	'abs',	0,	0,	0,	1000000,	'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Installment',
-              'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'','','','',	1,	'',	'2017-11-08 11:48:51');",
-
+    private static $replaceArvatoAfterPaySQL =
         "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
               ('apinv2standard',	'afterpayinvoice',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
               ('apdebit2standard',	'afterpaydebitnote',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
@@ -51,8 +61,7 @@ class Events
               ('apdebit2germany',	'afterpaydebitnote',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
               ('apinv2nl',	'afterpayinvoice',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51'),
               ('apdebit2nl',	'afterpaydebitnote',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51'),
-              ('apinstallment2germany',	'afterpayinstallment',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51');"
-    ];
+              ('apinstallment2germany',	'afterpayinstallment',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51');";
 
     /**
      * Check if field exists in table
@@ -75,17 +84,20 @@ class Events
      * Execute the sqlQueries at the first time of the module installation.
      *
      */
-    private static function setUpModule() {
+    private static function setUpModule()
+    {
+        $tablePayments = 'oxpayments';
 
-        // Check if the arvatoafterpayorder table was already created, if not create it.
-        if (!self::tableExists('arvatoafterpayafterpayorder')) {
-            self::executeSQL(self::$createArvatoAfterPay);
+        if (!self::fieldExists('afterpaydebinote', $tablePayments)) {
+            self::executeSQL(self::$arvatoAfterpayDebitnote);
         }
 
-        // Check if the tables oxpayments and oxobject2payment have all fields, if not replace them with the standard values
-        foreach (self::$replaceArvatoAfterPaySQLs as $sqlQuery) {
-            // execute the statements for oxpayments und oxobject2payment
-            self::executeSQL($sqlQuery);
+        if (!self::fieldExists('afterpayinstallment', $tablePayments)) {
+            self::executeSQL(self::$arvatoAfterpayInstallment);
+        }
+
+        if (!self::fieldExists('afterpayinvoide', $tablePayments)) {
+            self::executeSQL(self::$arvatoAfterpayInvoice);
         }
     }
 
@@ -124,23 +136,17 @@ class Events
         $selectPaymentTypes = "SELECT OXID FROM oxpayments WHERE OXID LIKE 'afterpay%'";
         $resPaymentTypes = $db->getAll($selectPaymentTypes);
 
-        foreach($resPaymentTypes as $resPaymentType) {
-            // check if the payment types are not in database and execute setupModule()
-            if(count($resPaymentTypes) < 3) {
-                self::setupModule();
-            }
-            else {
-                // if the payment types are already in the database, then update the values
-                if(count($resPaymentTypes) == 3) {
-                    $paymentTable = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
 
-                    foreach($resPaymentType as $keyPay=>$payType) {
-                        $paymentTable->load($payType);
-                    }
-                    $paymentTable->save();
-                }
-            }
+        if(count($resPaymentTypes) < 3) {
+            self::setupModule();
         }
+
+        // Check if the arvatoafterpayorder table was already created, if not create it.
+        if (!self::tableExists('arvatoafterpayafterpayorder')) {
+            self::executeSQL(self::$createArvatoAfterPay);
+        }
+
+        self::executeSQL(self::$replaceArvatoAfterPaySQL);
 
         // Get column if exist
         $colArticleProductGroupExist = $db->getOne(
