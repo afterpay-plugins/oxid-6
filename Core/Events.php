@@ -275,29 +275,15 @@ class Events
 
         self::afterpayPaymentsInsert();
 
-        self::executeSQL(self::createTableArvatoAfterpayAfterpayOrder());
+        self::createTableArvatoAfterpayAfterpayOrder();
 
         // Get column if exist
-        $colArticleProductGroupExist = $db->getOne(
-            "SELECT 1
-                   FROM information_schema.COLUMNS
-                   WHERE TABLE_NAME = 'oxarticles'
-                   AND COLUMN_NAME = 'AAPPRODUCTGROUP'"
-        );
-
         $colCategoryProductGroupExist = $db->getOne(
             "SELECT 1
                    FROM information_schema.COLUMNS
                    WHERE TABLE_NAME = 'oxcategories'
                    AND COLUMN_NAME = 'AAPPRODUCTGROUP'"
         );
-
-        // Insert columns if not exist
-        if (!$colArticleProductGroupExist) {
-            DatabaseProvider::getDb()->execute(
-                "ALTER TABLE `oxarticles`  ADD `AAPPRODUCTGROUP` varchar(32) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Arvato Afterpay product group - leave empty for category default'"
-            );
-        }
 
         if (!$colCategoryProductGroupExist) {
             DatabaseProvider::getDb()->execute(
