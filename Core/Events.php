@@ -29,20 +29,6 @@ class Events
         return $dbMetaDataHandler->tableExists($tableName);
     }
 
-    /**
-     * Check if field exists in table
-     *
-     * @param string $fieldName field name
-     * @param string $tableName table name
-     *
-     * @return bool
-     */
-    protected static function fieldExists($fieldName, $tableName)
-    {
-        $dbMetaDataHandler = oxNew(DbMetaDataHandler::class );
-
-        return $dbMetaDataHandler->fieldExists($fieldName, $tableName);
-    }
 
     /**
      * Executes given sql statement.
@@ -99,22 +85,6 @@ class Events
     }
 
     /**
-     * insertAfterpayInvoice
-     * -----------------------------------------------------------------------------------------------------------------
-     *
-     *
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
-     */
-    public static function insertAfterpayInvoice() {
-        $insertQueryAfterpayInvoice = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
-                                             VALUES
-              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	
-                  '',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51')";
-
-        self::executeSQL($insertQueryAfterpayInvoice);
-    }
-
-    /**
      * insertAfterpayInstallment
      * -----------------------------------------------------------------------------------------------------------------
      *
@@ -132,18 +102,19 @@ class Events
     }
 
     /**
-     * afterpayInvoiceTypeQuery
+     * insertAfterpayInvoice
      * -----------------------------------------------------------------------------------------------------------------
      *
      *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function afterpayInvoiceTypeQuery() {
-        $invoiceToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
-              ('apinv2standard',	'afterpayinvoice',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
-              ('apinv2germany',	'afterpayinvoice',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
-              ('apinv2nl',	'afterpayinvoice',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51');";
-        self::executeSQL($invoiceToObjQuery);
+    public static function insertAfterpayInvoice() {
+        $insertQueryAfterpayInvoice = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                             VALUES
+              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	
+                  '',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51')";
+
+        self::executeSQL($insertQueryAfterpayInvoice);
     }
 
     /**
@@ -153,7 +124,7 @@ class Events
      *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function afterpayDebitnoteTypeQuery() {
+    public static function afterpayDebitnoteTypeQuery() {
         $debitnoteToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
             ('apdebit2standard',	'afterpaydebitnote',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'), 
             ('apdebit2germany',	'afterpaydebitnote',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
@@ -168,12 +139,28 @@ class Events
      *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function afterpayInstallmentTypeQuery() {
+    public static function afterpayInstallmentTypeQuery() {
         $installmentToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
          ('apinstallment2standard',	'afterpayinstallment',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),  
          ('apinstallment2germany',	'afterpayinstallment',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51');";
         self::executeSQL($installmentToObjQuery);
     }
+
+    /**
+     * afterpayInvoiceTypeQuery
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public static function afterpayInvoiceTypeQuery() {
+        $invoiceToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
+              ('apinv2standard',	'afterpayinvoice',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
+              ('apinv2germany',	'afterpayinvoice',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
+              ('apinv2nl',	'afterpayinvoice',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51');";
+        self::executeSQL($invoiceToObjQuery);
+    }
+
 
     /**
      * getShopSpecificSQLs
