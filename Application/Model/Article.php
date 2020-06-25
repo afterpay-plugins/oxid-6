@@ -6,6 +6,8 @@
 
 namespace Arvato\AfterpayModule\Application\Model;
 
+use OxidEsales\Eshop\Core\DatabaseProvider;
+
 class Article extends Article_parent
 {
     /**
@@ -16,8 +18,18 @@ class Article extends Article_parent
      * @return bool
      */
     public function getMainCategory() {
-        if(!empty($this->getCategory()->getTitle()) && !empty($this->getCategoryIds())) {
-            return $this->getCategory()->getTitle();
+
+        $categoryOfArticle = "SELECT c.OXTITLE FROM oxobject2category o2c 
+                            LEFT JOIN oxcategories c ON c.OXID = o2c.OXCATNID 
+                            LEFT JOIN oxarticles a ON a.OXID = o2c.OXOBJECTID 
+                            WHERE a.OXID = ? 
+                            ORDER BY oxtime ASC LIMIT 1";
+        $categoryTitleStructure = DatabaseProvider::getDb()->getCol($categoryOfArticle, [$this->getId()]);
+        $categoryTitle = $categoryTitleStructure[0];
+
+
+        if(!empty($categoryTitle)) {
+            return $categoryTitle;
         }
         return false;
     }
