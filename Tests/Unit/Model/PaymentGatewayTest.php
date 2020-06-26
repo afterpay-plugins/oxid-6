@@ -119,8 +119,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->setMethods([
                 'gatherIBANandBIC',
                 'getValidateBankAccountService',
-                'getAvailablePaymentMethodsService',
-                'createContract'
+                'getAvailablePaymentMethodsService'
             ])
             ->getMock();
         $sut->getSession()->setVariable('dynvalue', ['afterpayInstallmentProfileId' => 1]);
@@ -128,7 +127,6 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $sut->method('gatherIBANandBIC')->will($this->returnValue([111, 222]));
         $sut->method('getValidateBankAccountService')->will($this->returnValue($mockValidateService));
         $sut->method('getAvailablePaymentMethodsService')->will($this->returnValue($mockAvailPaymenteService));
-        $sut->method('createContract')->will($this->returnValue(12345));
 
         $this->assertEquals(12345, $sut->handleInstallment(oxNew(\OxidEsales\Eshop\Application\Model\Order::class)));
     }
@@ -161,8 +159,7 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->setMethods([
                 'gatherIBANandBIC',
                 'getValidateBankAccountService',
-                'getAvailablePaymentMethodsService',
-                'createContract'
+                'getAvailablePaymentMethodsService'
             ])
             ->getMock();
         $sut->getSession()->setVariable('dynvalue', ['afterpayInstallmentProfileId' => 1]);
@@ -170,7 +167,6 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $sut->method('gatherIBANandBIC')->will($this->returnValue([111, 222]));
         $sut->method('getValidateBankAccountService')->will($this->returnValue($mockValidateService));
         $sut->method('getAvailablePaymentMethodsService')->will($this->returnValue($mockAvailPaymenteService));
-        $sut->method('createContract')->will($this->returnValue(12345));
 
         $this->assertFalse($sut->handleInstallment(oxNew(\OxidEsales\Eshop\Application\Model\Order::class)));
     }
@@ -206,14 +202,6 @@ class PaymentGatewayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $mockAvailPaymenteService
             ->method('isDirectDebitAvailable')
             ->will($this->returnValue(true));
-
-        $mockCCService = $this->getMockBuilder(\Arvato\AfterpayModule\Core\CreateContractService::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['createContract'])
-            ->getMock();
-        $mockCCService
-            ->method('createContract')
-            ->will($this->returnValue(12345));
 
 
         $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\PaymentGateway::class)

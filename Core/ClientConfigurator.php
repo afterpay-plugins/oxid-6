@@ -226,25 +226,6 @@ class ClientConfigurator
     }
 
     /**
-     * @param $checkoutId
-     *
-     * @param $isInstallmentApi
-     * @param $recordedApiKey
-     *
-     * @return WebServiceClient
-     */
-    public function getCreateContractClient($checkoutId, $isInstallmentApi = false, $recordedApiKey = '')
-    {
-        return $this->getBaseClient(
-            \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_CREATECONTRACT,
-            \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_CREATECONTRACT,
-            [$checkoutId],
-            $isInstallmentApi,
-            $recordedApiKey
-        );
-    }
-
-    /**
      * @return WebServiceClient
      */
     public function getAvailableInstallmentPlansClient()

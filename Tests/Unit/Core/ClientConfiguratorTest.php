@@ -93,15 +93,6 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
         );
     }
 
-    public function testgetCreateContractClient()
-    {
-        $sut = $this->getSUT();
-        $this->assertInstanceOf(
-            \Arvato\AfterpayModule\Core\WebServiceClient::class,
-            $sut->getCreateContractClient(123)
-        );
-    }
-
     public function testgetAvailableInstallmentPlansClient()
     {
         $sut = $this->getSUT();
