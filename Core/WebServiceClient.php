@@ -24,7 +24,6 @@ class WebServiceClient extends \Arvato\AfterpayModule\Core\HttpClient
     const FUNCTION_VALIDATEBANKACCOUNT = 'validate/bank-account';
     const FUNCTION_REFUND = 'orders/%s/refunds';
     const FUNCTION_AVAILABLEPAYMENTMETHODS = 'checkout/payment-methods';
-    const FUNCTION_CREATECONTRACT = 'checkout/%s/contract ';
     const FUNCTION_AVAILABLEINSTALLMENTPLANS = 'lookup/installment-plans';
     const FUNCTION_ORDERDETAILS = 'orders/%s';
 
@@ -35,7 +34,6 @@ class WebServiceClient extends \Arvato\AfterpayModule\Core\HttpClient
     const HTTPMETHOD_VALIDATEBANKACCOUNT = 'POST';
     const HTTPMETHOD_REFUND = 'POST';
     const HTTPMETHOD_AVAILABLEPAYMENTMETHODS = 'POST';
-    const HTTPMETHOD_CREATECONTRACT = 'POST';
     const HTTPMETHOD_AVAILABLEINSTALLMENTPLANS = 'POST';
     const HTTPMETHOD_ORDERDETAILS = 'GET';
 

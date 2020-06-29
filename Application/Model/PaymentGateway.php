@@ -12,7 +12,6 @@ use Exception;
 use OxidEsales\Eshop\Core\Registry;
 use Arvato\AfterpayModule\Core\AuthorizePaymentService;
 use Arvato\AfterpayModule\Core\AvailablePaymentMethodsService;
-use Arvato\AfterpayModule\Core\CreateContractService;
 
 /**
  * Class PaymentGateway
