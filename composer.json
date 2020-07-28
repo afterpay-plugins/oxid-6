@@ -13,7 +13,7 @@
             "blacklist-filter": [
                 "documentation/**/*.*"
             ],
-            "target-directory": "arvato-afterpay"
+            "target-directory": "arvato/afterpay"
         }
     },
     "require": {
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Arvato\\AfterpayModule\\": "../../../source/modules/arvato-afterpay"
+            "Arvato\\AfterpayModule\\": "../../../source/modules/arvato/afterpay"
         }
     }
 }
