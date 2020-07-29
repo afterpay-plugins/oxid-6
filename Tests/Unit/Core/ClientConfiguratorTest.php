@@ -1,21 +1,10 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Core;
+namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
 use OxidEsales\Eshop\Core\Registry;
 
@@ -29,12 +18,12 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $sutReturn = $sut->getAuthorizePaymentClient();
-        $this->assertEquals(\OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::FUNCTION_AUTHORIZE_CHECKOUT, $sutReturn->getFunction());
+        $this->assertEquals(\Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_AUTHORIZE_CHECKOUT, $sutReturn->getFunction());
     }
 
     public function testgetCaptureClientEx()
     {
-        $this->setExpectedException(\OxidProfessionalServices\ArvatoAfterpayModule\Core\Exception\CurlException::class);
+        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
         $sut = $this->getSUT();
         $sut->getCaptureClient(0, 'SomeApiKey');
     }
@@ -43,20 +32,20 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $sutReturn = $sut->getCaptureClient('orderid123', 'SomeApiKey');
-        $expected = sprintf(\OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::FUNCTION_CAPTURE, 'orderid123');
+        $expected = sprintf(\Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_CAPTURE, 'orderid123');
         $this->assertEquals($expected, $sutReturn->getFunction());
     }
 
     public function testgetCaptureShippingClientEx01()
     {
-        $this->setExpectedException(\OxidProfessionalServices\ArvatoAfterpayModule\Core\Exception\CurlException::class);
+        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
         $sut = $this->getSUT();
         $sut->getCaptureShippingClient(0, 1);
     }
 
     public function testgetCaptureShippingClientEx10()
     {
-        $this->setExpectedException(\OxidProfessionalServices\ArvatoAfterpayModule\Core\Exception\CurlException::class);
+        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
         $sut = $this->getSUT();
         $sut->getCaptureShippingClient(1, 0);
     }
@@ -65,7 +54,7 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getCaptureShippingClient(1, 1)
         );
     }
@@ -74,14 +63,14 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getValidateBankAccountClient()
         );
     }
 
     public function testgetRefundClientEx()
     {
-        $this->setExpectedException(\OxidProfessionalServices\ArvatoAfterpayModule\Core\Exception\CurlException::class);
+        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
         $sut = $this->getSUT();
         $sut->getRefundClient(0);
     }
@@ -90,7 +79,7 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getRefundClient(1)
         );
     }
@@ -99,17 +88,8 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getAvailablePaymentMethodsClient()
-        );
-    }
-
-    public function testgetCreateContractClient()
-    {
-        $sut = $this->getSUT();
-        $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
-            $sut->getCreateContractClient(123)
         );
     }
 
@@ -117,27 +97,27 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getAvailableInstallmentPlansClient()
         );
     }
 
     public function testgetBaseClientEx01()
     {
-        $this->setExpectedException(\OxidProfessionalServices\ArvatoAfterpayModule\Core\Exception\CurlException::class);
+        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getBaseClient(null, 'lorem')
         );
     }
 
     public function testgetBaseClientEx10()
     {
-        $this->setExpectedException(\OxidProfessionalServices\ArvatoAfterpayModule\Core\Exception\CurlException::class);
+        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getBaseClient('lorem', null)
         );
     }
@@ -146,7 +126,7 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getBaseClient('lorem', 'ipsum')
         );
     }
@@ -156,7 +136,7 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
         Registry::getConfig()->setConfigParam('arvatoAfterpayApiUrl', 'http://lorem');
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getBaseClient('lorem', 'ipsum')
         );
     }
@@ -166,34 +146,34 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
         Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', true);
         $sut = $this->getSUT();
         $this->assertInstanceOf(
-            \OxidProfessionalServices\ArvatoAfterpayModule\Core\WebServiceClient::class,
+            \Arvato\AfterpayModule\Core\WebServiceClient::class,
             $sut->getBaseClient('lorem', 'ipsum')
         );
     }
 
     public function testgetUserCountryCodeIdFromSessionAT()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6320aeb2ec2.72885259');
-        Registry::getSession()->setUser($oUser);
+       $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+       $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6320aeb2ec2.72885259');
+        Registry::getSession()->setUser($user);
         $sut = $this->getSUT();
         $this->assertEquals('AT', $sut->getUserCountryCodeIdFromSession());
     }
 
     public function testgetUserCountryCodeIdFromSessionCH()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6321c6f6109.43859248');
-        Registry::getSession()->setUser($oUser);
+       $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+       $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('a7c40f6321c6f6109.43859248');
+        Registry::getSession()->setUser($user);
         $sut = $this->getSUT();
         $this->assertEquals('CH', $sut->getUserCountryCodeIdFromSession());
     }
 
     public function testgetUserCountryCodeIdFromSessionDE()
     {
-        $oUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        $oUser->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('somethingelse');
-        Registry::getSession()->setUser($oUser);
+       $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+       $user->oxuser__oxcountryid = new \OxidEsales\Eshop\Core\Field('somethingelse');
+        Registry::getSession()->setUser($user);
         $sut = $this->getSUT();
         $this->assertEquals('DE', $sut->getUserCountryCodeIdFromSession());
     }
@@ -205,6 +185,6 @@ class ClientConfiguratorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSUT()
     {
-        return oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Core\ClientConfigurator::class);
+        return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class);
     }
 }

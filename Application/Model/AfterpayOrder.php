@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
@@ -47,7 +36,7 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
     /**
      * @var Order The oxorder to bind this class to. (1:1 similar to orartextends)
      */
-    protected $_sOxOrder = null;
+    protected $_order = null;
 
     /**
      * Class constructor
@@ -56,7 +45,7 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
      */
     public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_sOxOrder = $order;
+        $this->_order = $order;
         $this->setId($order->getId());
         parent::__construct();
         $this->init();
@@ -135,7 +124,7 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
     /**
      * Gets used api key
      * @codeCoverageIgnore
-     * @return string $AfterpayOrder__apusedapikey
+     * @return string $afterpayOrder__apusedapikey
      */
     public function getUsedApiKey()
     {
@@ -148,6 +137,6 @@ class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
      */
     public function getOxOrder()
     {
-        return $this->_sOxOrder;
+        return $this->_order;
     }
 }

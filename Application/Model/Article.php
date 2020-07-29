@@ -2,52 +2,35 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model;
 
+use OxidEsales\Eshop\Core\DatabaseProvider;
+
 class Article extends Article_parent
 {
-
     /**
-     * @return string ProductGroup Article specific, or if no such is defined, by category
+     * getMainCategory
+     * -----------------------------------------------------------------------------------------------------------------
+     * show main category if there is one in oxobject2category
+     *
+     * @return bool
      */
-    public function getAfterpayProductGroup()
-    {
+    public function getMainCategory() {
 
-        // Article
-        if ($this->oxarticles__aapproductgroup->value) {
-            return $this->oxarticles__aapproductgroup->value;
-        }
+        $categoryOfArticle = "SELECT c.OXTITLE FROM oxobject2category o2c 
+                            LEFT JOIN oxcategories c ON c.OXID = o2c.OXCATNID 
+                            LEFT JOIN oxarticles a ON a.OXID = o2c.OXOBJECTID 
+                            WHERE a.OXID = ? 
+                            ORDER BY oxtime ASC LIMIT 1";
+        $categoryTitleStructure = DatabaseProvider::getDb()->getCol($categoryOfArticle, [$this->getId()]);
+        $categoryTitle = $categoryTitleStructure[0];
 
-        // Parent Article
-        if ($this->getParentArticle() && $this->getParentArticle()->oxarticles__aapproductgroup->value) {
-            return $this->getParentArticle()->oxarticles__aapproductgroup->value;
-        }
 
-        // Main Category
-        if ($this->getCategory() && $this->getCategory()->oxcategories__aapproductgroup->value) {
-            return $this->getCategory()->oxcategories__aapproductgroup->value;
+        if(!empty($categoryTitle)) {
+            return $categoryTitle;
         }
-
-        // Any Category
-        $catTmp = oxNew(\OxidEsales\Eshop\Application\Model\Category::class);
-        foreach ($this->getCategoryIds() as $sID) {
-            if ($catTmp->load($sID) && $catTmp->oxcategories__aapproductgroup->value) {
-                return $catTmp->oxcategories__aapproductgroup->value;
-            }
-        }
-        return null;
+        return false;
     }
 }

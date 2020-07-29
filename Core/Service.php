@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -54,7 +43,7 @@ class Service
     /**
      * @var Order
      */
-    protected $_oxOrder;
+    protected $_order;
 
     /**
      * @var Language Current language.
@@ -143,15 +132,15 @@ class Service
 
     protected function getBaseClassName()
     {
-        $sClassName = str_replace(__NAMESPACE__ . '\\', '', get_class($this));
-        if (0 === strpos($sClassName, 'Mock_')) {
+        $className = str_replace(__NAMESPACE__ . '\\', '', get_class($this));
+        if (0 === strpos($className, 'Mock_')) {
             // Unit Test helper: Turn mocked Mock_someClass_a1b2c3d into someClass
-            $sClassName = substr($sClassName, 5);
-            $sClassName = substr($sClassName, 0, -9);
+            $className = substr($className, 5);
+            $className = substr($className, 0, -9);
         }
 
-        $sClassName = str_replace('Service', '', $sClassName);
+        $className = str_replace('Service', '', $className);
 
-        return $sClassName;
+        return $className;
     }
 }

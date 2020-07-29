@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Controller\Admin;
@@ -487,7 +476,7 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
         $param,
         $default = null
     ) {
-        $return = Registry::getConfig()->getRequestParameter($param);
+        $return = Registry::get(Request::class)->getRequestEscapedParameter($param);
         return $return ?: $default;
     }
 

@@ -2,17 +2,6 @@
 
 /**
  *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\Entity;
@@ -134,7 +123,7 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
             }
         }
 
-        foreach ($refundsByCaptureNumber as $sCaptureNumber => $refund) {
+        foreach ($refundsByCaptureNumber as $captureNumber => $refund) {
             $refundItems = $refund->refundItems;
             if (!isset($refundItems) || !is_array($refundItems) || !count($refundItems)) {
                 continue;
@@ -142,7 +131,7 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
 
             // Set left-to-capture quantity
             foreach ($refundItems as $refundItem) {
-                foreach ($capturesByCaptureNumber[$sCaptureNumber]->captureItems as $k => &$captureItem) {
+                foreach ($capturesByCaptureNumber[$captureNumber]->captureItems as $k => &$captureItem) {
                     if ($captureItem->productId === $refundItem->productId) {
                         $captureItem->leftToCaptureQuantity = $captureItem->quantity - $refundItem->quantity;
                     } elseif (!isset($captureItem->leftToCaptureQuantity)) {
@@ -165,11 +154,11 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
 
         $allItems = [];
 
-        foreach ($this->getOrderDetails()->orderItems as $oItem) {
-            $allItems[$oItem->productId] = clone($oItem);
+        foreach ($this->getOrderDetails()->orderItems as $objItem) {
+            $allItems[$objItem->productId] = clone($objItem);
             $art = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
-            $art->load($oItem->productId);
-            $allItems[$oItem->productId]->oxArticle = $art;
+            $art->load($objItem->productId);
+            $allItems[$objItem->productId]->oxArticle = $art;
         }
 
         return $allItems;

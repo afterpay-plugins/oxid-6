@@ -1,22 +1,12 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
 
+use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
 
@@ -25,7 +15,43 @@ use OxidEsales\Eshop\Core\DbMetaDataHandler;
  */
 class Events
 {
-    private static $createArvatoAfterPay = "CREATE TABLE IF NOT EXISTS `arvatoafterpayafterpayorder` (
+    /**
+     * Check if table exists
+     *
+     * @param string $tableName table name
+     *
+     * @return bool
+     */
+    protected static function tableExists($tableName)
+    {
+        $dbMetaDataHandler = oxNew(DbMetaDataHandler::class );
+
+        return $dbMetaDataHandler->tableExists($tableName);
+    }
+
+
+    /**
+     * Executes given sql statement.
+     *
+     * @param string $sqlQuery sql query to execute.
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    private static function executeSQL($sqlQuery)
+    {
+        DatabaseProvider::getDb()->execute($sqlQuery);
+    }
+
+
+    /**
+     * createTableArvatoAfterpayAfterpayOrder
+     * -----------------------------------------------------------------------------------------------------------------
+     *  method to create table arvatoafterpayafterpayorder
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public static function createTableArvatoAfterpayAfterpayOrder() {
+
+        $createQueryArvatoAfterpayAfterpayOrder = "CREATE TABLE IF NOT EXISTS `arvatoafterpayafterpayorder` (
               `OXID` varchar(32) NOT NULL COMMENT 'oxorder.oxorderid',
               `APRESERVATIONID` varchar(64) NOT NULL,
               `APCHECKOUTID` varchar(64) NOT NULL,
@@ -37,193 +63,112 @@ class Events
               PRIMARY KEY (`OXID`)
             ) ENGINE='InnoDB' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
-    /**
-     * An array of SQL statements, that will be executed only at the first time of module installation.
-     *
-     * @var array
-     */
-    private static $replaceArvatoAfterPaySQLs = [
-        "REPLACE INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) VALUES
 
-              ('afterpaydebitnote',	1,	'AfterPay Lastschrift',	0,	'abs',	0,	0,	0,	1000000,	'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Direct Debit',
-              'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'','',	'',	'',	3,	'2017-11-08 11:48:51'),
-
-              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51'),
-
-              ('afterpayinstallment',	1,	'AfterPay Ratenzahlung',	0,	'abs',	0,	0,	0,	1000000,	'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Installment',
-              'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'','','','',	1,	'',	'2017-11-08 11:48:51');",
-
-        "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
-              ('apinv2standard',	'afterpayinvoice',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
-              ('apdebit2standard',	'afterpaydebitnote',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
-              ('apinstallment2standard',	'afterpayinstallment',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
-
-              ('apinv2germany',	'afterpayinvoice',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
-              ('apdebit2germany',	'afterpaydebitnote',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
-              ('apinv2nl',	'afterpayinvoice',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51'),
-              ('apdebit2nl',	'afterpaydebitnote',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51'),
-              ('apinstallment2germany',	'afterpayinstallment',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51');"
-    ];
-
-    /**
-     * Check if field exists in table
-     *
-     * @param string $fieldName field name
-     * @param string $tableName table name
-     *
-     * @return bool
-     */
-    protected static function fieldExists($fieldName, $tableName)
-    {
-        $dbMetaDataHandler = oxNew(DbMetaDataHandler::class );
-
-        return $dbMetaDataHandler->fieldExists($fieldName, $tableName);
+        self::executeSQL($createQueryArvatoAfterpayAfterpayOrder);
     }
 
     /**
-     * setUpModule
+     * insertAfterpayDebitnote
      * -----------------------------------------------------------------------------------------------------------------
-     * Execute the sqlQueries at the first time of the module installation.
      *
-     */
-    private static function setUpModule() {
-
-        // Check if the arvatoafterpayorder table was already created, if not create it.
-        if (!self::tableExists('arvatoafterpayafterpayorder')) {
-            self::executeSQL(self::$createArvatoAfterPay);
-        }
-
-        // Check if the tables oxpayments and oxobject2payment have all fields, if not replace them with the standard values
-        foreach (self::$replaceArvatoAfterPaySQLs as $sqlQuery) {
-            // execute the statements for oxpayments und oxobject2payment
-            self::executeSQL($sqlQuery);
-        }
-    }
-
-    /**
-     * Check if table exists
      *
-     * @param string $sTableName table name
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public static function insertAfterpayDebitnote() {
+        $insertQueryAfterpayDebitnote = "REPLACE INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                               VALUES
+              ('afterpaydebitnote',	1,	'AfterPay Lastschrift',	0,	'abs',	0,	0,	0,	1000000,	'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	0,	
+               'AfterPay Direct Debit',
+              'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'','',	'',	'',	3,	'2017-11-08 11:48:51');";
+
+        self::executeSQL($insertQueryAfterpayDebitnote);
+    }
+
+    /**
+     * insertAfterpayInstallment
+     * -----------------------------------------------------------------------------------------------------------------
      *
-     * @return bool
-     */
-    protected static function tableExists($sTableName)
-    {
-        $oDbMetaDataHandler = oxNew(DbMetaDataHandler::class );
-
-        return $oDbMetaDataHandler->tableExists($sTableName);
-    }
-
-    /**
-     * Executes given sql statement.
      *
-     * @param string $sqlQuery sql query to execute.
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    private static function executeSQL($sqlQuery)
-    {
-        DatabaseProvider::getDb()->execute($sqlQuery);
+    public static function insertAfterpayInstallment() {
+        $insertQueryAfterpayInstallment = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                                VALUES
+              ('afterpayinstallment',	1,	'AfterPay Ratenzahlung',	0,	'abs',	0,	0,	0,	1000000,	'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Installment',
+              'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'','','','',	1,	'',	
+               '2017-11-08 11:48:51')";
+
+        self::executeSQL($insertQueryAfterpayInstallment);
     }
 
     /**
-     * Regenerate views for changed tables
+     * insertAfterpayInvoice
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    protected static function regenerateViews()
-    {
-        $oDbMetaDataHandler = oxNew(DbMetaDataHandler::class );
-        $oDbMetaDataHandler->updateViews();
+    public static function insertAfterpayInvoice() {
+        $insertQueryAfterpayInvoice = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
+                                             VALUES
+              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	
+                  '',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51')";
+
+        self::executeSQL($insertQueryAfterpayInvoice);
     }
 
     /**
-     * On module activation callback
+     * afterpayDebitnoteTypeQuery
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public static function onActivate()
-    {
-        $db = DatabaseProvider::getDb();
-        $logging = oxNew(\Arvato\AfterpayModule\Core\Logging::class);
-
-        $selectPaymentTypes = "SELECT OXID FROM oxpayments WHERE OXID LIKE 'afterpay%'";
-        $resPaymentTypes = $db->getAll($selectPaymentTypes);
-
-        foreach($resPaymentTypes as $resPaymentType) {
-            // check if the payment types are not in database and execute setupModule()
-            if(count($resPaymentTypes) < 3) {
-                self::setupModule();
-            }
-            else {
-                // if the payment types are already in the database, then update the values
-                if(count($resPaymentTypes) == 3) {
-                    $paymentTable = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-
-                    foreach($resPaymentType as $keyPay=>$payType) {
-                        $paymentTable->load($payType);
-                    }
-                    $paymentTable->save();
-                }
-            }
-            self::regenerateViews();
-        }
-
-        // Get column if exist
-        $colArticleProductGroupExist = $db->getOne(
-            "SELECT 1
-                   FROM information_schema.COLUMNS
-                   WHERE TABLE_NAME = 'oxarticles'
-                   AND COLUMN_NAME = 'AAPPRODUCTGROUP'"
-        );
-
-        $colCategoryProductGroupExist = $db->getOne(
-            "SELECT 1
-                   FROM information_schema.COLUMNS
-                   WHERE TABLE_NAME = 'oxcategories'
-                   AND COLUMN_NAME = 'AAPPRODUCTGROUP'"
-        );
-
-        // Insert columns if not exist
-        if (!$colArticleProductGroupExist) {
-            DatabaseProvider::getDb()->execute(
-                "ALTER TABLE `oxarticles`  ADD `AAPPRODUCTGROUP` varchar(32) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Arvato Afterpay product group - leave empty for category default'"
-            );
-        }
-
-        if (!$colCategoryProductGroupExist) {
-            DatabaseProvider::getDb()->execute(
-                "ALTER TABLE `oxcategories`  ADD `AAPPRODUCTGROUP` varchar(32) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Arvato Afterpay product group'"
-            );
-        }
-
-        $aShops = DatabaseProvider::getDb()->getAll('SELECT oxid FROM oxshops');
-
-        foreach (self::getShopSpecificSQLs() as $sql) {
-            foreach ($aShops as $sShopId) {
-                $sShopId = reset($sShopId);
-                if (!$sShopId) {
-                    continue;
-                }
-                $sql = str_replace('#shop#', $sShopId, $sql);
-
-                try {
-                    $db->execute($sql);
-                } catch (\Exception $e) {
-                     $logging->logInstallation('SQL-ERROR ON ACTIVATE: ' . $e->getMessage());
-                }
-            }
-        }
-
-        // Update the views
-        $metaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
-
-        return $metaDataHandler->updateViews();
+    public static function afterpayDebitnoteTypeQuery() {
+        $debitnoteToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
+            ('apdebit2standard',	'afterpaydebitnote',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'), 
+            ('apdebit2germany',	'afterpaydebitnote',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
+            ('apdebit2nl',	'afterpaydebitnote',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51');";
+        self::executeSQL($debitnoteToObjQuery);
     }
 
     /**
-     * On module deactivation callback
-     * @codeCoverageIgnore empty method
+     * afterpayInstallmentTypeQuery
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public static function onDeactivate()
-    {
+    public static function afterpayInstallmentTypeQuery() {
+        $installmentToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
+         ('apinstallment2standard',	'afterpayinstallment',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),  
+         ('apinstallment2germany',	'afterpayinstallment',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51');";
+        self::executeSQL($installmentToObjQuery);
+    }
+
+    /**
+     * afterpayInvoiceTypeQuery
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public static function afterpayInvoiceTypeQuery() {
+        $invoiceToObjQuery = "REPLACE INTO `oxobject2payment` (`OXID`, `OXPAYMENTID`, `OXOBJECTID`, `OXTYPE`, `OXTIMESTAMP`) VALUES
+              ('apinv2standard',	'afterpayinvoice',	'oxidstandard',	'oxdelset',	'2017-11-08 11:48:51'),
+              ('apinv2germany',	'afterpayinvoice',	'a7c40f631fc920687.20179984',	'oxcountry',	'2017-11-08 11:48:51'),
+              ('apinv2nl',	'afterpayinvoice',	'a7c40f632cdd63c52.64272623',	'oxcountry',	'2017-11-08 11:48:51');";
+        self::executeSQL($invoiceToObjQuery);
     }
 
 
+    /**
+     * getShopSpecificSQLs
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @return array
+     */
     protected static function getShopSpecificSQLs()
     {
         return [
@@ -277,5 +222,91 @@ class Events
               ('afterpayInstallment15-#shop#', '#shop#', 'afterpayInstallment', 'oxidcustomer', '2017-11-08 11:48:51');
             "
         ];
+    }
+
+
+    /**
+     * afterpayPaymentsInsert
+     * -----------------------------------------------------------------------------------------------------------------
+     * Execute the sqlQueries at the first time of the module installation.
+     *
+     */
+    private static function afterpayPaymentsInsert()
+    {
+        $tablePayments = 'oxpayments';
+
+        $paymentModel = oxNew(Payment::class);
+        if (self::tableExists($tablePayments) && !$paymentModel->load( 'afterpaydebitnote')) {
+            self::insertAfterpayDebitnote();
+            self::afterpayDebitnoteTypeQuery();
+        }
+
+        if (self::tableExists($tablePayments) && !$paymentModel->load( 'afterpayinstallment')) {
+            self::insertAfterpayInstallment();
+            self::afterpayInstallmentTypeQuery();
+        }
+
+        if (self::tableExists($tablePayments) && !$paymentModel->load( 'afterpayinvoice')) {
+            self::insertAfterpayInvoice();
+            self::afterpayInvoiceTypeQuery();
+        }
+    }
+
+    /**
+     * On module activation callback
+     */
+    public static function onActivate()
+    {
+        $db = DatabaseProvider::getDb();
+        $logging = oxNew(\Arvato\AfterpayModule\Core\Logging::class);
+
+        self::afterpayPaymentsInsert();
+
+        self::createTableArvatoAfterpayAfterpayOrder();
+
+        // Get column if exist
+        $colCategoryProductGroupExist = $db->getOne(
+            "SELECT 1
+                   FROM information_schema.COLUMNS
+                   WHERE TABLE_NAME = 'oxcategories'
+                   AND COLUMN_NAME = 'AAPPRODUCTGROUP'"
+        );
+
+        if (!$colCategoryProductGroupExist) {
+            DatabaseProvider::getDb()->execute(
+                "ALTER TABLE `oxcategories`  ADD `AAPPRODUCTGROUP` varchar(32) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Arvato Afterpay product group'"
+            );
+        }
+
+        $shops = DatabaseProvider::getDb()->getAll('SELECT oxid FROM oxshops');
+
+        foreach (self::getShopSpecificSQLs() as $sql) {
+            foreach ($shops as $shopId) {
+                $shopId = reset($shopId);
+                if (!$shopId) {
+                    continue;
+                }
+                $sql = str_replace('#shop#', $shopId, $sql);
+
+                try {
+                    $db->execute($sql);
+                } catch (\Exception $e) {
+                     $logging->logInstallation('SQL-ERROR ON ACTIVATE: ' . $e->getMessage());
+                }
+            }
+        }
+
+        // Update the views
+        $metaDataHandler = oxNew(\OxidEsales\Eshop\Core\DbMetaDataHandler::class);
+
+        return $metaDataHandler->updateViews();
+    }
+
+    /**
+     * On module deactivation callback
+     * @codeCoverageIgnore empty method
+     */
+    public static function onDeactivate()
+    {
     }
 }

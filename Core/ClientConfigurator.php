@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -237,25 +226,6 @@ class ClientConfigurator
     }
 
     /**
-     * @param $checkoutId
-     *
-     * @param $isInstallmentApi
-     * @param $recordedApiKey
-     *
-     * @return WebServiceClient
-     */
-    public function getCreateContractClient($checkoutId, $isInstallmentApi = false, $recordedApiKey = '')
-    {
-        return $this->getBaseClient(
-            \Arvato\AfterpayModule\Core\WebServiceClient::HTTPMETHOD_CREATECONTRACT,
-            \Arvato\AfterpayModule\Core\WebServiceClient::FUNCTION_CREATECONTRACT,
-            [$checkoutId],
-            $isInstallmentApi,
-            $recordedApiKey
-        );
-    }
-
-    /**
      * @return WebServiceClient
      */
     public function getAvailableInstallmentPlansClient()
@@ -318,16 +288,16 @@ class ClientConfigurator
         $recordedApiKey = ''
     ) {
 
-        $sIsInstallmentApi = $isInstallmentApi ? 'Installment' : '';
+        $isInstallmentApi = $isInstallmentApi ? 'Installment' : '';
 
         $customerCountryCode = $this->getUserCountryCodeIdFromSession();
 
         if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxMode')) {
             $url = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxUrl'));
-            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxKey' . $customerCountryCode . $sIsInstallmentApi));
+            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxKey' . $customerCountryCode . $isInstallmentApi));
         } else {
             $url = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiUrl'));
-            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiKey' . $customerCountryCode . $sIsInstallmentApi));
+            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiKey' . $customerCountryCode . $isInstallmentApi));
         }
 
         if (substr($url, -1) != '/') {

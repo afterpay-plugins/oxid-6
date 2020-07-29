@@ -12,7 +12,7 @@
 
 Use Composer to add the module to your project
 ```bash
-composer require oxid-professional-services/arvatoafterpay
+composer require arvato/afterpay
 ```
 
  * Activate the module in administration area
@@ -22,7 +22,7 @@ composer require oxid-professional-services/arvatoafterpay
 ## Uninstall
 
  * Deactivate the module in administration area
- * remove "oxid-professional-services/arvatoafterpay" from your composer.json
+ * remove "arvato/afterpay" from your composer.json
 
 Run Composer again to remove Module from vendor
 ```bash

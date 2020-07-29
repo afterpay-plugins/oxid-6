@@ -21,6 +21,9 @@ $aLang = [
 
     'ORDER_AFTERPAY_TITLE_VOIDPAYMENT'    => 'Cancel payment reservations',
 
+    'ORDER_AFTERPAY_CATEGORY_MAIN_HELP'      => 'Here should be the main category shown, with which the article is connected',
+    'ORDER_AFTERPAY_MAIN_CATEGORY'           => 'Main category',
+
     'SHOP_MODULE_GROUP_arvatoAfterpayGeneral'               => 'General Settings',
     'SHOP_MODULE_arvatoAfterpayApiDefaultShippingCompany'   => 'Default Shipping Company',
     'SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription' => 'Default refund description',

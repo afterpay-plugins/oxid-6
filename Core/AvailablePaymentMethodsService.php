@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -38,11 +27,11 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
      * @param Session $session
      * @param Language $lang
      */
-    public function __construct(\OxidEsales\Eshop\Core\Session $session, \OxidEsales\Eshop\Core\Language $lang, \OxidEsales\Eshop\Application\Model\Order $oOrder)
+    public function __construct(\OxidEsales\Eshop\Core\Session $session, \OxidEsales\Eshop\Core\Language $lang, \OxidEsales\Eshop\Application\Model\Order $order)
     {
         $this->_session = $session;
         $this->_lang = $lang;
-        $this->_oxOrder = $oOrder;
+        $this->_order = $order;
     }
 
     /**
@@ -94,13 +83,13 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
     public function isSpecificInstallmentAvailable($profileId, $requireDirectDebit = true)
     {
 
-        $aPaymentMethods = $this->getAvailablePaymentMethods();
+        $paymentMethods = $this->getAvailablePaymentMethods();
 
-        if (!is_array($aPaymentMethods) || !count($aPaymentMethods)) {
+        if (!is_array($paymentMethods) || !count($paymentMethods)) {
             return false;
         }
 
-        foreach ($aPaymentMethods as $stdClassMethod) {
+        foreach ($paymentMethods as $stdClassMethod) {
             if (
                 $stdClassMethod->type == 'Installment' &&
                 isset($stdClassMethod->installment) &&
@@ -149,28 +138,9 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
         $data = oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\AvailablePaymentMethodsDataProvider::class)->getDataObject(
             $this->_session,
             $this->_lang,
-            $this->_oxOrder
+            $this->_order
         )->exportData();
         return oxNew(\Arvato\AfterpayModule\Core\ClientConfigurator::class)->getAvailablePaymentMethodsClient()->execute($data);
-    }
-
-    /**
-     * Returns the number of installments (used for createContract) by profileId
-     *
-     * @param $profileId
-     *
-     * @return null|int
-     */
-    public function getNumberOfInstallmentsByProfileId($profileId)
-    {
-
-        if (!$this->_mappingInstallmentPfofileId2NumberOfInstallments) {
-            $this->isSpecificInstallmentAvailable(1);
-        }
-        if (isset($this->_mappingInstallmentPfofileId2NumberOfInstallments[$profileId])) {
-            return $this->_mappingInstallmentPfofileId2NumberOfInstallments[$profileId];
-        }
-        return null;
     }
 
     /**

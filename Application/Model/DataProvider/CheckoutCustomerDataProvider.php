@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
@@ -85,7 +74,7 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
             if ($birthdateEN && is_array($birthdateEN) && 3 == count($birthdateEN)) {
                 $birthdate = $birthdateEN[2] . '-' . $birthdateEN[0] . '-' . $birthdateEN[1];
-            } elseif ($aBirthdateDE && is_array($birthdateDE) && 3 == count($birthdateDE)) {
+            } elseif ($birthdateDE && is_array($birthdateDE) && 3 == count($birthdateDE)) {
                 $birthdate = $birthdateDE[2] . '-' . $birthdateDE[1] . '-' . $birthdateDE[0];
             }
         }

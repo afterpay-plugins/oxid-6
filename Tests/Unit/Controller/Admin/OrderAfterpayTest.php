@@ -1,21 +1,10 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Controller\Admin;
+namespace Arvato\AfterpayModule\Tests\Unit\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\DatabaseProvider;
@@ -39,26 +28,26 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $sut->render()
         );
 
-        $aViewData = $sut->getViewData();
+        $viewData = $sut->getViewData();
 
-        $this->assertTrue(isset($aViewData['oOrder']), 'isset oOrder');
+        $this->assertTrue(isset($viewData['oOrder']), 'isset oOrder');
 
-        if (isset($aViewData['oOrder'])) {
+        if (isset($viewData['oOrder'])) {
             $this->assertEquals(
                 $oxID,
-                $aViewData['oOrder']->getId()
+                $viewData['oOrder']->getId()
             );
         }
 
-        $this->assertTrue(isset($aViewData['oAfterpayOrder']));
-        if (isset($aViewData['oAfterpayOrder'])) {
+        $this->assertTrue(isset($viewData['oAfterpayOrder']));
+        if (isset($viewData['oAfterpayOrder'])) {
             $this->assertEquals(
                 $oxID,
-                $aViewData['oAfterpayOrder']->getId()
+                $viewData['oAfterpayOrder']->getId()
             );
         }
 
-        $this->assertFalse(isset($aViewData['sMessage']));
+        $this->assertFalse(isset($viewData['sMessage']));
     }
 
     /**
@@ -74,11 +63,11 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $sut->render()
         );
 
-        $aViewData = $sut->getViewData();
+        $viewData = $sut->getViewData();
 
-        $this->assertFalse(isset($aViewData['oOrder']), 'isset aOrder');
-        $this->assertFalse(isset($aViewData['oAfterpayOrder']), 'isset aAfterpayOrder');
-        $this->assertTrue(isset($aViewData['sMessage']), 'isset sMessage');
+        $this->assertFalse(isset($viewData['oOrder']), 'isset aOrder');
+        $this->assertFalse(isset($viewData['oAfterpayOrder']), 'isset aAfterpayOrder');
+        $this->assertTrue(isset($viewData['sMessage']), 'isset sMessage');
     }
 
     /**
@@ -94,11 +83,11 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $sut->render()
         );
 
-        $aViewData = $sut->getViewData();
+        $viewData = $sut->getViewData();
 
-        $this->assertFalse(isset($aViewData['oOrder']));
-        $this->assertFalse(isset($aViewData['oAfterpayOrder']));
-        $this->assertTrue(isset($aViewData['sMessage']));
+        $this->assertFalse(isset($viewData['oOrder']));
+        $this->assertFalse(isset($viewData['oAfterpayOrder']));
+        $this->assertTrue(isset($viewData['sMessage']));
     }
 
     public function testGetEditObject()
@@ -112,65 +101,65 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testCaptureDidCapture()
     {
         $sut = $this->getCaptureMockedSut(132.45);
-        $aViewData = $sut->getViewData();
-        $this->assertFalse(isset($aViewData['aErrorMessages']));
-        $this->assertTrue(isset($aViewData['oCaptureSuccess']));
+        $viewData = $sut->getViewData();
+        $this->assertFalse(isset($viewData['aErrorMessages']));
+        $this->assertTrue(isset($viewData['oCaptureSuccess']));
     }
 
     public function testCaptureDidNotCaptureServiceLevelError()
     {
         $sut = $this->getCaptureMockedSut(0, true);
-        $aViewData = $sut->getViewData();
-        $this->assertEquals('ServiceLevelError', $aViewData['aErrorMessages']);
-        $this->assertFalse(isset($aViewData['oCaptureSuccess']));
+        $viewData = $sut->getViewData();
+        $this->assertEquals('ServiceLevelError', $viewData['aErrorMessages']);
+        $this->assertFalse(isset($viewData['oCaptureSuccess']));
     }
 
     public function testCaptureDidNotCaptureResponseLevelError()
     {
         $sut = $this->getCaptureMockedSut(0, false);
-        $aViewData = $sut->getViewData();
-        $this->assertEquals(['ResponseLevelError'], $aViewData['aErrorMessages']);
-        $this->assertFalse(isset($aViewData['oCaptureSuccess']));
+        $viewData = $sut->getViewData();
+        $this->assertEquals(['ResponseLevelError'], $viewData['aErrorMessages']);
+        $this->assertFalse(isset($viewData['oCaptureSuccess']));
     }
 
     public function testCaptureshippingSuccessfull()
     {
         $sut = $this->getCaptureshippingMockedSut(123);
-        $aViewData = $sut->getViewData();
-        $this->assertFalse(isset($aViewData['aErrorMessages']), 'error messages set');
-        $this->assertTrue(isset($aViewData['oCaptureShippingSuccess']), 'capture shipping success set');
+        $viewData = $sut->getViewData();
+        $this->assertFalse(isset($viewData['aErrorMessages']), 'error messages set');
+        $this->assertTrue(isset($viewData['oCaptureShippingSuccess']), 'capture shipping success set');
     }
 
     public function testCaptureshippingUnsuccessfullServiceLevelError()
     {
         $sut = $this->getCaptureshippingMockedSut(null, true);
-        $aViewData = $sut->getViewData();
-        $this->assertEquals('ServiceLevelError', $aViewData['aErrorMessages'], 'error messages set');
-        $this->assertFalse(isset($aViewData['oCaptureShippingSuccess']), 'capture shipping success set');
+        $viewData = $sut->getViewData();
+        $this->assertEquals('ServiceLevelError', $viewData['aErrorMessages'], 'error messages set');
+        $this->assertFalse(isset($viewData['oCaptureShippingSuccess']), 'capture shipping success set');
     }
 
     public function testCaptureshippingUnsuccessfullResponseLevelError()
     {
         $sut = $this->getCaptureshippingMockedSut(null, false);
-        $aViewData = $sut->getViewData();
-        $this->assertEquals(['ResponseLevelError'], $aViewData['aErrorMessages'], 'error messages set');
-        $this->assertFalse(isset($aViewData['oCaptureShippingSuccess']), 'capture shipping success set');
+        $viewData = $sut->getViewData();
+        $this->assertEquals(['ResponseLevelError'], $viewData['aErrorMessages'], 'error messages set');
+        $this->assertFalse(isset($viewData['oCaptureShippingSuccess']), 'capture shipping success set');
     }
 
     public function testrefundSuccessfull()
     {
         $sut = $this->getRefundMockedSut([800012345]);
-        $aViewData = $sut->getViewData();
-        $this->assertFalse(isset($aViewData['aErrorMessages']), 'error messages set');
-        $this->assertTrue(isset($aViewData['oRefundSuccess']), 'refund success set');
+        $viewData = $sut->getViewData();
+        $this->assertFalse(isset($viewData['aErrorMessages']), 'error messages set');
+        $this->assertTrue(isset($viewData['oRefundSuccess']), 'refund success set');
     }
 
     public function testrefundUnsuccessfull()
     {
         $sut = $this->getRefundMockedSut(null);
-        $aViewData = $sut->getViewData();
-        $this->assertTrue(isset($aViewData['aErrorMessages']), 'error messages set');
-        $this->assertFalse(isset($aViewData['oRefundSuccess']), 'refund success set');
+        $viewData = $sut->getViewData();
+        $this->assertTrue(isset($viewData['aErrorMessages']), 'error messages set');
+        $this->assertFalse(isset($viewData['oRefundSuccess']), 'refund success set');
     }
 
     /**
@@ -185,7 +174,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('getEditObject'))
             ->getMock();
 
@@ -219,10 +208,10 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $orderarticle_vat19 = new \stdClass();
         $orderarticle_vat19->oxorderarticles__oxvat = new \OxidEsales\Eshop\Core\Field(19);
 
-        $aOrderArticles = [$orderarticle_vat19, $orderarticle_vat19];
+        $orderArticles = [$orderarticle_vat19, $orderarticle_vat19];
         $this->assertEquals(
             [19],
-            $this->getSUT('lorem')->getRefundVatPercentages($aOrderArticles)
+            $this->getSUT('lorem')->getRefundVatPercentages($orderArticles)
         );
     }
 
@@ -237,14 +226,14 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             2 => $article
         ];
 
-        $response = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
+        $response = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(array('getOrderItems'))
             ->getMock();
         $response->method('getOrderItems')
             ->will($this->returnValue($items));
 
-        $service = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Core\CaptureService ::class)
+        $service = $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureService ::class)
             ->disableOriginalConstructor()
             ->setMethods(array('getOrderDetails'))
             ->getMock();
@@ -257,7 +246,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var $sut OrderAfterpay
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('getOrderDetailsService', 'getEditObject'))
             ->getMock();
         $sut->method('getOrderDetailsService')
@@ -267,11 +256,11 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $sut->smartyAssignOrderDetails();
 
-        $aViewData = $sut->getViewData();
+        $viewData = $sut->getViewData();
 
         $this->assertEquals(
             $items,
-            $aViewData['aArvatoAllOrderItems']
+            $viewData['aArvatoAllOrderItems']
         );
     }
 
@@ -311,7 +300,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
     protected function getOrderItemActionSUT()
     {
 
-        $service = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Core\CaptureService ::class)
+        $service = $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureService ::class)
             ->disableOriginalConstructor()
             ->setMethods(array('getOrderDetails'))
             ->getMock();
@@ -321,7 +310,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var $sut OrderAfterpay
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array(
                 'getFromRequest',
                 'getOrderDetailsService',
@@ -357,7 +346,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             2 => $article
         ];
 
-        $response = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
+        $response = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(array('getOrderItems'))
             ->getMock();
@@ -366,7 +355,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('capture'))
             ->getMock();
         $sut->expects($this->once())
@@ -388,7 +377,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             2 => $article
         ];
 
-        $response = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
+        $response = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrderItems'])
             ->getMock();
@@ -397,7 +386,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(['refund', 'getFromRequest'])
             ->getMock();
         $sut->expects($this->once())
@@ -423,7 +412,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             2 => $article
         ];
 
-        $response = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
+        $response = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\Entity\OrderDetailsResponseEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(array('getOrderItems'))
             ->getMock();
@@ -432,7 +421,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('void'))
             ->getMock();
 
@@ -447,7 +436,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function testvoidSuccess()
     {
 
-        $response = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\VoidResponseEntity::class)
+        $response = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\Entity\VoidResponseEntity::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->setMethods(array('getTotalAuthorizedAmount'))
@@ -456,7 +445,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->method('getTotalAuthorizedAmount')
             ->will($this->returnValue(123));
 
-        $mockVoidServie = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Core\RefundService::class)
+        $mockVoidServie = $this->getMockBuilder(\Arvato\AfterpayModule\Core\RefundService::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->setMethods(array('void'))
@@ -471,7 +460,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('getEditObject','getVoidPaymentService'))
             ->getMock();
 
@@ -508,7 +497,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('smartyAssignOrderDetails'))
             ->getMock();
         $sut->method('smartyAssignOrderDetails')
@@ -549,17 +538,17 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * @param $capturedAmount
-     * @param $bErrorsAreServiceLevel
+     * @param $errorsAreServiceLevel
      *
      * @return OrderAfterpay
      */
-    protected function getCaptureMockedSut($capturedAmount, $bErrorsAreServiceLevel = true)
+    protected function getCaptureMockedSut($capturedAmount, $errorsAreServiceLevel = true)
     {
-        $mockCaptureResponseEntity = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CaptureResponseEntity::class);
+        $mockCaptureResponseEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureResponseEntity::class);
         $mockCaptureResponseEntity->setCapturedAmount($capturedAmount);
         $mockCaptureResponseEntity->setErrors(['ResponseLevelError']);
 
-        $mockCaptureServie = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Core\CaptureService::class)
+        $mockCaptureServie = $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureService::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->setMethods(array('capture', 'getErrorMessages'))
@@ -572,14 +561,14 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $errorAccesses = $capturedAmount ? $this->never() : $this->once();
         $mockCaptureServie->expects($errorAccesses)
             ->method('getErrorMessages')
-            ->will($this->returnValue($bErrorsAreServiceLevel ? 'ServiceLevelError' : null));
+            ->will($this->returnValue($errorsAreServiceLevel ? 'ServiceLevelError' : null));
 
         $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oxOrder->load('unitauthorizedorder');
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('getCapturePaymentService', 'getEditObject'))
             ->getMock();
         $sut->expects($this->once())
@@ -592,20 +581,20 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * @param int $iShippingNumber Service response: integer number of captured shipping. Do not confuse with arbitrary
+     * @param int $shippingNumber Service response: integer number of captured shipping. Do not confuse with arbitrary
      *     tracking id,./runte
      *
-     * @param $bErrorsAreServiceLevel
+     * @param $errorsAreServiceLevel
      *
      * @return OrderAfterpay
      */
-    protected function getCaptureshippingMockedSut($iShippingNumber, $bErrorsAreServiceLevel = true)
+    protected function getCaptureshippingMockedSut($shippingNumber, $errorsAreServiceLevel = true)
     {
-        $mockCaptureShippingResponseEntity = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity::class);
-        $mockCaptureShippingResponseEntity->setShippingNumber($iShippingNumber);
+        $mockCaptureShippingResponseEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity::class);
+        $mockCaptureShippingResponseEntity->setShippingNumber($shippingNumber);
         $mockCaptureShippingResponseEntity->setErrors(['ResponseLevelError']);
 
-        $mockCaptureServie = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Core\CaptureShippingService::class)
+        $mockCaptureServie = $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureShippingService::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->setMethods(array('captureShipping', 'getErrorMessages'))
@@ -615,17 +604,17 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->will($this->returnValue($mockCaptureShippingResponseEntity));
 
         // If there is a captured amount getErrorMessages() is not to be called
-        $errorAccesses = is_numeric($iShippingNumber) ? $this->never() : $this->once();
+        $errorAccesses = is_numeric($shippingNumber) ? $this->never() : $this->once();
         $mockCaptureServie->expects($errorAccesses)
             ->method('getErrorMessages')
-            ->will($this->returnValue($bErrorsAreServiceLevel ? 'ServiceLevelError' : null));
+            ->will($this->returnValue($errorsAreServiceLevel ? 'ServiceLevelError' : null));
 
         $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oxOrder->load('unitauthorizedorder');
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('getCaptureShippingService', 'getEditObject'))
             ->getMock();
         $sut->expects($this->once())
@@ -638,17 +627,17 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * @param int $iShippingNumber Service response: integer number of captured shipping. Do not confuse with arbitrary
+     * @param int $shippingNumber Service response: integer number of captured shipping. Do not confuse with arbitrary
      *     tracking id,./runte
      *
      * @return OrderAfterpay
      */
-    protected function getRefundMockedSut($aRefundNumbers = [800012345])
+    protected function getRefundMockedSut($refundNumbers = [800012345])
     {
-        $mockRefundResponseEntity = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\RefundResponseEntity::class);
-        $mockRefundResponseEntity->setRefundNumbers($aRefundNumbers);
+        $mockRefundResponseEntity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\RefundResponseEntity::class);
+        $mockRefundResponseEntity->setRefundNumbers($refundNumbers);
 
-        $mockCaptureServie = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Core\RefundService::class)
+        $mockCaptureServie = $this->getMockBuilder(\Arvato\AfterpayModule\Core\RefundService::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->setMethods(array('refund', 'getErrorMessages'))
@@ -658,7 +647,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->will($this->returnValue($mockRefundResponseEntity));
 
         // If there is a captured amount getErrorMessages() is not to be called
-        $errorAccesses = $aRefundNumbers ? $this->never() : $this->once();
+        $errorAccesses = $refundNumbers ? $this->never() : $this->once();
         $mockCaptureServie->expects($errorAccesses)
             ->method('getErrorMessages')
             ->will($this->returnValue('LoremIpsum'));
@@ -669,7 +658,7 @@ class OrderAfterpayTest extends \OxidEsales\TestingLibrary\UnitTestCase
         /**
          * @var OrderAfterpay $sut
          */
-        $sut = $this->getMockBuilder(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
+        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class)
             ->setMethods(array('getRefundService', 'getEditObject'))
             ->getMock();
         $sut->expects($this->once())

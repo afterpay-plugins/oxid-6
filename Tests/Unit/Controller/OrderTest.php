@@ -1,21 +1,11 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Controller;
+
+namespace Arvato\AfterpayModule\Tests\Unit\Controller;
 
 use OxidEsales\Eshop\Core\Registry;
 
@@ -188,11 +178,11 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Will give SUT with mocked parent::render() and mocked get_session()
      *
-     * @param int $iInstallmentProfileId
+     * @param int $installmentProfileId
      *
      * @return OrderController
      */
-    protected function getSUTInstallmentProfileId($iInstallmentProfileId)
+    protected function getSUTInstallmentProfileId($installmentProfileId)
     {
         $oxSession = Registry::getSession();
         $oxSession->setVariable('dynvalue', []);
@@ -203,7 +193,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $sut->expects($this->atLeastOnce())
             ->method('getRequestParameter')
-            ->will($this->returnValue($iInstallmentProfileId));
+            ->will($this->returnValue($installmentProfileId));
 
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
@@ -238,26 +228,26 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->method('updateSelectedInstallmentPlanProfileIdInSession')
             ->will($this->returnValue(1));
 
-        $oInstallmentplan = new \stdClass();
-        $oInstallmentplan->readMore = '';
-        $oInstallmentplan->totalInterestAmount = 1;
-        $oInstallmentplan->totalAmount = 2;
-        $oInstallmentplan->effectiveInterestRate = 3;
+        $installmentPlan = new \stdClass();
+        $installmentPlan->readMore = '';
+        $installmentPlan->totalInterestAmount = 1;
+        $installmentPlan->totalAmount = 2;
+        $installmentPlan->effectiveInterestRate = 3;
 
         $sut->expects($this->atLeastOnce())
             ->method('getAvailableInstallmentPlans')
-            ->will($this->returnValue([1 => $oInstallmentplan]));
+            ->will($this->returnValue([1 => $installmentPlan]));
 
         return $sut;
     }
 
     /**
      * @param $fBasketPrice
-     * @param $bFoundInstallmentPlans
+     * @param $foundInstallmentPlans
      *
      * @return OrderController
      */
-    protected function getSutMockedInstallment($fBasketPrice, $bFoundInstallmentPlans)
+    protected function getSutMockedInstallment($fBasketPrice, $foundInstallmentPlans)
     {
 
         $oxPrice = $this->getMockBuilder('stdClass')->setMethods(['getBruttoPrice'])->getMock();
@@ -269,18 +259,18 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $oxSession = $this->getMockBuilder('stdClass')->setMethods(['getBasket'])->getMock();
         $oxSession->method('getBasket')->will($this->returnValue($oxBasket));
 
-        if ($bFoundInstallmentPlans) {
+        if ($foundInstallmentPlans) {
             $installmentPlan = new \stdClass();
             $installmentPlan->effectiveAnnualPercentageRate = 'deleteme';
             $installmentPlan->installmentProfileNumber = 99;
-            $aAvailableInstallmentPlans = [$installmentPlan];
+            $availableInstallmentPlans = [$installmentPlan];
         }
 
-        $oAvailableInstallmentPlans = $this->getMockBuilder('stdClass')->setMethods(['getAvailableInstallmentPlans'])->getMock();
-        $oAvailableInstallmentPlans->method('getAvailableInstallmentPlans')->will($this->returnValue($aAvailableInstallmentPlans));
+        $objAvailableInstallmentPlans = $this->getMockBuilder('stdClass')->setMethods(['getAvailableInstallmentPlans'])->getMock();
+        $objAvailableInstallmentPlans->method('getAvailableInstallmentPlans')->will($this->returnValue($availableInstallmentPlans));
 
         $availableInstallmentPlansService = $this->getMockBuilder('stdClass')->setMethods(['getAvailableInstallmentPlans'])->getMock();
-        $availableInstallmentPlansService->method('getAvailableInstallmentPlans')->will($this->returnValue($oAvailableInstallmentPlans));
+        $availableInstallmentPlansService->method('getAvailableInstallmentPlans')->will($this->returnValue($objAvailableInstallmentPlans));
 
         $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\OrderController::class)
             ->setMethods(array('getAvailableInstallmentPlansService', 'getSession'))

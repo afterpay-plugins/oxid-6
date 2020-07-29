@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -37,7 +26,7 @@ class RefundService extends \Arvato\AfterpayModule\Core\Service
      */
     public function __construct(\OxidEsales\Eshop\Application\Model\Order $order)
     {
-        $this->_oxOrder = $order;
+        $this->_order = $order;
         $this->_afterpayOrder = $order->getAfterpayOrder();
     }
 
@@ -65,14 +54,14 @@ class RefundService extends \Arvato\AfterpayModule\Core\Service
 
         if ($vatSplittedRefunds) {
             $response = $this->executeRequestFromVatSplittedRefundFields(
-                $this->_oxOrder->oxorder__oxordernr->value,
+                $this->_order->oxorder__oxordernr->value,
                 $captureNo ?: $this->_afterpayOrder->getCaptureNo(),
                 $vatSplittedRefunds,
                 $recordedApiKey
             );
         } else {
             $response = $this->executeRequestFromOrderItems(
-                $this->_oxOrder->oxorder__oxordernr->value,
+                $this->_order->oxorder__oxordernr->value,
                 $captureNo ?: $this->_afterpayOrder->getCaptureNo(),
                 $orderItems,
                 $recordedApiKey

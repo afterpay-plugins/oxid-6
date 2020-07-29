@@ -15,29 +15,29 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\Entity;
+namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
 /**
  * Class CheckoutCustomerEntityTest: unit tests for CheckoutCustomerEntity.
  */
-class CheckoutCustomerEntityTest extends \OxidProfessionalServices\ArvatoAfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class CheckoutCustomerEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
 {
     /**
      * Tests the data container.
      */
     public function testDataContainer()
     {
-        $address = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\AddressEntity::class);
+        $address = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AddressEntity::class);
         $address->setPostalPlace('Paris');
 
         $testData = [
-            'customerCategory'      => \OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::CUSTOMER_CATEGORY_PERSON,
+            'customerCategory'      => \Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::CUSTOMER_CATEGORY_PERSON,
             'identificationNumber'  => '12345abcde',
             'address'               => $address,
             'firstName'             => 'Paulchen',
             'lastName'              => 'Panther',
             'customerNumber'        => 'abced12345',
-            'salutation'            => \OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::SALUTATION_MR,
+            'salutation'            => \Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::SALUTATION_MR,
             'email'                 => 'panther@blakeedwards.com',
             'phone'                 => '+49/0800/12345678',
             'mobilePhone'           => '+49/0171/12345678',
@@ -45,17 +45,17 @@ class CheckoutCustomerEntityTest extends \OxidProfessionalServices\ArvatoAfterpa
             'conversationLanguage'  => 'FR'
         ];
 
-        $testObject = oxNew(\OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::class);
+        $testObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::class);
         $this->testGetSet($testObject, $testData);
 
         $this->assertEquals((object) [
-            'customerCategory'      => \OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::CUSTOMER_CATEGORY_PERSON,
+            'customerCategory'      => \Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::CUSTOMER_CATEGORY_PERSON,
             'identificationNumber'  => '12345abcde',
             'address'               => (object) ['postalPlace' => 'Paris'],
             'firstName'             => 'Paulchen',
             'lastName'              => 'Panther',
             'customerNumber'        => 'abced12345',
-            'salutation'            => \OxidProfessionalServices\ArvatoAfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::SALUTATION_MR,
+            'salutation'            => \Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::SALUTATION_MR,
             'email'                 => 'panther@blakeedwards.com',
             'phone'                 => '+49/0800/12345678',
             'mobilePhone'           => '+49/0171/12345678',

@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -31,7 +20,7 @@ class Logging
     * Logger
     * @param array with Logger Obj
     */
-    protected $_aLogger = [];
+    protected $_loggers = [];
 
     /**
      * If enabled in module settings, log resuest and response to shoproot/log/AFTERPAY.log,
@@ -64,8 +53,8 @@ class Logging
             . '---------' . PHP_EOL . PHP_EOL
             . $response_data . PHP_EOL;
 
-        $oLogger = $this->getLogger('ARVATO Logger', 'AFTERPAY.log', 'NOTICE');
-        call_user_func([$oLogger, 'notice'], $logMessage);
+        $objLogger = $this->getLogger('ARVATO Logger', 'AFTERPAY.log', 'NOTICE');
+        call_user_func([$objLogger, 'notice'], $logMessage);
     }
 
     /**
@@ -82,8 +71,8 @@ class Logging
             . $_SERVER['QUERY_STRING'] . PHP_EOL
             . $message . PHP_EOL;
 
-        $oLogger = $this->getLogger('ARVATO Logger', 'AFTERPAY.log', 'NOTICE');
-        call_user_func([$oLogger, 'notice'], $logMessage);
+        $objLogger = $this->getLogger('ARVATO Logger', 'AFTERPAY.log', 'NOTICE');
+        call_user_func([$objLogger, 'notice'], $logMessage);
     }
 
     /**
@@ -102,29 +91,29 @@ class Logging
     *
     * @return Monolog\Logger
     */
-    protected function getLogger(string $sLogger = null, string $sFile = null, string $sLogLevel = null)
+    protected function getLogger(string $logger = null, string $file = null, string $logLevel = null)
     {
-        $sLogger = (!empty($sLogger) ? $sLogger : 'OXID Logger');
+        $logger = (!empty($logger) ? $logger : 'OXID Logger');
 
-        if (!array_key_exists($sLogger, $this->_aLogger)) {
-            $sFile = (!empty($sFile) ? $sFile : 'oxideshop.log');
+        if (!array_key_exists($logger, $this->_loggers)) {
+            $file = (!empty($file) ? $file : 'oxideshop.log');
 
-            $sPath = Registry::getConfig()->getLogsDir() . $sFile;
+            $path = Registry::getConfig()->getLogsDir() . $file;
 
-            if (!is_file($sPath)) {
-                file_put_contents($sPath, '');
+            if (!is_file($path)) {
+                file_put_contents($path, '');
             }
 
-            $sLogLevel = strtoupper($sLogLevel);
-            $sLogLevel = ((!empty($sLogLevel) && defined("Logger::$sLogLevel")) ? constant("Logger::$sLogLevel") : Logger::DEBUG);
+            $logLevel = strtoupper($logLevel);
+            $logLevel = ((!empty($logLevel) && defined("Logger::$logLevel")) ? constant("Logger::$logLevel") : Logger::DEBUG);
 
-            $this->_aLogger[$sLogger] = new Logger($sLogger);
-            $this->_aLogger[$sLogger]->pushHandler(new StreamHandler(
-                $sPath,
-                $sLogLevel
+            $this->_loggers[$logger] = new Logger($logger);
+            $this->_loggers[$logger]->pushHandler(new StreamHandler(
+                $path,
+                $logLevel
             ));
         }
 
-        return $this->_aLogger[$sLogger];
+        return $this->_loggers[$logger];
     }
 }

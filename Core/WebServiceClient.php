@@ -1,18 +1,7 @@
 <?php
 
 /**
- * This Software is the property of OXID eSales and is protected
- * by copyright law - it is NOT Freeware.
  *
- * Any unauthorized use of this software without a valid license key
- * is a violation of the license agreement and will be prosecuted by
- * civil and criminal law.
- *
- * @category  module
- * @package   afterpay
- * @author    ©2020 norisk GmbH
- * @link
- * @copyright (C) OXID eSales AG 2003-2020
  */
 
 namespace Arvato\AfterpayModule\Core;
@@ -35,7 +24,6 @@ class WebServiceClient extends \Arvato\AfterpayModule\Core\HttpClient
     const FUNCTION_VALIDATEBANKACCOUNT = 'validate/bank-account';
     const FUNCTION_REFUND = 'orders/%s/refunds';
     const FUNCTION_AVAILABLEPAYMENTMETHODS = 'checkout/payment-methods';
-    const FUNCTION_CREATECONTRACT = 'checkout/%s/contract ';
     const FUNCTION_AVAILABLEINSTALLMENTPLANS = 'lookup/installment-plans';
     const FUNCTION_ORDERDETAILS = 'orders/%s';
 
@@ -46,7 +34,6 @@ class WebServiceClient extends \Arvato\AfterpayModule\Core\HttpClient
     const HTTPMETHOD_VALIDATEBANKACCOUNT = 'POST';
     const HTTPMETHOD_REFUND = 'POST';
     const HTTPMETHOD_AVAILABLEPAYMENTMETHODS = 'POST';
-    const HTTPMETHOD_CREATECONTRACT = 'POST';
     const HTTPMETHOD_AVAILABLEINSTALLMENTPLANS = 'POST';
     const HTTPMETHOD_ORDERDETAILS = 'GET';
 

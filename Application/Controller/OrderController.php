@@ -2,17 +2,6 @@
 
 /**
  *
-*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  */
 
 namespace Arvato\AfterpayModule\Application\Controller;
@@ -180,8 +169,8 @@ class OrderController extends OrderController_parent
         $smarty = Registry::getUtilsView()->getSmarty();
 
         // Assign installment plan formatting ...
-        $aAvailableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
-        $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $aAvailableInstallmentPlanFormattings);
+        $availableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
+        $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $availableInstallmentPlanFormattings);
 
         // ... and the URL to the legal documents, based upon current plan choice ...
         $selectedInstallmentPlan = isset($availableInstallmentPlans[$selectedInstallmentPlanProfileIdInSession])
