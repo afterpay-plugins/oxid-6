@@ -1,27 +1,17 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
+
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingEntity;
+use OxidEsales\TestingLibrary\UnitTestCase;
 
 /**
  * Class CaptureShippingEntityTest: Tests for CaptureShippingEntity.
  */
-class CaptureShippingEntityTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CaptureShippingEntityTest extends UnitTestCase
 {
-
     /**
-     * setUp helper
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
-    /**
-     * Testing method gettype
+     * Testing method getType
      */
     public function testGetSettype()
     {
@@ -32,7 +22,7 @@ class CaptureShippingEntityTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * Testing method getshippingCompany
+     * Testing method getShippingCompany
      */
     public function testGetSetShippingCompany()
     {
@@ -43,7 +33,7 @@ class CaptureShippingEntityTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * Testing method gettrackingId
+     * Testing method getTrackingId
      */
     public function testGetSetTrackingId()
     {
@@ -60,6 +50,6 @@ class CaptureShippingEntityTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingEntity::class);
+        return oxNew(CaptureShippingEntity::class);
     }
 }

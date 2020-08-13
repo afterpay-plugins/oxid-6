@@ -203,7 +203,10 @@ class OrderController extends OrderController_parent
      */
     protected function _getNextStep($success)
     {
+        file_put_contents(OX_BASE_PATH . 'log/0mzwack.log', date('[Y-m-d H:i:s] ') . __METHOD__ . ' '
+            . PHP_EOL . ' ╠ $success = ' . str_replace("\n", "\n ║  ", var_export($success, true)) . PHP_EOL, 8);
         if ($success === self::ARVATO_ORDER_STATE_CHECKADDRESS) {
+            file_put_contents(OX_BASE_PATH . 'log/0mzwack.log', date('[Y-m-d H:i:s] ') . __METHOD__ . ' ' . PHP_EOL, 8);
             return 'user?wecorrectedyouraddress=1';
         } elseif (is_string($success) && 10 < strlen($success)) {
             $session = Registry::getSession();

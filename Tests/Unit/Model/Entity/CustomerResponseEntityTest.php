@@ -6,10 +6,12 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity;
+
 /**
  * Class CustomerResponseEntityTest: Tests for CustomerResponseEntity.
  */
-class CustomerResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class CustomerResponseEntityTest extends EntityAbstract
 {
     /**
      * Testing all getters and Setters
@@ -20,21 +22,21 @@ class CustomerResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model
             'customerNumber' => 123,
             'firstName'      => 'Jon',
             'lastName'       => 'Doe',
-            'addressList'    => ['Lorem', 'Ipsum']
+            'addressList'    => ['Lorem', 'Ipsum'],
         ];
 
         $testObject = $this->getSUT();
-        $this->testGetSet($testObject, $testData);
+        $this->getSet($testObject, $testData);
         $this->assertEquals((object) $testData, $testObject->exportData(), 'exported object not valid');
     }
 
     /**
      * SUT generator
      *
-     * @return CaptureResponseEntity
+     * @return CustomerResponseEntity
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity::class);
+        return oxNew(CustomerResponseEntity::class);
     }
 }

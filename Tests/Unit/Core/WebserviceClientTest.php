@@ -6,15 +6,22 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
+use Arvato\AfterpayModule\Core\Exception\CurlException;
+use Arvato\AfterpayModule\Core\WebServiceClient;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+
 /**
  * Class WebServiceClientTest: Tests for WebServiceClient.
  */
-class WebServiceClientTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class WebServiceClientTest extends UnitTestCase
 {
 
 
     /**
      * Testing method setFunction - nonvariable URL
+     *
+     * @throws CurlException
      */
     public function testSetFunctionNonVariableUrl()
     {
@@ -36,6 +43,8 @@ class WebServiceClientTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Testing method setFunction - nonvariable URL
+     *
+     * @throws CurlException
      */
     public function testSetFunctionVariableUrl()
     {
@@ -47,6 +56,8 @@ class WebServiceClientTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Testing method getFunction
      * Identical with the setter test
+     *
+     * @throws CurlException
      */
     public function testGetFunction()
     {
@@ -56,7 +67,9 @@ class WebServiceClientTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * Testing method excecute
+     * Testing method execute
+     *
+     * @throws CurlException
      */
     public function testExcecute()
     {
@@ -87,16 +100,16 @@ class WebServiceClientTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Core\WebServiceClient::class);
+        return oxNew(WebServiceClient::class);
     }
 
     /**
-     * @return WebServiceClient
+     * @return WebServiceClient|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSutMockedForExecute()
     {
-        return $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
-            ->setMethods(array('executeJsonRequest'))
-            ->getMock();
+        return $this->getMockBuilder(WebServiceClient::class)
+                    ->setMethods(['executeJsonRequest'])
+                    ->getMock();
     }
 }

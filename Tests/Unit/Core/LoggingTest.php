@@ -6,12 +6,15 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
+use Arvato\AfterpayModule\Core\Logging;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Class LoggingTest: Test class for Logging.
  */
-class LoggingTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class LoggingTest extends UnitTestCase
 {
 
     /**
@@ -74,17 +77,19 @@ class LoggingTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Get mocked SUT for config injection
+     *
      * @param bool $loggingEnabled
-     * @return Logging
+     * @param bool $willOverrideLoggingStatus
+     * @return Logging|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMokedSut($loggingEnabled, $willOverrideLoggingStatus = false)
     {
-        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Core\Logging::class)
-            ->setMethods(array('isLoggingEnabled'))
-            ->getMock();
+        $sut = $this->getMockBuilder(Logging::class)
+                    ->setMethods(['isLoggingEnabled'])
+                    ->getMock();
         $sut->expects($willOverrideLoggingStatus ? $this->never() : $this->once())
             ->method('isLoggingEnabled')
-            ->will($this->returnValue((bool)$loggingEnabled));
+            ->will($this->returnValue((bool) $loggingEnabled));
 
         return $sut;
     }
@@ -97,7 +102,7 @@ class LoggingTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $this->assertEquals(
             Registry::getConfig()->getConfigParam('arvatoAfterpayApiRequestLogging'),
-            oxNew(\Arvato\AfterpayModule\Core\Logging::class)->isLoggingEnabled()
+            oxNew(Logging::class)->isLoggingEnabled()
         );
     }
 }

@@ -1,24 +1,26 @@
-<?php
-
-/**
- *
- */
+<?php /** @noinspection Annotator */
 
 namespace Arvato\AfterpayModule\Tests\Unit\Controller;
 
+use Arvato\AfterpayModule\Application\Controller\PaymentController as ArvatoPaymentController;
+use OxidEsales\Eshop\Application\Controller\PaymentController;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use stdClass;
 
 /**
  * Class PaymentController: Tests for PaymentController.
  */
-class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class PaymentTest extends UnitTestCase
 {
 
     public function testrender()
     {
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods(array('parentRender'))
-            ->getMock();
+        /** @var PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods(['parentRender'])
+                    ->getMock();
         $sut->expects($this->once())
             ->method('parentRender')
             ->will($this->returnValue('###OK###'));
@@ -28,14 +30,15 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testvalidatePaymentNoAfterPayPayment()
     {
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods([
-                'getRequestOrSessionParameter',
-                'validateDebitNote',
-                'validateAndSaveSelectedInstallmentPforileId',
-                'validateInstallment'
-            ])
-            ->getMock();
+        /** @var PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods([
+                        'getRequestOrSessionParameter',
+                        'validateDebitNote',
+                        'validateAndSaveSelectedInstallmentPforileId',
+                        'validateInstallment',
+                    ])
+                    ->getMock();
 
         $sut->expects($this->exactly(2))
             ->method('getRequestOrSessionParameter')
@@ -52,15 +55,16 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testvalidatePaymentDebitNote()
     {
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods([
-                'getRequestOrSessionParameter',
-                'validateDebitNote',
-                'validateAndSaveSelectedInstallmentPforileId',
-                'validateInstallment',
-                'parentValidatePayment'
-            ])
-            ->getMock();
+        /** @var PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods([
+                        'getRequestOrSessionParameter',
+                        'validateDebitNote',
+                        'validateAndSaveSelectedInstallmentPforileId',
+                        'validateInstallment',
+                        'parentValidatePayment',
+                    ])
+                    ->getMock();
 
         $sut->expects($this->exactly(2))
             ->method('getRequestOrSessionParameter')
@@ -78,15 +82,16 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testvalidatePaymentInstallment()
     {
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods([
-                'getRequestOrSessionParameter',
-                'validateDebitNote',
-                'validateAndSaveSelectedInstallmentPforileId',
-                'validateInstallment',
-                'parentValidatePayment'
-            ])
-            ->getMock();
+        /** @var PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods([
+                        'getRequestOrSessionParameter',
+                        'validateDebitNote',
+                        'validateAndSaveSelectedInstallmentPforileId',
+                        'validateInstallment',
+                        'parentValidatePayment',
+                    ])
+                    ->getMock();
 
         $sut->expects($this->exactly(2))
             ->method('getRequestOrSessionParameter')
@@ -104,26 +109,25 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testgetAvailableInstallmentPlansNoPlans()
     {
-        $sut = $this->getSut_MockedInstallment(123, false);
+        $sut = $this->getSutMockedInstallment(123, false);
         $this->assertNull($sut->getAvailableInstallmentPlans());
     }
 
     public function testgetAvailableInstallmentPlansFoundPlans()
     {
-        $sut = $this->getSut_MockedInstallment(123, true);
+        $sut = $this->getSutMockedInstallment(123, true);
         $sutReturn = $sut->getAvailableInstallmentPlans();
         $this->assertEquals('{"99":{"installmentProfileNumber":99}}', json_encode($sutReturn));
     }
 
     public function testvalidateDebitNote()
     {
-
         $dynValue = [
             'apdebitbankaccount' => 1,
             'apdebitbankcode'    => false,
         ];
 
-        $sut = oxNew(\OxidEsales\Eshop\Application\Controller\PaymentController::class);
+        $sut = oxNew(PaymentController::class);
         $this->assertEquals(1, $sut->validateDebitNote($dynValue));
     }
 
@@ -134,35 +138,35 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'apinstallmentbankcode'    => false,
         ];
 
-        $sut = oxNew(\OxidEsales\Eshop\Application\Controller\PaymentController::class);
+        $sut = oxNew(PaymentController::class);
         $this->assertEquals(1, $sut->validateInstallment($dynValue));
     }
 
     public function testvalidateAndSaveSelectedInstallmentPforileIdNoError()
     {
-        $sut = oxNew(\OxidEsales\Eshop\Application\Controller\PaymentController::class);
+        $sut = oxNew(PaymentController::class);
         $sutReturn = $sut->validateAndSaveSelectedInstallmentPforileId(['afterpayInstallmentProfileId' => 1]);
         $this->assertEquals(0, $sutReturn);
     }
 
     public function testvalidateAndSaveSelectedInstallmentPforileIdUnselectedProfileIdError()
     {
-        $sut = oxNew(\OxidEsales\Eshop\Application\Controller\PaymentController::class);
+        $sut = oxNew(PaymentController::class);
         $sutReturn = $sut->validateAndSaveSelectedInstallmentPforileId(['afterpayInstallmentProfileId' => null]);
         $this->assertEquals(-13337, $sutReturn);
     }
 
     public function testassignRequiredDynValue()
     {
-
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods(array('getUser'))
-            ->getMock();
+        /** @var PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods(['getUser'])
+                    ->getMock();
 
         $sut->method('getUser')
             ->will($this->returnValue(true));
 
-        $this->assertTrue((bool)$sut->assignRequiredDynValue());
+        $this->assertTrue((bool) $sut->assignRequiredDynValue());
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -173,18 +177,20 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @param null $oxSession
      *
-     * @return PaymentController
+     * @return PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSUTNoInstallment($oxSession = null)
     {
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods(array('parentRender', 'getSession'))
-            ->getMock();
+        /** @var PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods(['parentRender', 'getSession'])
+                    ->getMock();
         $sut->method('parentRender')
             ->will($this->returnValue('parent_render_called.tpl'));
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));
+
         return $sut;
     }
 
@@ -193,16 +199,16 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @param int $installmentProfileId
      *
-     * @return PaymentController
+     * @return PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSUTInstallmentProfileId($installmentProfileId)
     {
         $oxSession = Registry::getSession();
         $oxSession->setVariable('dynvalue', []);
 
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods(array('getSession', 'getRequestParameter'))
-            ->getMock();
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods(['getSession', 'getRequestParameter'])
+                    ->getMock();
 
         $sut->expects($this->atLeastOnce())
             ->method('getRequestParameter')
@@ -220,18 +226,18 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      *
      * @param null $oxSession
      *
-     * @return PaymentController
+     * @return PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSUTInstallment($oxSession = null)
     {
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods([
-                'parentRender',
-                'getSession',
-                'updateSelectedInstallmentPlanProfileIdInSession',
-                'getAvailableInstallmentPlans'
-            ])
-            ->getMock();
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods([
+                        'parentRender',
+                        'getSession',
+                        'updateSelectedInstallmentPlanProfileIdInSession',
+                        'getAvailableInstallmentPlans',
+                    ])
+                    ->getMock();
         $sut->method('parentRender')
             ->will($this->returnValue('parent_render_called.tpl'));
         $sut->expects($this->atLeastOnce())
@@ -241,7 +247,7 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
             ->method('updateSelectedInstallmentPlanProfileIdInSession')
             ->will($this->returnValue(1));
 
-        $installmentPlan = new \stdClass();
+        $installmentPlan = new stdClass();
         $installmentPlan->readMore = '';
         $installmentPlan->totalInterestAmount = 1;
         $installmentPlan->totalAmount = 2;
@@ -258,7 +264,7 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
      * @param $fBasketPrice
      * @param $foundInstallmentPlans
      *
-     * @return PaymentController
+     * @return PaymentController|ArvatoPaymentController|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSutMockedInstallment($fBasketPrice, $foundInstallmentPlans)
     {
@@ -272,8 +278,9 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $oxSession = $this->getMockBuilder('stdClass')->setMethods(['getBasket'])->getMock();
         $oxSession->method('getBasket')->will($this->returnValue($oxBasket));
 
+        $availableInstallmentPlans = null;
         if ($foundInstallmentPlans) {
-            $installmentPlan = new \stdClass();
+            $installmentPlan = new stdClass();
             $installmentPlan->effectiveAnnualPercentageRate = 'deleteme';
             $installmentPlan->installmentProfileNumber = 99;
             $availableInstallmentPlans = [$installmentPlan];
@@ -285,14 +292,15 @@ class PaymentTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $availableInstallmentPlansService = $this->getMockBuilder('stdClass')->setMethods(['getAvailableInstallmentPlans'])->getMock();
         $availableInstallmentPlansService->method('getAvailableInstallmentPlans')->will($this->returnValue($objAvailableInstallmentPlans));
 
-        $sut = $this->getMockBuilder(\OxidEsales\Eshop\Application\Controller\PaymentController::class)
-            ->setMethods(array('getAvailableInstallmentPlansService', 'getSession'))
-            ->getMock();
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods(['getAvailableInstallmentPlansService', 'getSession'])
+                    ->getMock();
         $sut->method('getAvailableInstallmentPlansService')
             ->will($this->returnValue($availableInstallmentPlansService));
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));
+
         return $sut;
     }
 }

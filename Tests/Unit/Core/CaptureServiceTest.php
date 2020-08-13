@@ -6,13 +6,21 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
-use OxidEsales\Eshop\Core\Registry;
+use Arvato\AfterpayModule\Application\Model\Order as ArvatoOrder;
+use Arvato\AfterpayModule\Core\CaptureService;
+use Arvato\AfterpayModule\Core\WebServiceClient;
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use stdClass;
 
 /**
  * Class CaptureServiceTest: Tests for CaptureService.
  */
-class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CaptureServiceTest extends UnitTestCase
 {
 
     /**
@@ -21,7 +29,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/oxps/arvatoafterpay/Tests/Fixtures/orders_setUp.sql');
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/orders_setUp.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);
             if ($query) {
@@ -36,7 +44,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function tearDown()
     {
         parent::tearDown();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/oxps/arvatoafterpay/Tests/Fixtures/generalTearDown.sql');
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/generalTearDown.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);
             if ($query) {
@@ -50,7 +58,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCaptureSuccess()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitauthorizedorder');
         $sut = $this->getSutThatWillSucceedCapture($oxOrder);
 
@@ -71,7 +79,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCaptureFailure()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitauthorizedorder');
         $sut = $this->getSutThatWillFailCapture($oxOrder);
         $CaptureResponseEntity = $sut->capture('SomeApiKey');
@@ -93,7 +101,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetErrorMessagesOnErrors()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitauthorizedorder');
         $sut = $this->getSutThatWillFailCapture($oxOrder);
         $sut->capture('SomeApiKey');
@@ -107,7 +115,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetErrorMessagesOnNoErrors()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitauthorizedorder');
         $sut = $this->getSutThatWillSucceedCapture($oxOrder);
         $sut->capture('SomeApiKey');
@@ -117,19 +125,19 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     public function testExecuteRequestFromOrderData()
     {
-
+        /** @var CaptureService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureService::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['getCaptureDataForApi', 'getCaptureClientForApi'])
-                ->getMock();
+            $this->getMockBuilder(CaptureService::class)
+                 ->disableOriginalConstructor()
+                 ->setMethods(['getCaptureDataForApi', 'getCaptureClientForApi'])
+                 ->getMock();
 
         // Client
 
         $mockClient =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
-                ->setMethods(['execute'])
-                ->getMock();
+            $this->getMockBuilder(WebServiceClient::class)
+                 ->setMethods(['execute'])
+                 ->getMock();
 
         $mockClient
             ->expects($this->once())
@@ -154,17 +162,17 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * @param stdClass|stdClass[] $response
-     * @param oxOrder $mockOxOrder
+     * @param Order               $mockOxOrder
      *
-     * @return CaptureService Mocked
+     * @return CaptureService|PHPUnit_Framework_MockObject_MockObject Mocked
      */
-    protected function getMockedCaptureService($response, \OxidEsales\Eshop\Application\Model\Order $mockOxOrder)
+    protected function getMockedCaptureService($response, Order $mockOxOrder)
     {
         $mockCaptureService =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureService::class)
-                ->setConstructorArgs([$mockOxOrder])
-                ->setMethods(array('executeRequestFromOrderData'))
-                ->getMock();
+            $this->getMockBuilder(CaptureService::class)
+                 ->setConstructorArgs([$mockOxOrder])
+                 ->setMethods(['executeRequestFromOrderData'])
+                 ->getMock();
 
         $mockCaptureService
             ->expects($this->once())
@@ -178,27 +186,26 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Return session Mock that tests if reservationId and checkoutId is stored correctly
      *
-     * @return oxSession Mocked
+     * @return Session|PHPUnit_Framework_MockObject_MockObject Mocked
      */
     protected function getMockOxSession()
     {
-        return $this->getMockBuilder(\OxidEsales\Eshop\Core\Session::class)
-                ->disableOriginalConstructor()
-                ->disableOriginalClone()
-                ->setMethods(array('setVariable'))
-                ->getMock();
+        return $this->getMockBuilder(Session::class)
+                    ->disableOriginalConstructor()
+                    ->disableOriginalClone()
+                    ->setMethods(['setVariable'])
+                    ->getMock();
     }
 
     /**
-     * @param oxOrder $orOrder
-     *
+     * @param Order|ArvatoOrder $oxOrder
      * @return CaptureService
      */
-    protected function getSutThatWillFailCapture(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    protected function getSutThatWillFailCapture(Order $oxOrder)
     {
         $response = json_decode(file_get_contents(
             Registry::getConfig()->getConfigParam('sShopDir')
-            . '/modules/oxps/arvatoafterpay/Tests/Fixtures/captureErrorResponse.json'
+            . '/modules/arvato/afterpay/Tests/Fixtures/captureErrorResponse.json'
         ));
 
         // Self-Testing Fixtures:
@@ -209,6 +216,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $oxOrder->getAfterpayOrder()->getStatus(),
             'Self-testing fixture: Failing order has to start out "authorized"'
         );
+
         // End of Self-Test
 
         return $this->getMockedCaptureService($response, $oxOrder);
@@ -221,12 +229,11 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSutThatWillSucceedCapture($oxOrder)
     {
-
         // Build SUT : Get ResponseData to inject
 
         $response = json_decode(file_get_contents(
             Registry::getConfig()->getConfigParam('sShopDir')
-            . '/modules/oxps/arvatoafterpay/Tests/Fixtures/captureSuccessResponse.json'
+            . '/modules/arvato/afterpay/Tests/Fixtures/captureSuccessResponse.json'
         ));
 
         // Self-Testing Fixtures:
@@ -237,6 +244,7 @@ class CaptureServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $oxOrder->getAfterpayOrder()->getStatus(),
             'Self-testing fixture: Succeeding order has to start out "authorized"'
         );
+
         // End of Self-Test
 
         return $this->getMockedCaptureService($response, $oxOrder);

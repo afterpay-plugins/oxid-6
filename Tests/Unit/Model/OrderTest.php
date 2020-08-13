@@ -6,10 +6,15 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model;
 
+use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Field;
+use OxidEsales\TestingLibrary\UnitTestCase;
+
 /**
  * Class OrderTest: Tests for Order.
  */
-class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class OrderTest extends UnitTestCase
 {
 
     /**
@@ -17,7 +22,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsAfterpayPaymentTypeTrue()
     {
-        $sut = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $sut = oxNew(Order::class);
         $this->assertTrue($sut->isAfterpayPaymentType('afterpayFoobar'));
         $this->assertTrue($sut->isAfterpayPaymentType('afterpayInvoice'));
     }
@@ -27,7 +32,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testIsAfterpayPaymentTypeFalse()
     {
-        $sut = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $sut = oxNew(Order::class);
         $this->assertFalse($sut->isAfterpayPaymentType('oxidFoobar'));
         $this->assertFalse($sut->isAfterpayPaymentType(''));
     }
@@ -37,7 +42,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetAfterpayOrderReturnEmpty()
     {
-        $sut = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $sut = oxNew(Order::class);
         $AfterpayOrder = $sut->getAfterpayOrder();
         $this->assertFalse($AfterpayOrder->isLoaded());
     }
@@ -49,11 +54,11 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
 
         /** @ var oxOrder $sut */
-        $sut = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $sut = oxNew(Order::class);
         $sut->setId('UNITTEST123');
-        $sut->oxorder__oxpaymenttype = new \OxidEsales\Eshop\Core\Field('afterpayinvoice');
+        $sut->oxorder__oxpaymenttype = new Field('afterpayinvoice');
 
-        $afterpayOrder = oxNew(\Arvato\AfterpayModule\Application\Model\AfterpayOrder::class, $sut);
+        $afterpayOrder = oxNew(AfterpayOrder::class, $sut);
         $afterpayOrder->save();
 
         // Selftest

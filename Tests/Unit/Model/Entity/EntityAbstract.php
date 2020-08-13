@@ -6,18 +6,21 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\Entity;
+use OxidEsales\TestingLibrary\UnitTestCase;
+
 /**
  * Class EntityTest: Base class for the entity tests.
  */
-abstract class EntityAbstract extends \OxidEsales\TestingLibrary\UnitTestCase
+abstract class EntityAbstract extends UnitTestCase
 {
     /**
-     * Tests the setter andd getter methods for consistency.
+     * Tests the setter and getter methods for consistency.
      *
-     * @param Entity $testObject
+     * @param Entity  $testObject
      * @param mixed[] $testData
      */
-    public function testGetSet(\Arvato\AfterpayModule\Application\Model\Entity\Entity $testObject, $testData)
+    public function getSet(Entity $testObject, $testData)
     {
         foreach ($testData as $key => $value) {
             $setter = $this->getSetterName($key);

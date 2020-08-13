@@ -6,10 +6,13 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentResponseEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity;
+
 /**
  * Class AuthorizePaymentResponseEntityTest: Tests for AuthorizePaymentResponseEntity.
  */
-class AuthorizePaymentResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class AuthorizePaymentResponseEntityTest extends EntityAbstract
 {
     /**
      * Testing all getters and Setters
@@ -17,16 +20,16 @@ class AuthorizePaymentResponseEntityTest extends \Arvato\AfterpayModule\Tests\Un
     public function testGetSetData()
     {
         $testData = [
-            'outcome' => 111,
-            'customer' => oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity::class),
-            'deliveryCustomer' => oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity::class),
-            'reservationId' => 444,
-            'checkoutId' => 555,
-            'riskCheckMessages' => 666
+            'outcome'           => 111,
+            'customer'          => oxNew(CustomerResponseEntity::class),
+            'deliveryCustomer'  => oxNew(CustomerResponseEntity::class),
+            'reservationId'     => 444,
+            'checkoutId'        => 555,
+            'riskCheckMessages' => 666,
         ];
 
         $testObject = $this->getSUT();
-        $this->testGetSet($testObject, $testData);
+        $this->getSet($testObject, $testData);
     }
 
     /**
@@ -36,6 +39,6 @@ class AuthorizePaymentResponseEntityTest extends \Arvato\AfterpayModule\Tests\Un
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentResponseEntity::class);
+        return oxNew(AuthorizePaymentResponseEntity::class);
     }
 }

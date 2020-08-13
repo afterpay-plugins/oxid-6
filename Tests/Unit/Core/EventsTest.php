@@ -6,10 +6,13 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
+use Arvato\AfterpayModule\Core\Events;
+use OxidEsales\TestingLibrary\UnitTestCase;
+
 /**
  * Class EventsTest: Tests for arvatoAfterpayEvents.
  */
-class EventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class EventsTest extends UnitTestCase
 {
 
     /**
@@ -27,10 +30,10 @@ class EventsTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testOnActivate()
     {
-        $sutReturn = \Arvato\AfterpayModule\Core\Events::onActivate();
+        $sutReturn = Events::onActivate();
         $this->assertTrue($sutReturn);
         // Must be idempotent - let's repeat
-        $sutReturn = \Arvato\AfterpayModule\Core\Events::onActivate();
+        $sutReturn = Events::onActivate();
         $this->assertTrue($sutReturn);
     }
 }

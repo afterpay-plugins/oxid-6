@@ -6,32 +6,39 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
+use Arvato\AfterpayModule\Application\Model\Entity\Entity;
+use Arvato\AfterpayModule\Core\AvailablePaymentMethodsService;
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use stdClass;
 
 /**
  * Class CaptureServiceTest: Tests for CaptureService.
  */
-class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class AvailablePaymentMethodsServiceTest extends UnitTestCase
 {
 
     public function testConstruct()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $sut = oxNew(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class, Registry::getSession(), Registry::getLang(), $order);
-        $this->assertInstanceOf(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class, $sut);
+        $order = oxNew(Order::class);
+        $sut = oxNew(AvailablePaymentMethodsService::class, Registry::getSession(), Registry::getLang(), $order);
+        $this->assertInstanceOf(AvailablePaymentMethodsService::class, $sut);
     }
 
     public function testgetAvailablePaymentMethods()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
+        $entity = oxNew(Entity::class);
         $entity->setPaymentMethods('LoremIpsum');
 
         $sut->method('parseResponse')->willReturn($entity);
@@ -42,15 +49,16 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisInvoiceAvailableFalse()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
+        $entity = oxNew(Entity::class);
         $entity->setPaymentMethods('LoremIpsum');
 
         $sut->method('parseResponse')->willReturn($entity);
@@ -59,16 +67,17 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisInvoiceAvailableTrue()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
+        $entity = oxNew(Entity::class);
+        $paymentMethod = new stdClass();
         $paymentMethod->type = 'Invoice';
         $entity->setPaymentMethods([$paymentMethod]);
 
@@ -78,16 +87,17 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisSpecificInstallmentAvailableFalse()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
+        $entity = oxNew(Entity::class);
+        $paymentMethod = new stdClass();
         $paymentMethod->type = 'Invoice';
         $paymentMethod->installmentProfileNumber = 1;
         $entity->setPaymentMethods([$paymentMethod]);
@@ -98,10 +108,11 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisSpecificInstallmentAvailableNoMethodsAtAll()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
@@ -112,21 +123,22 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisSpecificInstallmentAvailableTrue()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
+        $entity = oxNew(Entity::class);
+        $paymentMethod = new stdClass();
         $paymentMethod->type = 'Installment';
-        $paymentMethod->installment = new \stdClass();
+        $paymentMethod->installment = new stdClass();
         $paymentMethod->installment->installmentProfileNumber = 2;
         $paymentMethod->installment->numberOfInstallments = 1337;
-        $paymentMethod->directDebit = new \stdClass();
+        $paymentMethod->directDebit = new stdClass();
         $paymentMethod->directDebit->available = true;
         $entity->setPaymentMethods([$paymentMethod]);
 
@@ -136,16 +148,17 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisDirectDebitAvailableFalse()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
+        $entity = oxNew(Entity::class);
+        $paymentMethod = new stdClass();
         $entity->setPaymentMethods([$paymentMethod]);
 
         $sut->method('parseResponse')->willReturn($entity);
@@ -154,68 +167,22 @@ class AvailablePaymentMethodsServiceTest extends \OxidEsales\TestingLibrary\Unit
 
     public function testisDirectDebitAvailableTrue()
     {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $order = oxNew(Order::class);
+        /** @var AvailablePaymentMethodsService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
             $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
+                ->getMockBuilder(AvailablePaymentMethodsService::class)
                 ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
                 ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
                 ->getMock();
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
+        $entity = oxNew(Entity::class);
+        $paymentMethod = new stdClass();
         $paymentMethod->type = 'Invoice';
         $paymentMethod->directDebit = ['lorem'];
         $entity->setPaymentMethods([$paymentMethod]);
 
         $sut->method('parseResponse')->willReturn($entity);
         $this->assertTrue($sut->isDirectDebitAvailable());
-    }
-
-    public function testgetNumberOfInstallmentsByProfileIdNonefound()
-    {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $sut =
-            $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
-                ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
-                ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
-                ->getMock();
-
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
-        $paymentMethod->type = 'Installment';
-        $paymentMethod->installment = new \stdClass();
-        $paymentMethod->installment->installmentProfileNumber = 1;
-        $paymentMethod->installment->numberOfInstallments = 1337;
-        $entity->setPaymentMethods([$paymentMethod]);
-
-        $sut->method('parseResponse')->willReturn($entity);
-        $this->assertNull($sut->getNumberOfInstallmentsByProfileId(1));
-    }
-
-    public function testgetNumberOfInstallmentsByProfileIdFound()
-    {
-        $order = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $sut =
-            $this
-                ->getMockBuilder(\Arvato\AfterpayModule\Core\AvailablePaymentMethodsService::class)
-                ->setConstructorArgs([Registry::getSession(), Registry::getLang(), $order])
-                ->setMethods(['executeRequestFromSessionData', 'parseResponse'])
-                ->getMock();
-
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class);
-        $paymentMethod = new \stdClass();
-        $paymentMethod->type = 'Installment';
-        $paymentMethod->installment = new \stdClass();
-        $paymentMethod->installment->installmentProfileNumber = 2;
-        $paymentMethod->installment->numberOfInstallments = 1337;
-        $paymentMethod->directDebit = new \stdClass();
-        $paymentMethod->directDebit->available = true;
-        $entity->setPaymentMethods([$paymentMethod]);
-
-        $sut->method('parseResponse')->willReturn($entity);
-
-        $this->assertEquals(1337, $sut->getNumberOfInstallmentsByProfileId(2));
     }
 }

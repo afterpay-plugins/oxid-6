@@ -1,27 +1,36 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Tests\Unit\Model\DataProvider;
 
-use OxidEsales\Eshop\Core\Registry;
+use Arvato\AfterpayModule\Application\Model\DataProvider\AuthorizePaymentDataProvider;
+use Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\OrderEntity;
+use Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity;
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\BasketItem;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\ArticleInputException;
+use OxidEsales\Eshop\Core\Exception\NoArticleException;
+use OxidEsales\Eshop\Core\Exception\OutOfStockException;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Class AuthorizePaymentDataProviderTest: Tests for AuthorizePaymentDataProvider.
  */
-class AuthorizePaymentDataProviderTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class AuthorizePaymentDataProviderTest extends UnitTestCase
 {
-
     /**
      * Read DB Fixtures
      */
     public function setUp()
     {
         parent::setUp();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/oxps/arvatoafterpay/Tests/Fixtures/dataproviders_setUp.sql');
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/dataproviders_setUp.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);
             if ($query) {
@@ -36,7 +45,7 @@ class AuthorizePaymentDataProviderTest extends \OxidEsales\TestingLibrary\UnitTe
     public function tearDown()
     {
         parent::tearDown();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/oxps/arvatoafterpay/Tests/Fixtures/dataproviders_tearDown.sql');
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/dataproviders_tearDown.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);
             if ($query) {
@@ -46,48 +55,41 @@ class AuthorizePaymentDataProviderTest extends \OxidEsales\TestingLibrary\UnitTe
     }
 
     /**
-     * Testing method getDataObject
+     * @throws ArticleInputException
+     * @throws NoArticleException
+     * @throws OutOfStockException
      */
     public function testGetDataObject()
     {
-        $sut = $this->getMockBuilder(\Arvato\AfterpayModule\Application\Model\DataProvider\AuthorizePaymentDataProvider::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getOrderSummeryByBasket','getCustomer', 'getPayment'])
-            ->getMock();
+        /** @var AuthorizePaymentDataProvider|PHPUnit_Framework_MockObject_MockObject $sut */
+        $sut = $this->getMockBuilder(AuthorizePaymentDataProvider::class)
+                    ->disableOriginalConstructor()
+                    ->setMethods(['getOrderSummeryByBasket', 'getCustomer', 'getPayment'])
+                    ->getMock();
 
-        $sut->method('getOrderSummeryByBasket')->willReturn(oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderEntity::class));
-        $sut->method('getPayment')->willReturn(oxNew(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::class));
-        $sut->method('getCustomer')->willReturn(oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::class));
+        $sut->method('getOrderSummeryByBasket')->willReturn(oxNew(OrderEntity::class));
+        $sut->method('getPayment')->willReturn(oxNew(PaymentEntity::class));
+        $sut->method('getCustomer')->willReturn(oxNew(CheckoutCustomerEntity::class));
 
         // Construction of in-session-basket incomplete.
         //There must be an easier way.
 
-        $oxBasket = oxNew(\OxidEsales\Eshop\Application\Model\Basket::class);
+        $oxBasket = oxNew(Basket::class);
 
-        try {
-            $this->assertTrue($oxBasket->addToBasket('unitoxarticle', 1) instanceof oxbasketitem);
-        } catch (\OxidEsales\Eshop\Core\Exception\NoArticleException $e) {
-            try {
-                $this->assertTrue($oxBasket->addToBasket('unitoxarticlece', 1) instanceof oxbasketitem);
-            } catch (\OxidEsales\Eshop\Core\Exception\NoArticleException $e) {
-                // This particular test fails because fixture can't handle oxshop=oxbaseshop vs. oxshop=1)
-                $this->markTestSkipped();
-                return;
-            }
-        }
+        $this->assertInstanceOf(BasketItem::class, $oxBasket->addToBasket('unitoxarticle', 1));
 
-        $oxUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        $oxUser = oxNew(User::class);
         $oxUser->load('oxdefaultadmin');
 
-        $oxSesssion = Registry::getSession();
-        $oxSesssion->setVariable('afterpayOrderId', 'afterpayOrderId123');
-        $oxSesssion->setVariable('deladrid', null);//'deladrid123');
-        $oxSesssion->setBasket($oxBasket);
-        $oxSesssion->setUser($oxUser);
+        $oxSession = Registry::getSession();
+        $oxSession->setVariable('afterpayOrderId', 'afterpayOrderId123');
+        $oxSession->setVariable('deladrid', null);//'deladrid123');
+        $oxSession->setBasket($oxBasket);
+        $oxSession->setUser($oxUser);
 
         $oxLang = Registry::getLang();
         $oxLang->getBaseLanguage();
-        $sutReturn = $sut->getDataObject($oxSesssion, $oxLang, oxNew(\OxidEsales\Eshop\Application\Model\Order::class));
-        $this->assertInstanceOf(\Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentEntity::class, $sutReturn);
+        $sutReturn = $sut->getDataObject($oxSession, $oxLang, oxNew(Order::class));
+        $this->assertInstanceOf(AuthorizePaymentEntity::class, $sutReturn);
     }
 }

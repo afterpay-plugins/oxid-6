@@ -68,7 +68,7 @@ class RefundItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Da
     /**
      * Transforms a basket item into an AfterPay order item.
      *
-     * @param BasketItem[] $item
+     * @param array $item
      *
      * @return OrderItemEntity
      */

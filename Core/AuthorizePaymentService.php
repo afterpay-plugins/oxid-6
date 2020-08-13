@@ -75,7 +75,7 @@ class AuthorizePaymentService extends \Arvato\AfterpayModule\Core\Service
     /**
      * Takes corrected customer address from API response, saves to oxUser and oxAddress.
      *
-     * @param stdClass $stdClassAddress E.G.
+     * @param stdClass|stdClass[]|null|null[] $stdClassAddress E.G.
      *     {"street":"Bahnhofstr.","streetNumber":"123","postalCode":"70736","postalPlace":"Fellbach","countryCode":"DE"}
      * @param bool $isDeliveryAddress billing/delivery
      */

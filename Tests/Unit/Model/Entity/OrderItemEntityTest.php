@@ -6,10 +6,12 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity;
+
 /**
  * Class OrderItemEntityTest: unit tests for OrderItemEntity.
  */
-class OrderItemEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class OrderItemEntityTest extends EntityAbstract
 {
     /**
      * Tests the data container.
@@ -24,7 +26,7 @@ class OrderItemEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity
             'groupId'                 => 'abcde12345',
             'netUnitPrice'            => 1.1,
             'unitCode'                => 'tons',
-            'vatCategory'             => \Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::VAT_CATEGORY_MIDDLE,
+            'vatCategory'             => OrderItemEntity::VAT_CATEGORY_MIDDLE,
             'vatPercent'              => 19,
             'vatAmount'               => 10,
             'imageUrl'                => 'http://www.oxid-esales.com/Innenspiegel.jpg',
@@ -34,11 +36,11 @@ class OrderItemEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity
             'lineNumber'              => 1,
             'discountAmount'          => 5,
             'productUrl'              => 'http://www.oxid-esales.com/shop/Innenspiegel',
-            'marketPlaceSellerId'     => '12345abcde'
+            'marketPlaceSellerId'     => '12345abcde',
         ];
 
-        $testObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
-        $this->testGetSet($testObject, $testData);
-        $this->assertEquals((object)$testData, $testObject->exportData(), 'exported object not valid');
+        $testObject = oxNew(OrderItemEntity::class);
+        $this->getSet($testObject, $testData);
+        $this->assertEquals((object) $testData, $testObject->exportData(), 'exported object not valid');
     }
 }

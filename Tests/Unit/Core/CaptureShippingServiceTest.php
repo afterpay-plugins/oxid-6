@@ -6,22 +6,29 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
-use OxidEsales\Eshop\Core\Registry;
+use Arvato\AfterpayModule\Application\Model\Order as AfterpayOrder;
+use Arvato\AfterpayModule\Core\CaptureShippingService;
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use stdClass;
 
 /**
  * Class CaptureShippingServiceTest: Tests for CaptureShippingService.
  */
-class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CaptureShippingServiceTest extends UnitTestCase
 {
-
     /**
      * Read DB Fixtures
      */
     public function setUp()
     {
         parent::setUp();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/oxps/arvatoafterpay/Tests/Fixtures/orders_setUp.sql');
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/orders_setUp.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);
             if ($query) {
@@ -36,7 +43,7 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
     public function tearDown()
     {
         parent::tearDown();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/oxps/arvatoafterpay/Tests/Fixtures/generalTearDown.sql');
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/generalTearDown.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);
             if ($query) {
@@ -47,30 +54,35 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Testing method captureShipping
+     *
+     * @throws StandardException
      */
     public function testCaptureShippingSuccess()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitcapturedorder');
         $sut = $this->getSutThatWillSucceedCaptureShipping($oxOrder);
         $trackingID = 'tr12345';
         $shippingCompany = 'ACME';
         $CaptureResponseEntity = $sut->captureShipping($trackingID, 'SomeApiKey', $shippingCompany);
 
-        $this->assertEquals(6, $CaptureResponseEntity->getShippingNumber());
+        $this->assertEquals(6, $CaptureResponseEntity->getShippingNumber(), 'Shipping number test failed');
 
         $this->assertEquals(
             'captured',
-            $oxOrder->getAfterpayOrder()->getStatus()
+            $oxOrder->getAfterpayOrder()->getStatus(),
+            'Shipping capture status failed'
         );
     }
 
     /**
      * Testing method capture - failure
+     *
+     * @throws StandardException
      */
     public function testCaptureShippingFailure()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitcapturedorder');
         $sut = $this->getSutThatWillFailCaptureShipping($oxOrder);
         $trackingID = 'tr12345';
@@ -87,25 +99,29 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Testing method capture - failure
+     *
+     * @throws StandardException
      */
     public function testCaptureShippingException()
     {
-        $this->setExpectedException(\OxidEsales\Eshop\Core\Exception\StandardException::class);
+        $this->setExpectedException(StandardException::class);
 
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitnonafterpayorder');
         $sut = $this->getSutThatWillThrowException($oxOrder);
         $trackingID = 'tr12345';
         $shippingCompany = 'ACME';
-        $CaptureResponseEntity = $sut->captureShipping($trackingID, 'SomeApiKey', $shippingCompany);
+        $sut->captureShipping($trackingID, 'SomeApiKey', $shippingCompany);
     }
 
     /**
      * Testing method getErrorMessages - Capture fails, Error Message present
+     *
+     * @throws StandardException
      */
     public function testGetErrorMessagesOnErrors()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitcapturedorder');
         $sut = $this->getSutThatWillFailCaptureShipping($oxOrder);
         $trackingID = 'tr12345';
@@ -117,11 +133,13 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * Testing method getErrorMessages - Capture Successfull, no Errors
+     * Testing method getErrorMessages - Capture successful, no Errors
+     *
+     * @throws StandardException
      */
     public function testGetErrorMessagesOonNoErrors()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitcapturedorder');
         $sut = $this->getSutThatWillSucceedCaptureShipping($oxOrder);
         $trackingID = 'tr12345';
@@ -133,17 +151,17 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * @param stdClass|stdClass[] $response
-     * @param oxOrder $mockOxOrder
+     * @param Order               $mockOxOrder
      *
-     * @return CaptureService Mocked
+     * @return PHPUnit_Framework_MockObject_MockObject|CaptureShippingService Mocked
      */
-    protected function getMockedCaptureShippingService($response, \OxidEsales\Eshop\Application\Model\Order $mockOxOrder)
+    protected function getMockedCaptureShippingService($response, Order $mockOxOrder)
     {
         $mockCaptureService =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\CaptureShippingService::class)
-                ->setConstructorArgs([$mockOxOrder])
-                ->setMethods(array('executeRequestFromOrderData'))
-                ->getMock();
+            $this->getMockBuilder(CaptureShippingService::class)
+                 ->setConstructorArgs([$mockOxOrder])
+                 ->setMethods(['executeRequestFromOrderData'])
+                 ->getMock();
 
         $mockCaptureService
             ->method('executeRequestFromOrderData')
@@ -155,27 +173,27 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
     /**
      * Return session Mock that tests if reservationId and checkoutId is stored correctly
      *
-     * @return oxSession Mocked
+     * @return PHPUnit_Framework_MockObject_MockObject|Session Mocked
      */
     protected function getMockOxSession()
     {
-        return $this->getMockBuilder(\OxidEsales\Eshop\Core\Session::class)
-                ->disableOriginalConstructor()
-                ->disableOriginalClone()
-                ->setMethods(array('setVariable'))
-                ->getMock();
+        return $this->getMockBuilder(Session::class)
+                    ->disableOriginalConstructor()
+                    ->disableOriginalClone()
+                    ->setMethods(['setVariable'])
+                    ->getMock();
     }
 
     /**
-     * @param oxOrder $orOrder
+     * @param Order|AfterpayOrder $oxOrder
      *
      * @return CaptureShippingService
      */
-    protected function getSutThatWillFailCaptureShipping(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    protected function getSutThatWillFailCaptureShipping(Order $oxOrder)
     {
         $response = json_decode(file_get_contents(
             Registry::getConfig()->getConfigParam('sShopDir')
-            . '/modules/oxps/arvatoafterpay/Tests/Fixtures/captureShippingFailureResponse.json'
+            . '/modules/arvato/afterpay/Tests/Fixtures/captureShippingFailureResponse.json'
         ));
 
         // Self-Testing Fixtures:
@@ -186,32 +204,34 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $oxOrder->getAfterpayOrder()->getStatus(),
             'Self-testing fixture: Failing order has to start out "captured"'
         );
+
         // End of Self-Test
 
         return $this->getMockedCaptureShippingService($response, $oxOrder);
     }
 
     /**
-     * @param oxOrder $oxOrder
+     * @param Order|AfterpayOrder $oxOrder
      *
      * @return CaptureShippingService
      */
-    protected function getSutThatWillThrowException(\OxidEsales\Eshop\Application\Model\Order $oxOrder)
+    protected function getSutThatWillThrowException(Order $oxOrder)
     {
         $response = json_decode(file_get_contents(
             Registry::getConfig()->getConfigParam('sShopDir')
-            . '/modules/oxps/arvatoafterpay/Tests/Fixtures/captureShippingFailureResponse.json'
+            . '/modules/arvato/afterpay/Tests/Fixtures/captureShippingFailureResponse.json'
         ));
 
         // Self-Testing Fixtures:
         $this->assertNotNull($oxOrder->getAfterpayOrder());
+
         // End of Self-Test
 
         return $this->getMockedCaptureShippingService($response, $oxOrder);
     }
 
     /**
-     * @param $oxOrder
+     * @param Order|AfterpayOrder $oxOrder
      *
      * @return CaptureShippingService
      */
@@ -222,7 +242,7 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $response = json_decode(file_get_contents(
             Registry::getConfig()->getConfigParam('sShopDir')
-            . '/modules/oxps/arvatoafterpay/Tests/Fixtures/captureShippingSuccessResponse.json'
+            . '/modules/arvato/afterpay/Tests/Fixtures/captureShippingSuccessResponse.json'
         ));
 
         // Self-Testing Fixtures:
@@ -233,6 +253,7 @@ class CaptureShippingServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
             $oxOrder->getAfterpayOrder()->getStatus(),
             'Self-testing fixture: Succeeding order has to start out "captured"'
         );
+
         // End of Self-Test
 
         return $this->getMockedCaptureShippingService($response, $oxOrder);

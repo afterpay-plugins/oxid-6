@@ -6,12 +6,16 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model;
 
+use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\TestingLibrary\UnitTestCase;
 
 /**
  * Class AfterpayOrderTest: Tests for AfterpayOrder.
  */
-class AfterpayOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class AfterpayOrderTest extends UnitTestCase
 {
 
     /**
@@ -24,6 +28,8 @@ class AfterpayOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Testing method fillBySession
+     *
+     * @noinspection PhpUndefinedFieldInspection
      */
     public function testFillBySession()
     {
@@ -40,6 +46,10 @@ class AfterpayOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Testing method setStatus
+     *
+     * @throws StandardException
+     * @throws StandardException
+     * @noinspection PhpUndefinedFieldInspection
      */
     public function testSetStatusLegalStatus()
     {
@@ -49,23 +59,25 @@ class AfterpayOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
     }
 
     /**
-     * Testing method setStatus
-     * @expectedException \OxidEsales\Eshop\Core\Exception\StandardException::class
+     * @throws StandardException
      */
     public function testSetStatusIllegalStatus()
     {
+        $this->setExpectedException(StandardException::class);
         $sut = $this->getSUT();
         $sut->setStatus('FooBar!');
     }
 
     /**
      * Testing method getStatus
+     *
+     * @throws StandardException
      */
     public function testGetStatus()
     {
         $sut = $this->getSUT();
         $sut->setStatus('authorized');
-        $this->assertEquals('authorized', $sut->getStatus('authorized'));
+        $this->assertEquals('authorized', $sut->getStatus());
     }
 
     /**
@@ -75,7 +87,10 @@ class AfterpayOrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSUT()
     {
-        $dummyOxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        return oxNew(\Arvato\AfterpayModule\Application\Model\AfterpayOrder::class, $dummyOxOrder);
+        $dummyOxOrder = oxNew(Order::class);
+        /** @var AfterpayOrder $dummyAfterpayOrder */
+        $dummyAfterpayOrder = oxNew(AfterpayOrder::class, $dummyOxOrder);
+
+        return $dummyAfterpayOrder;
     }
 }

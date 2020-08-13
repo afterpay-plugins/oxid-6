@@ -6,10 +6,15 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Parser;
 
+use Arvato\AfterpayModule\Application\Model\Parser\CaptureResponseParser;
+use OxidEsales\Eshop\Core\Exception\StandardException;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use stdClass;
+
 /**
  * Class CaptureResponseParserTest: Tests for CaptureResponseParser.
  */
-class CaptureResponseParserTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CaptureResponseParserTest extends UnitTestCase
 {
 
     /**
@@ -22,10 +27,12 @@ class CaptureResponseParserTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
     /**
      * Testing method parse
+     *
+     * @throws StandardException
      */
     public function testParse()
     {
-        $object = new \stdClass();
+        $object = new stdClass();
         $object->capturedAmount = '111';
         $object->authorizedAmount = '222';
         $object->remainingAuthorizedAmount = '333';
@@ -47,6 +54,6 @@ class CaptureResponseParserTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Parser\CaptureResponseParser::class);
+        return oxNew(CaptureResponseParser::class);
     }
 }

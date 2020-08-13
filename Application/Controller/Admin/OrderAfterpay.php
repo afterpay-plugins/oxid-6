@@ -21,6 +21,8 @@ use OxidEsales\Eshop\Core\Request;
  */
 class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController
 {
+    protected $_oEditObject;
+
     /**
      * Executes parent method parent::render(), creates oxOrder object,
      * passes it's data to Smarty engine and returns

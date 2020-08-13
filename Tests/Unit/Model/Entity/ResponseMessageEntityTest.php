@@ -6,10 +6,12 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\ResponseMessageEntity;
+
 /**
  * Class ResponseMessageEntityTest: Tests for ResponseMessageEntity.
  */
-class ResponseMessageEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class ResponseMessageEntityTest extends EntityAbstract
 {
     /**
      * Testing all getters and Setters
@@ -17,16 +19,16 @@ class ResponseMessageEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\
     public function testGetSetData()
     {
         $testData = [
-            'type' => 'Lorem Invoice',
-            'code' => 234,
-            'message' => 111,
+            'type'                  => 'Lorem Invoice',
+            'code'                  => 234,
+            'message'               => 111,
             'customerFacingMessage' => 'Lorem Ipsum',
-            'actionCode' => '222',
-            'fieldReference' => '333'
+            'actionCode'            => '222',
+            'fieldReference'        => '333',
         ];
 
         $testObject = $this->getSUT();
-        $this->testGetSet($testObject, $testData);
+        $this->getSet($testObject, $testData);
         $this->assertEquals((object) $testData, $testObject->exportData(), 'exported object not valid');
     }
 
@@ -37,6 +39,6 @@ class ResponseMessageEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\ResponseMessageEntity::class);
+        return oxNew(ResponseMessageEntity::class);
     }
 }
