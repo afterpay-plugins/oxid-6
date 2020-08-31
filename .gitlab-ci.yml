@@ -1,3 +1,7 @@
+# !!! Um das automatische Installieren zu ermöglichen muss das oxideshop_composer_plugin gepachted werden
+# https://github.com/OXID-eSales/oxideshop_composer_plugin/blob/87fcaaba356c60bd5c0edf23a9c643809da68165/src/Installer/Package/AbstractPackageInstaller.php#L199
+# Von `N` auf `Y`
+
 stages:
 - deploy
 
