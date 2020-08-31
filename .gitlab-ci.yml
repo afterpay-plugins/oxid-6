@@ -4,6 +4,6 @@ stages:
 deploy_to_nrsweb08:
   stage: deploy
   only:
-    - 'dev1.x'
+    - 'dev2.x'
   script:
     - 'ssh nrdeploy@172.16.16.23 "cd /var/wwwfile/36520; composer require arvato/afterpay dev-dev2.x"'
