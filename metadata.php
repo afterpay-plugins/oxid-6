@@ -34,7 +34,7 @@ $aModule = [
         'en' => 'standalone release of the Arvato AfterPay Module'
     ],
     'thumbnail'   => 'Application/views/out/img/AfterPay_logo_green.png',
-    'version' => '2.0.0',
+    'version' => '2.0.0-dev',
     'author' => 'OXID eSales AG',
     'url' => '',
     'email' => '',
