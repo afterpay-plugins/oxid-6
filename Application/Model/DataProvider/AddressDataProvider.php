@@ -8,6 +8,8 @@ namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AddressEntity;
 use OxidEsales\Eshop\Application\Model\Address;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Str;
 
 /**
  * Class AddressDataProvider: Data provider for address data.
@@ -27,7 +29,8 @@ class AddressDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
         $dataObject->setPostalCode($user->oxuser__oxzip->value);
         $dataObject->setStreet($user->oxuser__oxstreet->value);
         $dataObject->setStreetNumber($user->oxuser__oxstreetnr->value);
-        $dataObject->setStreetNumberAdditional($user->oxuser__oxaddinfo->value);
+        $additionalInfo = Str::getStr()->substr($user->oxuser__oxaddinfo->value, 0, 10);
+        $dataObject->setStreetNumberAdditional($additionalInfo);
         $dataObject->setPostalPlace($user->oxuser__oxcity->value);
         $dataObject->setCareOf($user->oxuser__oxcompany->value);
 
