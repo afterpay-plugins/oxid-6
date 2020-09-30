@@ -73,11 +73,7 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
      */
     public function smartyAssignOrderDetails()
     {
-        /**
-         * @var CaptureService $service
-         */
         $service = $this->getOrderDetailsService();
-
         $response = $service->getOrderDetails();
 
         // Lists based on prior actions
@@ -450,7 +446,7 @@ class OrderAfterpay extends \OxidEsales\Eshop\Application\Controller\Admin\Admin
      */
     protected function getOrderDetailsService()
     {
-        return oxNew(\Arvato\AfterpayModule\Core\CoreOrderDetailsService::class, $this->getEditObject());
+        return oxNew(\Arvato\AfterpayModule\Core\OrderDetailsService::class, $this->getEditObject());
     }
 
     /**
