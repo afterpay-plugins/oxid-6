@@ -2,9 +2,9 @@
 
 <dl>
     <dt>
-        <input id="payment_[{$sPaymentId}]" type="radio" name="paymentid" value="[{$sPaymentId}]"
+        <input id="payment_[{$sPaymentID}]" type="radio" name="paymentid" value="[{$sPaymentID}]"
                [{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]checked[{/if}]>
-        <label for="payment_[{$sPaymentId}]"><b>[{$paymentmethod->oxpayments__oxdesc->value}]</b></label>
+        <label for="payment_[{$sPaymentID}]"><b>[{$paymentmethod->oxpayments__oxdesc->value}]</b></label>
         <img src="https://cdn.myafterpay.com/logo/AfterPay_logo.svg" class="frontendAfterpayLogo">
     </dt>
     <dd class="[{if $oView->getCheckedPaymentId() == $paymentmethod->oxpayments__oxid->value}]activePayment[{/if}]">

@@ -222,11 +222,10 @@ class OrderController extends OrderController_parent
      */
     public function _validateTermsAndConditions()
     {
-        $config = Registry::getConfig();
         $paymentId = $this->getSession()->getVariable('paymentid');
         $isAfterpay = (false !== strpos($paymentId, 'afterpay'));
 
-        if ($isAfterpay && !$config->getRequestParameter('ord_afterpay_agb')) {
+        if ($isAfterpay && !$this->getRequestParameter('ord_afterpay_agb')) {
             return false;
         }
 

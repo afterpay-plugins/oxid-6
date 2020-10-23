@@ -135,8 +135,7 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
      */
     protected function handleInvoice($order)
     {
-
-        $service = $this->getAuthorizePaymentService($order);
+        $service = $this->getAuthorizePaymentService();
         $response = $service->authorizePayment($order);
 
         $this->_sLastError = null;

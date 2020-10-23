@@ -6,33 +6,47 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
-class RefundServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+use Arvato\AfterpayModule\Application\Model\AfterpayOrder;
+use Arvato\AfterpayModule\Core\Exception\CurlException;
+use Arvato\AfterpayModule\Core\RefundService;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+
+class RefundServiceTest extends UnitTestCase
 {
 
     public function testConstruct()
     {
         $this->assertInstanceOf(
-            \Arvato\AfterpayModule\Core\RefundService::class,
-            oxNew(\Arvato\AfterpayModule\Core\RefundService::class, oxNew(\OxidEsales\Eshop\Application\Model\Order::class))
+            RefundService::class,
+            oxNew(RefundService::class, oxNew(Order::class))
         );
     }
 
+    /**
+     * @throws CurlException
+     */
     public function testRefundException()
     {
-        $this->setExpectedException(\Arvato\AfterpayModule\Core\Exception\CurlException::class);
-        $sut = oxNew(\Arvato\AfterpayModule\Core\RefundService::class, oxNew(\OxidEsales\Eshop\Application\Model\Order::class));
+        $this->setExpectedException(CurlException::class);
+        $sut = oxNew(RefundService::class, oxNew(Order::class));
         $sut->refund(null, 'SomeApiKey');
     }
 
+    /**
+     * @throws CurlException
+     */
     public function testRefundOk()
     {
-        $oxOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-        $AfterpayOrder = oxNew(\Arvato\AfterpayModule\Application\Model\AfterpayOrder::class, $oxOrder);
+        $oxOrder = oxNew(Order::class);
+        $afterpayOrder = oxNew(AfterpayOrder::class, $oxOrder);
+        /** @var RefundService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\RefundService::class)
-                ->setConstructorArgs([$oxOrder, $AfterpayOrder])
-                ->setMethods(['executeRequestFromVatSplittedRefundFields', 'parseResponse'])
-                ->getMock();
+            $this->getMockBuilder(RefundService::class)
+                 ->setConstructorArgs([$oxOrder, $afterpayOrder])
+                 ->setMethods(['executeRequestFromVatSplittedRefundFields', 'parseResponse'])
+                 ->getMock();
         $sut
             ->expects($this->once())
             ->method('executeRequestFromVatSplittedRefundFields')

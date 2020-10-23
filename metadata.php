@@ -55,18 +55,18 @@ $aModule = [
         'OrderAfterpay' => Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class
     ],
     'templates' => [
-        'order_afterpay.tpl'                                     => 'arvato-afterpay/Application/views/admin/tpl/order_afterpay.tpl',
-        'order_afterpay_item.tpl'                                => 'arvato-afterpay/Application/views/admin/tpl/order_afterpay_item.tpl',
-        'flow/page/checkout/inc/payment_afterpayinstallment.tpl' => 'arvato-afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinstallment.tpl',
-        'flow/page/checkout/inc/payment_afterpaydebitnote.tpl'   => 'arvato-afterpay/Application/views/flow/page/checkout/inc/payment_afterpaydebitnote.tpl',
-        'flow/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato-afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
-        'flow/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato-afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
-        'flow/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato-afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl',
-        'wave/page/checkout/inc/payment_afterpayinstallment.tpl' => 'arvato-afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinstallment.tpl',
-        'wave/page/checkout/inc/payment_afterpaydebitnote.tpl'   => 'arvato-afterpay/Application/views/flow/page/checkout/inc/payment_afterpaydebitnote.tpl',
-        'wave/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato-afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
-        'wave/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato-afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
-        'wave/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato-afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl'
+        'order_afterpay.tpl'                                     => 'arvato/afterpay/Application/views/admin/tpl/order_afterpay.tpl',
+        'order_afterpay_item.tpl'                                => 'arvato/afterpay/Application/views/admin/tpl/order_afterpay_item.tpl',
+        'flow/page/checkout/inc/payment_afterpayinstallment.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinstallment.tpl',
+        'flow/page/checkout/inc/payment_afterpaydebitnote.tpl'   => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpaydebitnote.tpl',
+        'flow/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
+        'flow/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
+        'flow/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl',
+        'wave/page/checkout/inc/payment_afterpayinstallment.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinstallment.tpl',
+        'wave/page/checkout/inc/payment_afterpaydebitnote.tpl'   => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpaydebitnote.tpl',
+        'wave/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
+        'wave/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
+        'wave/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl'
     ],
     'blocks' => [
         [

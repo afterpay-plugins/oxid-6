@@ -9,6 +9,7 @@ namespace Arvato\AfterpayModule\Core;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
+use OxidEsales\Eshop\Core\Registry;
 
 /**
  * Class ArvatoAfterpayEvents: Events for the afterpay module.
@@ -264,12 +265,13 @@ class Events
 
         self::createTableArvatoAfterpayAfterpayOrder();
 
-        // Get column if exist
+        // Check if oxcategories.AAPPRODUCTGROUP exists
         $colCategoryProductGroupExist = $db->getOne(
             "SELECT 1
                    FROM information_schema.COLUMNS
                    WHERE TABLE_NAME = 'oxcategories'
-                   AND COLUMN_NAME = 'AAPPRODUCTGROUP'"
+                   AND COLUMN_NAME = 'AAPPRODUCTGROUP'
+                   AND TABLE_SCHEMA = ?", [Registry::getConfig()->getConfigParam('dbName')]
         );
 
         if (!$colCategoryProductGroupExist) {

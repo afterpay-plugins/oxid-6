@@ -6,10 +6,13 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureEntity;
+use stdClass;
+
 /**
  * Class CaptureEntityTest: Tests for CaptureEntity.
  */
-class CaptureEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class CaptureEntityTest extends EntityAbstract
 {
 
     /**
@@ -18,15 +21,15 @@ class CaptureEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\E
      */
     public function testGetAndSetOrderDetails()
     {
-        $orderDetails = new \stdClass();
+        $orderDetails = new stdClass();
         $orderDetails->lorem = 'ipsum';
 
         $testData = [
-            'orderDetails' => $orderDetails
+            'orderDetails' => $orderDetails,
         ];
 
         $testObject = $this->getSUT();
-        $this->testGetSet($testObject, $testData);
+        $this->getSet($testObject, $testData);
         $this->assertEquals((object) $testData, $testObject->exportData(), 'exported object not valid');
     }
 
@@ -37,6 +40,6 @@ class CaptureEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\E
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureEntity::class);
+        return oxNew(CaptureEntity::class);
     }
 }

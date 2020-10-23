@@ -1,12 +1,6 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Entity;
-
-use stdClass;
 
 /**
  * Class CaptureShippingEntity: Entity for capture Shipping call.
@@ -17,7 +11,7 @@ class CaptureShippingEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Getter for checkout id property.
      *
-     * @return stdClass $type
+     * @return string $type
      */
     public function getType()
     {
@@ -27,7 +21,7 @@ class CaptureShippingEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Setter for checkout id property.
      *
-     * @param stdClass $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -37,7 +31,7 @@ class CaptureShippingEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Getter for checkout id property.
      *
-     * @return stdClass $shippingCompany
+     * @return string $shippingCompany
      */
     public function getShippingCompany()
     {
@@ -47,7 +41,7 @@ class CaptureShippingEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Setter for checkout id property.
      *
-     * @param stdClass $shippingCompany
+     * @param string $shippingCompany
      */
     public function setShippingCompany($shippingCompany)
     {
@@ -57,7 +51,7 @@ class CaptureShippingEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Getter for checkout id property.
      *
-     * @return stdClass $trackingId
+     * @return string $trackingId
      */
     public function getTrackingId()
     {
@@ -67,7 +61,7 @@ class CaptureShippingEntity extends \Arvato\AfterpayModule\Application\Model\Ent
     /**
      * Setter for checkout id property.
      *
-     * @param stdClass $trackingId
+     * @param string $trackingId
      */
     public function setTrackingId($trackingId)
     {

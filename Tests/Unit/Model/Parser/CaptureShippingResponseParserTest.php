@@ -6,10 +6,14 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Parser;
 
+use Arvato\AfterpayModule\Application\Model\Parser\CaptureShippingResponseParser;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use stdClass;
+
 /**
  * Class CaptureShippingResponseParserTest: Tests for CaptureShippingResponseParser.
  */
-class CaptureShippingResponseParserTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CaptureShippingResponseParserTest extends UnitTestCase
 {
 
     /**
@@ -25,7 +29,7 @@ class CaptureShippingResponseParserTest extends \OxidEsales\TestingLibrary\UnitT
      */
     public function testParse()
     {
-        $object = new \stdClass();
+        $object = new stdClass();
         $object->shippingNumber = '111';
         $object->message = '222';
         $sut = $this->getSUT();
@@ -42,6 +46,6 @@ class CaptureShippingResponseParserTest extends \OxidEsales\TestingLibrary\UnitT
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Parser\CaptureShippingResponseParser::class);
+        return oxNew(CaptureShippingResponseParser::class);
     }
 }

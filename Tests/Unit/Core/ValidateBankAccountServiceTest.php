@@ -6,26 +6,32 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
+use Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountResponseEntity;
+use Arvato\AfterpayModule\Core\ValidateBankAccountService;
+use Arvato\AfterpayModule\Core\WebServiceClient;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
-class ValidateBankAccountServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class ValidateBankAccountServiceTest extends UnitTestCase
 {
 
     public function testValidate()
     {
         $client =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
-                ->setMethods(['execute'])
-                ->getMock();
+            $this->getMockBuilder(WebServiceClient::class)
+                 ->setMethods(['execute'])
+                 ->getMock();
         $client
             ->expects($this->once())
             ->method('execute')
             ->will($this->returnValue(111));
 
+        /** @var ValidateBankAccountService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\ValidateBankAccountService::class)
-                ->setMethods(['getRequestData', 'getClient', 'parseResponse'])
-                ->getMock();
+            $this->getMockBuilder(ValidateBankAccountService::class)
+                 ->setMethods(['getRequestData', 'getClient', 'parseResponse'])
+                 ->getMock();
         $sut
             ->expects($this->once())
             ->method('getRequestData')
@@ -49,18 +55,19 @@ class ValidateBankAccountServiceTest extends \OxidEsales\TestingLibrary\UnitTest
         Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', false);
 
         $client =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
-                ->setMethods(['execute'])
-                ->getMock();
+            $this->getMockBuilder(WebServiceClient::class)
+                 ->setMethods(['execute'])
+                 ->getMock();
         $client
             ->expects($this->once())
             ->method('execute')
             ->will($this->returnValue(111));
 
+        /** @var ValidateBankAccountService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\ValidateBankAccountService::class)
-                ->setMethods(['getRequestData', 'getClient', 'parseResponse'])
-                ->getMock();
+            $this->getMockBuilder(ValidateBankAccountService::class)
+                 ->setMethods(['getRequestData', 'getClient', 'parseResponse'])
+                 ->getMock();
         $sut
             ->expects($this->once())
             ->method('getRequestData')
@@ -83,22 +90,23 @@ class ValidateBankAccountServiceTest extends \OxidEsales\TestingLibrary\UnitTest
     {
         Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', false);
 
-        $entity = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountResponseEntity::class);
+        $entity = oxNew(ValidateBankAccountResponseEntity::class);
         $entity->setIsValid('FOOBAR');
 
         $client =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
-                ->setMethods(['execute'])
-                ->getMock();
+            $this->getMockBuilder(WebServiceClient::class)
+                 ->setMethods(['execute'])
+                 ->getMock();
         $client
             ->expects($this->once())
             ->method('execute')
             ->will($this->returnValue(111));
 
+        /** @var ValidateBankAccountService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\ValidateBankAccountService::class)
-                ->setMethods(['getRequestData', 'getClient', 'parseResponse'])
-                ->getMock();
+            $this->getMockBuilder(ValidateBankAccountService::class)
+                 ->setMethods(['getRequestData', 'getClient', 'parseResponse'])
+                 ->getMock();
         $sut
             ->expects($this->once())
             ->method('getRequestData')
@@ -120,7 +128,7 @@ class ValidateBankAccountServiceTest extends \OxidEsales\TestingLibrary\UnitTest
     public function testIsValidSandbox()
     {
         Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', true);
-        $sut = oxNew(\Arvato\AfterpayModule\Core\ValidateBankAccountService::class);
+        $sut = oxNew(ValidateBankAccountService::class);
         $this->assertTrue($sut->isValid(123, 456));
     }
 }

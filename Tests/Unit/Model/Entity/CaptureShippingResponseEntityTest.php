@@ -6,10 +6,13 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity;
+use OxidEsales\TestingLibrary\UnitTestCase;
+
 /**
  * Class CaptureShippingResponseEntityTest: Tests for CaptureShippingResponseEntity.
  */
-class CaptureShippingResponseEntityTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class CaptureShippingResponseEntityTest extends UnitTestCase
 {
 
     /**
@@ -38,6 +41,6 @@ class CaptureShippingResponseEntityTest extends \OxidEsales\TestingLibrary\UnitT
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity::class);
+        return oxNew(CaptureShippingResponseEntity::class);
     }
 }

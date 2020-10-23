@@ -6,10 +6,12 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\CaptureResponseEntity;
+
 /**
  * Class CaptureResponseEntityTest: Tests for CaptureResponseEntity.
  */
-class CaptureResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class CaptureResponseEntityTest extends EntityAbstract
 {
     /**
      * Testing all getters and Setters
@@ -17,14 +19,14 @@ class CaptureResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\
     public function testGetSetData()
     {
         $testData = [
-            'capturedAmount' => 123,
-            'authorizedAmount' => 234,
+            'capturedAmount'            => 123,
+            'authorizedAmount'          => 234,
             'remainingAuthorizedAmount' => 111,
-            'captureNumber' => 'Lorem Ipsum',
+            'captureNumber'             => 'Lorem Ipsum',
         ];
 
         $testObject = $this->getSUT();
-        $this->testGetSet($testObject, $testData);
+        $this->getSet($testObject, $testData);
         $this->assertEquals((object) $testData, $testObject->exportData(), 'exported object not valid');
     }
 
@@ -35,6 +37,6 @@ class CaptureResponseEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\
      */
     protected function getSUT()
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureResponseEntity::class);
+        return oxNew(CaptureResponseEntity::class);
     }
 }

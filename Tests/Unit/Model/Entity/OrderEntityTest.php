@@ -6,10 +6,12 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Model\Entity;
 
+use Arvato\AfterpayModule\Application\Model\Entity\OrderEntity;
+
 /**
  * Class OrderEntityTest: unit tests for OrderEntity.
  */
-class OrderEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\EntityAbstract
+class OrderEntityTest extends EntityAbstract
 {
     /**
      * Tests the data container.
@@ -26,11 +28,11 @@ class OrderEntityTest extends \Arvato\AfterpayModule\Tests\Unit\Model\Entity\Ent
             'imageUrl'                => 'http://www.oxid-esales.com/Innenspiegel.jpg',
             'googleAnalyticsUserId'   => 'google123',
             'googleAnalyticsClientId' => 'google456',
-            'discountAmount'          => 5
+            'discountAmount'          => 5,
         ];
 
-        $testObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderEntity::class);
-        $this->testGetSet($testObject, $testData);
-        $this->assertEquals((object)$testData, $testObject->exportData(), 'exported object not valid');
+        $testObject = oxNew(OrderEntity::class);
+        $this->getSet($testObject, $testData);
+        $this->assertEquals((object) $testData, $testObject->exportData(), 'exported object not valid');
     }
 }

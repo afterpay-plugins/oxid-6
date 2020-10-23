@@ -6,23 +6,28 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
-class AvailableInstallmentPlanServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
+use Arvato\AfterpayModule\Core\WebServiceClient;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+
+class AvailableInstallmentPlanServiceTest extends UnitTestCase
 {
 
     public function testgetAvailableInstallmentPlans()
     {
-
+        /** @var AvailableInstallmentPlansService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\AvailableInstallmentPlansService::class)
-                ->setMethods(['parseResponse', 'getAvailableInstallmentPlansClient'])
-                ->getMock();
+            $this->getMockBuilder(AvailableInstallmentPlansService::class)
+                 ->setMethods(['parseResponse', 'getAvailableInstallmentPlansClient'])
+                 ->getMock();
 
         // Client
 
         $mockClient =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
-                ->setMethods(['execute'])
-                ->getMock();
+            $this->getMockBuilder(WebServiceClient::class)
+                 ->setMethods(['execute'])
+                 ->getMock();
 
         $mockClient
             ->expects($this->once())

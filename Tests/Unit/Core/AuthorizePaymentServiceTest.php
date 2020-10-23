@@ -6,12 +6,24 @@
 
 namespace Arvato\AfterpayModule\Tests\Unit\Core;
 
+use Arvato\AfterpayModule\Application\Model\DataProvider\AuthorizePaymentDataProvider;
+use Arvato\AfterpayModule\Application\Model\Entity\Entity;
+use Arvato\AfterpayModule\Core\AuthorizePaymentService;
+use Arvato\AfterpayModule\Core\WebServiceClient;
+use OxidEsales\Eshop\Application\Model\Address;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use stdClass;
 
 /**
  * Class AuthorizePaymentServiceTest: Tests for AuthorizePaymentService.
  */
-class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class AuthorizePaymentServiceTest extends UnitTestCase
 {
 
     /**
@@ -29,10 +41,9 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
     public function testAuthorizePaymentSuccessfull()
     {
         // Build SUT : Get ResponseData, Language, and Session to inject results into.
-
         $responseData = json_decode(file_get_contents(
             Registry::getConfig()->getConfigParam('sShopDir')
-            . '/modules/oxps/arvatoafterpay/Tests/Fixtures/1stepAuthPaymentSuccessResponse.json'
+            . '/modules/arvato/afterpay/Tests/Fixtures/1stepAuthPaymentSuccessResponse.json'
         ));
 
         $mockOxSession = $this->getMockOxSession();
@@ -47,7 +58,7 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
         $oxLang = Registry::getLang();
 
         $sut = $this->getAuthorizePaymentServiceMockedSut($responseData, $mockOxSession, $oxLang);
-        $this->assertEquals('Accepted', $sut->authorizePayment(oxNew(\OxidEsales\Eshop\Application\Model\Order::class)));
+        $this->assertEquals('Accepted', $sut->authorizePayment(oxNew(Order::class)));
     }
 
     /**
@@ -56,40 +67,40 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
      */
     public function testAuthorizePaymentUnsuccessfull()
     {
-        $responseData = new \stdClass();
+        $responseData = new stdClass();
 
         $mockOxSession = $this->getMockOxSession();
         $mockOxSession->expects($this->exactly(2))
-            ->method('setVariable')
-            ->withConsecutive(
-                [$this->equalTo('arvatoAfterpayReservationId'), $this->equalTo(null)],
-                [$this->equalTo('arvatoAfterpayCheckoutId'), $this->equalTo(null)]
-            );
+                      ->method('setVariable')
+                      ->withConsecutive(
+                          [$this->equalTo('arvatoAfterpayReservationId'), $this->equalTo(null)],
+                          [$this->equalTo('arvatoAfterpayCheckoutId'), $this->equalTo(null)]
+                      );
 
         $oxLang = Registry::getLang();
 
         $sut = $this->getAuthorizePaymentServiceMockedSut($responseData, $mockOxSession, $oxLang);
-        $this->assertNotEquals('Accepted', $sut->authorizePayment(oxNew(\OxidEsales\Eshop\Application\Model\Order::class)));
+        $this->assertNotEquals('Accepted', $sut->authorizePayment(oxNew(Order::class)));
     }
 
     public function testexecuteRequestFromSessionData()
     {
-
+        /** @var AuthorizePaymentService|PHPUnit_Framework_MockObject_MockObject $sut */
         $sut =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\AuthorizePaymentService::class)
-                ->setConstructorArgs([Registry::getSession(), Registry::getLang()])
-                ->disableOriginalClone()
-                ->setMethods(['getAuthorizePaymentClient', 'getAuthorizePaymentDataProvider'])
-                ->getMock();
+            $this->getMockBuilder(AuthorizePaymentService::class)
+                 ->setConstructorArgs([Registry::getSession(), Registry::getLang()])
+                 ->disableOriginalClone()
+                 ->setMethods(['getAuthorizePaymentClient', 'getAuthorizePaymentDataProvider'])
+                 ->getMock();
 
         // Client
 
         $mockClient =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\WebServiceClient::class)
+            $this->getMockBuilder(WebServiceClient::class)
                 //->disableOriginalConstructor()
                 //->disableOriginalClone()
-                ->setMethods(['execute'])
-                ->getMock();
+                 ->setMethods(['execute'])
+                 ->getMock();
 
         $mockClient
             ->expects($this->once())
@@ -104,14 +115,14 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
         // Data provider
 
         $mockDataProvider =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\AuthorizePaymentDataProvider::class)
-                ->setMethods(['getDataObject'])
-                ->getMock();
+            $this->getMockBuilder(AuthorizePaymentDataProvider::class)
+                 ->setMethods(['getDataObject'])
+                 ->getMock();
 
         $mockDataProvider
             ->expects($this->once())
             ->method('getDataObject')
-            ->will($this->returnValue(oxNew(\Arvato\AfterpayModule\Application\Model\Entity\Entity::class)));
+            ->will($this->returnValue(oxNew(Entity::class)));
 
         $sut
             ->expects($this->once())
@@ -119,7 +130,7 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
             ->will($this->returnValue($mockDataProvider));
 
         // run
-        $this->assertEquals('###OK###', $sut->executeRequestFromSessionData(oxNew(\OxidEsales\Eshop\Application\Model\Order::class)));
+        $this->assertEquals('###OK###', $sut->executeRequestFromSessionData(oxNew(Order::class)));
     }
 
     public function testupdateCorrectedCustomerAddressNoAddress()
@@ -132,7 +143,7 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
 
     public function testupdateCorrectedCustomerAddressBillingAddress()
     {
-        $address = new \stdClass();
+        $address = new stdClass();
         $address->lorem = 'ipsum';
 
         $sut = $this->getMockForUpdateCorrectedCustomerAddress(true, true, false);
@@ -144,7 +155,7 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
 
     public function testupdateCorrectedCustomerAddressDeliveryAddress()
     {
-        $address = new \stdClass();
+        $address = new stdClass();
         $address->lorem = 'ipsum';
 
         $sut = $this->getMockForUpdateCorrectedCustomerAddress(true, true, true);
@@ -154,18 +165,19 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
     }
 
     /**
-     * @param float Captured Amount to be mocked
-     *
-     * @return AuthorizePaymentService
+     * @param stdClass $response
+     * @param Session  $mockOxSession
+     * @param Language $oxLang
+     * @return AuthorizePaymentService|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getAuthorizePaymentServiceMockedSut(\stdClass $response, \OxidEsales\Eshop\Application\Core\Session $mockOxSession, \OxidEsales\Eshop\Core\Language $oxLang)
+    protected function getAuthorizePaymentServiceMockedSut(stdClass $response, Session $mockOxSession, Language $oxLang)
     {
         $mockAuthorizePaymentService =
-            $this->getMockBuilder(\Arvato\AfterpayModule\Core\AuthorizePaymentService::class)
-                ->setConstructorArgs([$mockOxSession, $oxLang])
-                ->disableOriginalClone()
-                ->setMethods(array('executeRequestFromSessionData'))
-                ->getMock();
+            $this->getMockBuilder(AuthorizePaymentService::class)
+                 ->setConstructorArgs([$mockOxSession, $oxLang])
+                 ->disableOriginalClone()
+                 ->setMethods(['executeRequestFromSessionData'])
+                 ->getMock();
 
         $mockAuthorizePaymentService
             ->expects($this->once())
@@ -178,15 +190,15 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
     /**
      * Return session Mock that tests if reservationId and checkoutId is stored correctly
      *
-     * @return oxSession Mocked
+     * @return Session|PHPUnit_Framework_MockObject_MockObject Mocked
      */
     protected function getMockOxSession()
     {
-        return $this->getMockBuilder(\OxidEsales\Eshop\Core\Session::class)
-                ->disableOriginalConstructor()
-                ->disableOriginalClone()
-                ->setMethods(['setVariable'])
-                ->getMock();
+        return $this->getMockBuilder(Session::class)
+                    ->disableOriginalConstructor()
+                    ->disableOriginalClone()
+                    ->setMethods(['setVariable'])
+                    ->getMock();
     }
 
     /**
@@ -194,24 +206,24 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
      * @param $isUserFound
      * @param $isDeliveryAddress
      *
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return AuthorizePaymentService|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockForUpdateCorrectedCustomerAddress($addressFound, $isUserFound, $isDeliveryAddress)
     {
         $mockOxAddress =
-            $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\Address::class)
-                ->disableOriginalConstructor()
-                ->disableOriginalClone()
-                ->setMethods(['save'])
-                ->getMock();
+            $this->getMockBuilder(Address::class)
+                 ->disableOriginalConstructor()
+                 ->disableOriginalClone()
+                 ->setMethods(['save'])
+                 ->getMock();
 
         if ($isUserFound) {
             $mockOxUser =
-                $this->getMockBuilder(\OxidEsales\Eshop\Application\Model\User::class)
-                    ->disableOriginalConstructor()
-                    ->disableOriginalClone()
-                    ->setMethods(['save', 'getSelectedAddress'])
-                    ->getMock();
+                $this->getMockBuilder(User::class)
+                     ->disableOriginalConstructor()
+                     ->disableOriginalClone()
+                     ->setMethods(['save', 'getSelectedAddress'])
+                     ->getMock();
             $mockOxUser
                 ->expects($isDeliveryAddress ? $this->never() : $this->once())
                 ->method('save')
@@ -223,20 +235,20 @@ class AuthorizePaymentServiceTest extends \OxidEsales\TestingLibrary\UnitTestCas
         }
 
         $mockOxSession =
-            $this->getMockBuilder(\OxidEsales\Eshop\Core\Session::class)
-                ->disableOriginalConstructor()
-                ->disableOriginalClone()
-                ->setMethods(['getUser'])
-                ->getMock();
+            $this->getMockBuilder(Session::class)
+                 ->disableOriginalConstructor()
+                 ->disableOriginalClone()
+                 ->setMethods(['getUser'])
+                 ->getMock();
         $mockOxSession
             ->expects($addressFound ? $this->once() : $this->never())
             ->method('getUser')
             ->will($this->returnValue($isUserFound ? $mockOxUser : null));
 
-        return $this->getMockBuilder(\Arvato\AfterpayModule\Core\AuthorizePaymentService::class)
-                ->setConstructorArgs([$mockOxSession, Registry::getLang()])
-                ->disableOriginalClone()
-                ->setMethods(['getAuthorizePaymentClient', 'getAuthorizePaymentDataProvider'])
-                ->getMock();
+        return $this->getMockBuilder(AuthorizePaymentService::class)
+                    ->setConstructorArgs([$mockOxSession, Registry::getLang()])
+                    ->disableOriginalClone()
+                    ->setMethods(['getAuthorizePaymentClient', 'getAuthorizePaymentDataProvider'])
+                    ->getMock();
     }
 }
