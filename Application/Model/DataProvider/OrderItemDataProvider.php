@@ -144,10 +144,6 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         $orderItem->setImageUrl($item->getArticle()->getPictureUrl());
         $orderItem->setProductUrl($item->getLink());
 
-        if ($item->getArticle()->getAfterpayProductGroup()) {
-            $orderItem->setGroupId($item->getArticle()->getAfterpayProductGroup());
-        }
-
         return $orderItem;
     }
 
