@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Parser;
 
 use Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity;
@@ -12,7 +8,7 @@ use stdClass;
 /**
  * Class CaptureShippingResponseParser: Parser for the capture shipping response.
  */
-class CaptureShippingResponseParser extends \Arvato\AfterpayModule\Application\Model\Parser\Parser
+class CaptureShippingResponseParser extends Parser
 {
     /**
      * Parses a standard object into a entity.
@@ -21,9 +17,9 @@ class CaptureShippingResponseParser extends \Arvato\AfterpayModule\Application\M
      *
      * @return CaptureShippingResponseEntity
      */
-    public function parse(\stdClass $object)
+    public function parse(stdClass $object)
     {
-        $responseMessage = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CaptureShippingResponseEntity::class);
+        $responseMessage = oxNew(CaptureShippingResponseEntity::class);
         if (isset($object->shippingNumber)) {
             $responseMessage->setShippingNumber($object->shippingNumber);
         }
