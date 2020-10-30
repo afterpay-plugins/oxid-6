@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Parser;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AddressEntity;
@@ -12,7 +8,7 @@ use stdClass;
 /**
  * Class AddressParser: Parser for address entities.
  */
-class AddressParser extends \Arvato\AfterpayModule\Application\Model\Parser\Parser
+class AddressParser extends Parser
 {
     /**
      * Parses a standard object into a entity.
@@ -20,9 +16,9 @@ class AddressParser extends \Arvato\AfterpayModule\Application\Model\Parser\Pars
      * @param stdClass $object
      * @return AddressEntity
      */
-    public function parse(\stdClass $object)
+    public function parse(stdClass $object)
     {
-        $responseMessage = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AddressEntity::class);
+        $responseMessage = oxNew(AddressEntity::class);
 
         $responseMessage->setCountryCode($object->countryCode);
         $responseMessage->setPostalCode($object->postalCode);
@@ -31,6 +27,7 @@ class AddressParser extends \Arvato\AfterpayModule\Application\Model\Parser\Pars
         $responseMessage->setStreetNumberAdditional($object->streetNumberAdditional);
         $responseMessage->setPostalPlace($object->postalPlace);
         $responseMessage->setCareOf($object->careOf);
+
         return $responseMessage;
     }
 }
