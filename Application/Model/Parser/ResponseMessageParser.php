@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Parser;
 
 use Arvato\AfterpayModule\Application\Model\Entity\ResponseMessageEntity;
@@ -12,7 +8,7 @@ use stdClass;
 /**
  * Class ResponseMessageParser: Parser for the response messages.
  */
-class ResponseMessageParser extends \Arvato\AfterpayModule\Application\Model\Parser\Parser
+class ResponseMessageParser extends Parser
 {
     /**
      * Parses a standard object into a entity.
@@ -20,9 +16,9 @@ class ResponseMessageParser extends \Arvato\AfterpayModule\Application\Model\Par
      * @param stdClass $object
      * @return ResponseMessageEntity
      */
-    public function parse(\stdClass $object)
+    public function parse(stdClass $object)
     {
-        $responseMessage = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\ResponseMessageEntity::class);
+        $responseMessage = oxNew(ResponseMessageEntity::class);
 
         $responseMessage->setType($object->type);
         $responseMessage->setCode($object->code);

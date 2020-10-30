@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Parser;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentResponseEntity;
@@ -12,7 +8,7 @@ use stdClass;
 /**
  * Class CustomerResponseParser: Parser for the authorize payment response.
  */
-class AuthorizePaymentResponseParser extends \Arvato\AfterpayModule\Application\Model\Parser\Parser
+class AuthorizePaymentResponseParser extends Parser
 {
     /**
      * Cert. Manual p.21: Classes that are pure data containers don’t include any logic
@@ -24,22 +20,21 @@ class AuthorizePaymentResponseParser extends \Arvato\AfterpayModule\Application\
      *
      * @return AuthorizePaymentResponseEntity
      */
-    public function parse(\stdClass $object)
+    public function parse(stdClass $object)
     {
-
         /** @var AuthorizePaymentResponseEntity $responseMessage */
-        $responseMessage = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AuthorizePaymentResponseEntity::class);
+        $responseMessage = oxNew(AuthorizePaymentResponseEntity::class);
 
         if (isset($object->outcome)) {
             $responseMessage->setOutcome($object->outcome);
         }
 
         if (isset($object->customer)) {
-            $responseMessage->setCustomer(oxNew(\Arvato\AfterpayModule\Application\Model\Parser\CustomerResponseParser::class)->parse($object->customer));
+            $responseMessage->setCustomer(oxNew(CustomerResponseParser::class)->parse($object->customer));
         }
 
         if (isset($object->deliveryCustomer)) {
-            $responseMessage->setDeliveryCustomer(oxNew(\Arvato\AfterpayModule\Application\Model\Parser\CustomerResponseParser::class)->parse($object->deliveryCustomer));
+            $responseMessage->setDeliveryCustomer(oxNew(CustomerResponseParser::class)->parse($object->deliveryCustomer));
         }
 
         if (isset($object->reservationId)) {
@@ -52,7 +47,7 @@ class AuthorizePaymentResponseParser extends \Arvato\AfterpayModule\Application\
 
         if (is_array($object->riskCheckMessages)) {
             foreach ($object->riskCheckMessages as $riskCheckMessage) {
-                $responseMessage->addAddress(oxNew(\Arvato\AfterpayModule\Application\Model\Parser\ResponseMessageParser::class)->parse($riskCheckMessage));
+                $responseMessage->addAddress(oxNew(ResponseMessageParser::class)->parse($riskCheckMessage));
                 if ($riskCheckMessage->customerFacingMessage) {
                     $responseMessage->setCustomerFacingMessage($riskCheckMessage->customerFacingMessage);
                 }

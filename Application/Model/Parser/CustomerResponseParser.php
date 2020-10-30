@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Parser;
 
 use Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity;
@@ -16,7 +12,7 @@ use stdClass;
  * (only getters and setters), can be excluded from test coverage:
  * @codeCoverageIgnore
  */
-class CustomerResponseParser extends \Arvato\AfterpayModule\Application\Model\Parser\Parser
+class CustomerResponseParser extends Parser
 {
     /**
      * Parses a standard object into a entity.
@@ -24,9 +20,9 @@ class CustomerResponseParser extends \Arvato\AfterpayModule\Application\Model\Pa
      * @param stdClass $object
      * @return CustomerResponseEntity
      */
-    public function parse(\stdClass $object)
+    public function parse(stdClass $object)
     {
-        $responseMessage = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CustomerResponseEntity::class);
+        $responseMessage = oxNew(CustomerResponseEntity::class);
 
         $responseMessage->setCustomerNumber($object->customerNumber);
         $responseMessage->setFirstName($object->firstName);
@@ -34,7 +30,7 @@ class CustomerResponseParser extends \Arvato\AfterpayModule\Application\Model\Pa
 
         if (is_array($object->addressList)) {
             foreach ($object->addressList as $address) {
-                $responseMessage->addAddress(oxNew(\Arvato\AfterpayModule\Application\Model\Parser\AddressParser::class)->parse($address));
+                $responseMessage->addAddress(oxNew(AddressParser::class)->parse($address));
             }
         }
 

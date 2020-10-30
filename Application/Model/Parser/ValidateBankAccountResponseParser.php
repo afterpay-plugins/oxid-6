@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Model\Parser;
 
 use Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountResponseEntity;
@@ -15,7 +11,7 @@ use stdClass;
  * (only getters and setters), can be excluded from test coverage:
  * @codeCoverageIgnore
  */
-class ValidateBankAccountResponseParser extends \Arvato\AfterpayModule\Application\Model\Parser\Parser
+class ValidateBankAccountResponseParser extends Parser
 {
     /**
      * Parses a standard object into a entity.
@@ -24,9 +20,9 @@ class ValidateBankAccountResponseParser extends \Arvato\AfterpayModule\Applicati
      *
      * @return ValidateBankAccountResponseEntity
      */
-    public function parse(\stdClass $object)
+    public function parse(stdClass $object)
     {
-        $responseMessage = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountResponseEntity::class);
+        $responseMessage = oxNew(ValidateBankAccountResponseEntity::class);
         if (isset($object->isValid)) {
             $responseMessage->setIsValid($object->isValid);
         }
