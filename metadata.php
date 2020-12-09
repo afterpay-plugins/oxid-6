@@ -34,8 +34,8 @@ $aModule = [
         'en' => 'standalone release of the Arvato AfterPay Module'
     ],
     'thumbnail'   => 'Application/views/out/img/AfterPay_logo_green.png',
-    'version' => '2.0.0-dev',
-    'author' => 'OXID eSales AG',
+    'version' => '2.1.0-beta.3',
+    'author' => 'norisk GmbH',
     'url' => '',
     'email' => '',
     'events' => [
@@ -201,6 +201,20 @@ $aModule = [
             'name'  => 'arvatoAfterpayRiskDeliveryType',
             'type'  => 'str',
             'value' => 'Normal'
+        ],
+        [
+            'group' => 'arvatoAfterpayGeneral',
+            'name'  => 'arvatoAfterpayManufacturerInDescription',
+            'type' => 'select',
+            'value' => 'no',
+            'constraints' => 'no|manufacturer|vendor',
+        ],
+        [
+            'group' => 'arvatoAfterpayGeneral',
+            'name'  => 'arvatoAfterpayVariantInDescription',
+            'type' => 'select',
+            'value' => 'yes',
+            'constraints' => 'yes|no',
         ],
 
         // API

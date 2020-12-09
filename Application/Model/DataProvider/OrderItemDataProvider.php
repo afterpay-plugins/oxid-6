@@ -7,8 +7,11 @@
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 
 use Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity;
+use oxArticleInputException;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\BasketItem;
+use OxidEsales\Eshop\Core\Registry;
+use oxNoArticleException;
 
 /**
  * Class AvailableInstallmentPlansDataProvider
@@ -74,7 +77,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
             $netVaucher = round($grossVaucher * ($sumNetto / $sumBrutto), 2);
 
             $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
-            $orderItem->setProductId('Vaucher');
+            $orderItem->setProductId('Voucher');
             $orderItem->setDescription('Vaucher/Gutschein');
             $orderItem->setQuantity(1);
             $orderItem->setGrossUnitPrice($grossVaucher);
@@ -130,7 +133,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
      *
      * @return OrderItemEntity
      */
-    public function getOrderItem(\OxidEsales\Eshop\Application\Model\BasketItem $item)
+    public function getOrderItem(BasketItem $item)
     {
         $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
         $orderItem->setProductId($item->getArticle()->oxarticles__oxid->value);
@@ -152,11 +155,27 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
      *
      * @param BasketItem $item
      *
+     * @throws oxArticleInputException
+     * @throws oxNoArticleException
      * @return string
      */
-    protected function getItemDescription(\OxidEsales\Eshop\Application\Model\BasketItem $item)
+    protected function getItemDescription(BasketItem $item)
     {
-        $description = $item->getTitle();
+        $article = $item->getArticle();
+        // Using article.oxtitle here since the basket item title already contains the oxvarselect
+        $description = $article->getFieldData('oxtitle');
+
+        $manufacturerSetting = Registry::getConfig()->getConfigParam('arvatoAfterpayManufacturerInDescription');
+        if ($manufacturerSetting === 'manufacturer' && ($manufacturer = $article->getManufacturer())) {
+            $description = $manufacturer->getTitle() . ' ' . $description;
+        } elseif ($manufacturerSetting === 'vendor' && ($vendor = $article->getVendor())) {
+            $description = $vendor->getTitle() . ' ' . $description;
+        }
+
+        $addVarSelect = Registry::getConfig()->getConfigParam('arvatoAfterpayVariantInDescription') === 'yes';
+        if ($addVarSelect && $article->getFieldData('oxvarselect')) {
+            $description .= ' ' . $article->getFieldData('oxvarselect');
+        }
 
         if (!empty($item->getChosenSelList())) {
             $description .= ' | ' . $item->getChosenSelList();

@@ -29,6 +29,13 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription' => 'Default refund description',
     'SHOP_MODULE_arvatoAfterpayRiskChannelType'             => 'Risk management - ChanelType',
     'SHOP_MODULE_arvatoAfterpayRiskDeliveryType'            => 'Risk management - DeliveryType',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription'              => 'Marke',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_no'           => 'nichts übergeben',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_manufacturer' => 'oxvendor',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_vendor'       => 'oxmanufacturer',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription'                   => 'Variante mit übergeben',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription_yes'               => 'Ja',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription_no'                => 'Nein',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayApi' => 'API Settings',
     'SHOP_MODULE_arvatoAfterpayApiUrl'    => 'API Url',
