@@ -101,26 +101,29 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
 
         if ($grossDiscount) {
             $grossDiscount = 0 - abs(round($grossDiscount, 2));
-            $netDiscount = round($grossDiscount * ($sumNetto / $sumBrutto), 2);
+            if ($grossDiscount) {
 
-            $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
-            $orderItem->setProductId('Discount');
-            $orderItem->setDescription('Discount');
-            $orderItem->setQuantity(1);
-            $orderItem->setGrossUnitPrice($grossDiscount);
-            $orderItem->setNetUnitPrice($netDiscount);
-            $orderItem->setVatPercent(round(100 * (($grossDiscount / $netDiscount) - 1)));
-            $orderItem->setVatAmount($grossDiscount - $netDiscount);
+                $netDiscount = round($grossDiscount * ($sumNetto / $sumBrutto), 2);
 
-            // Set group ID if any item has a group id.
-            foreach ($list as $article) {
-                if ($article->hasGroupId() && $article->getGroupId() !== null) {
-                    $orderItem->setGroupId('0');
-                    break;
+                $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
+                $orderItem->setProductId('Discount');
+                $orderItem->setDescription('Discount');
+                $orderItem->setQuantity(1);
+                $orderItem->setGrossUnitPrice($grossDiscount);
+                $orderItem->setNetUnitPrice($netDiscount);
+                $orderItem->setVatPercent(round(100 * (($grossDiscount / $netDiscount) - 1)));
+                $orderItem->setVatAmount($grossDiscount - $netDiscount);
+
+                // Set group ID if any item has a group id.
+                foreach ($list as $article) {
+                    if ($article->hasGroupId() && $article->getGroupId() !== null) {
+                        $orderItem->setGroupId('0');
+                        break;
+                    }
                 }
-            }
 
-            $list[] = $orderItem;
+                $list[] = $orderItem;
+            }
         }
 
         return $list;
