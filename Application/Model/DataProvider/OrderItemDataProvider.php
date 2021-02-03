@@ -73,17 +73,17 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         // Add vouchers
 
         if ($basket->getVoucherDiscount()) {
-            $grossVaucher = 0 - round($basket->getVoucherDiscValue(), 2);
-            $netVaucher = round($grossVaucher * ($sumNetto / $sumBrutto), 2);
+            $grossVoucher = 0 - round($basket->getVoucherDiscValue(), 2);
+            $netVoucher = round($grossVoucher * ($sumNetto / $sumBrutto), 2);
 
             $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
             $orderItem->setProductId('Voucher');
-            $orderItem->setDescription('Vaucher/Gutschein');
+            $orderItem->setDescription('Voucher/Gutschein');
             $orderItem->setQuantity(1);
-            $orderItem->setGrossUnitPrice($grossVaucher);
-            $orderItem->setNetUnitPrice($netVaucher);
+            $orderItem->setGrossUnitPrice($grossVoucher);
+            $orderItem->setNetUnitPrice($netVoucher);
             $orderItem->setVatPercent(round(100 * (($sumBrutto / $sumNetto) - 1)));
-            $orderItem->setVatAmount($grossVaucher - $netVaucher);
+            $orderItem->setVatAmount($grossVoucher - $netVoucher);
 
             // Set group ID if any item has a group id.
             foreach ($list as $article) {
@@ -97,7 +97,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         }
 
         // Add discounts
-        $grossDiscount = abs($basket->getBruttoSum()) - abs($basket->getDiscountedProductsBruttoPrice()) - abs($grossVaucher);
+        $grossDiscount = abs($basket->getBruttoSum()) - abs($basket->getDiscountedProductsBruttoPrice()) - abs($grossVoucher);
 
         if ($grossDiscount) {
             $grossDiscount = 0 - abs(round($grossDiscount, 2));
