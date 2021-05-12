@@ -12,9 +12,9 @@ use OxidEsales\Eshop\Core\Session;
  * Class AfterpayOrder
  *
  *  Naming of the "*Order"-Classes:
- *    - ArvatoAfterpayOxOrder: Exctension of oxOrder - model
- *    - OrderController: Exctension of order - view
- *    - AfterpayOrder: New model as seen in db table afterpayorder <-- THIS FILE
+ *    - Order:           Extension of order - model
+ *    - OrderController: Extension of order - view
+ *    - AfterpayOrder:   New model as seen in db table afterpayorder <-- THIS FILE
  */
 class AfterpayOrder extends \OxidEsales\Eshop\Core\Model\BaseModel
 {

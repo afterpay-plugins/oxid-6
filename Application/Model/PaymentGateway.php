@@ -140,7 +140,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         $this->_sLastError = null;
         if ($response != 'Accepted') {
-            $order->resetNumber();
             $this->_sLastError = $service->getErrorMessages();
             $this->_iLastErrorNo = $service->getLastErrorNo();
             return false;
