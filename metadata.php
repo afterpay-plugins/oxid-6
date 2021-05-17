@@ -262,6 +262,12 @@ $aModule = [
             'type'  => 'str',
             'value' => ''
         ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiKeyBE',
+            'type'  => 'str',
+            'value' => ''
+        ],
 
         [
             'group' => 'arvatoAfterpayApi',
@@ -309,6 +315,12 @@ $aModule = [
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiSandboxKeyNL',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiSandboxKeyBE',
             'type'  => 'str',
             'value' => ''
         ],
