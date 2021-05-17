@@ -45,6 +45,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyATInstallment' => 'API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiKeyCH'            => 'API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API Schlüssel BE',
 
     'SHOP_MODULE_arvatoAfterpayApiSandboxMode' => 'Sandbox Modus',
     'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'  => 'Sandbox API URL',
@@ -55,6 +56,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyATInstallment' => 'Sandbox API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API Schlüssel BE',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'Api Anfragenprotokollierung',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',

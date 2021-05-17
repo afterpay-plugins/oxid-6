@@ -46,6 +46,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyATInstallment' => 'API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiKeyCH'            => 'API key CH',
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API key BE',
 
     'SHOP_MODULE_arvatoAfterpayApiSandboxMode' => 'Sandbox mode',
     'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'  => 'Sandbox API URL',
@@ -56,6 +57,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyATInstallment' => 'Sandbox API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API key CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API key BE',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'API request logging',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',

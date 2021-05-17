@@ -338,6 +338,9 @@ class ClientConfigurator
             case 'a7c40f632cdd63c52.64272623':
                 $customerCountryCode = 'NL';
                 break;
+            case 'a7c40f632e04633c9.47194042':
+                $customerCountryCode = 'BE';
+                break;
             case 'a7c40f631fc920687.20179984':
             default:
                 $customerCountryCode = 'DE';
