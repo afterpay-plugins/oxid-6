@@ -202,6 +202,20 @@ $aModule = [
             'type'  => 'str',
             'value' => 'Normal'
         ],
+        [
+            'group' => 'arvatoAfterpayGeneral',
+            'name'  => 'arvatoAfterpayManufacturerInDescription',
+            'type' => 'select',
+            'value' => 'no',
+            'constraints' => 'no|manufacturer|vendor',
+        ],
+        [
+            'group' => 'arvatoAfterpayGeneral',
+            'name'  => 'arvatoAfterpayVariantInDescription',
+            'type' => 'select',
+            'value' => 'yes',
+            'constraints' => 'yes|no',
+        ],
 
         // API
 
@@ -245,6 +259,12 @@ $aModule = [
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiKeyNL',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiKeyBE',
             'type'  => 'str',
             'value' => ''
         ],
@@ -295,6 +315,12 @@ $aModule = [
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiSandboxKeyNL',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiSandboxKeyBE',
             'type'  => 'str',
             'value' => ''
         ],

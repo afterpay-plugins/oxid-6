@@ -17,9 +17,9 @@ use OxidEsales\Eshop\Core\Request;
  * @extends order
  *
  *  Naming of the "*Order"-Classes:
- *    - ArvatoAfterpayOxOrder: Exctension of oxOrder - model
- *    - OrderController: Exctension of order - view
- *    - AfterpayOrder: New model as seen in db table afterpayorder
+ *    - Order:           Extension of order - model
+ *    - OrderController: Extension of order - view <-- THIS FILE
+ *    - AfterpayOrder:   New model as seen in db table afterpayorder
  */
 class OrderController extends OrderController_parent
 {

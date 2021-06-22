@@ -29,6 +29,13 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription' => 'Default refund description',
     'SHOP_MODULE_arvatoAfterpayRiskChannelType'             => 'Risk management - ChanelType',
     'SHOP_MODULE_arvatoAfterpayRiskDeliveryType'            => 'Risk management - DeliveryType',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription'              => 'Marke',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_no'           => 'nichts übergeben',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_manufacturer' => 'oxmanufacturer',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_vendor'       => 'oxvendor',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription'                   => 'Variante mit übergeben',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription_yes'               => 'Ja',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription_no'                => 'Nein',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayApi' => 'API Settings',
     'SHOP_MODULE_arvatoAfterpayApiUrl'    => 'API Url',
@@ -39,6 +46,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyATInstallment' => 'API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiKeyCH'            => 'API key CH',
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API key BE',
 
     'SHOP_MODULE_arvatoAfterpayApiSandboxMode' => 'Sandbox mode',
     'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'  => 'Sandbox API URL',
@@ -49,6 +57,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyATInstallment' => 'Sandbox API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API key CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API key BE',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'API request logging',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',

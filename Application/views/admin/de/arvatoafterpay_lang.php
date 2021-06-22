@@ -28,6 +28,13 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription' => 'Standard Rückerstattungs-Beschreibung',
     'SHOP_MODULE_arvatoAfterpayRiskChannelType'             => 'Risikosteuerung - ChanelType',
     'SHOP_MODULE_arvatoAfterpayRiskDeliveryType'            => 'Risikosteuerung - DeliveryType',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription'              => 'Marke:',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_no'           => 'nichts übergeben',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_manufacturer' => 'oxmanufacturer',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_vendor'       => 'oxvendor',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription'                   => 'Variante mit übergeben',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription_yes'               => 'Ja',
+    'SHOP_MODULE_arvatoAfterpayVariantInDescription_no'                => 'Nein',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayApi' => 'API Einstellungen',
     'SHOP_MODULE_arvatoAfterpayApiUrl'    => 'API Url',
@@ -38,6 +45,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyATInstallment' => 'API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiKeyCH'            => 'API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API Schlüssel BE',
 
     'SHOP_MODULE_arvatoAfterpayApiSandboxMode' => 'Sandbox Modus',
     'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'  => 'Sandbox API URL',
@@ -48,6 +56,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyATInstallment' => 'Sandbox API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API Schlüssel BE',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'Api Anfragenprotokollierung',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',

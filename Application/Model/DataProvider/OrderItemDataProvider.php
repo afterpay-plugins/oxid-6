@@ -7,8 +7,11 @@
 namespace Arvato\AfterpayModule\Application\Model\DataProvider;
 
 use Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity;
+use oxArticleInputException;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\BasketItem;
+use OxidEsales\Eshop\Core\Registry;
+use oxNoArticleException;
 
 /**
  * Class AvailableInstallmentPlansDataProvider
@@ -70,17 +73,17 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         // Add vouchers
 
         if ($basket->getVoucherDiscount()) {
-            $grossVaucher = 0 - round($basket->getVoucherDiscValue(), 2);
-            $netVaucher = round($grossVaucher * ($sumNetto / $sumBrutto), 2);
+            $grossVoucher = 0 - round($basket->getVoucherDiscValue(), 2);
+            $netVoucher = round($grossVoucher * ($sumNetto / $sumBrutto), 2);
 
             $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
-            $orderItem->setProductId('Vaucher');
-            $orderItem->setDescription('Vaucher/Gutschein');
+            $orderItem->setProductId('Voucher');
+            $orderItem->setDescription('Voucher/Gutschein');
             $orderItem->setQuantity(1);
-            $orderItem->setGrossUnitPrice($grossVaucher);
-            $orderItem->setNetUnitPrice($netVaucher);
+            $orderItem->setGrossUnitPrice($grossVoucher);
+            $orderItem->setNetUnitPrice($netVoucher);
             $orderItem->setVatPercent(round(100 * (($sumBrutto / $sumNetto) - 1)));
-            $orderItem->setVatAmount($grossVaucher - $netVaucher);
+            $orderItem->setVatAmount($grossVoucher - $netVoucher);
 
             // Set group ID if any item has a group id.
             foreach ($list as $article) {
@@ -94,30 +97,33 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
         }
 
         // Add discounts
-        $grossDiscount = abs($basket->getBruttoSum()) - abs($basket->getDiscountedProductsBruttoPrice()) - abs($grossVaucher);
+        $grossDiscount = abs($basket->getBruttoSum()) - abs($basket->getDiscountedProductsBruttoPrice()) - abs($grossVoucher);
 
         if ($grossDiscount) {
             $grossDiscount = 0 - abs(round($grossDiscount, 2));
-            $netDiscount = round($grossDiscount * ($sumNetto / $sumBrutto), 2);
+            if ($grossDiscount) {
 
-            $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
-            $orderItem->setProductId('Discount');
-            $orderItem->setDescription('Discount');
-            $orderItem->setQuantity(1);
-            $orderItem->setGrossUnitPrice($grossDiscount);
-            $orderItem->setNetUnitPrice($netDiscount);
-            $orderItem->setVatPercent(round(100 * (($grossDiscount / $netDiscount) - 1)));
-            $orderItem->setVatAmount($grossDiscount - $netDiscount);
+                $netDiscount = round($grossDiscount * ($sumNetto / $sumBrutto), 2);
 
-            // Set group ID if any item has a group id.
-            foreach ($list as $article) {
-                if ($article->hasGroupId() && $article->getGroupId() !== null) {
-                    $orderItem->setGroupId('0');
-                    break;
+                $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
+                $orderItem->setProductId('Discount');
+                $orderItem->setDescription('Discount');
+                $orderItem->setQuantity(1);
+                $orderItem->setGrossUnitPrice($grossDiscount);
+                $orderItem->setNetUnitPrice($netDiscount);
+                $orderItem->setVatPercent(round(100 * (($grossDiscount / $netDiscount) - 1)));
+                $orderItem->setVatAmount($grossDiscount - $netDiscount);
+
+                // Set group ID if any item has a group id.
+                foreach ($list as $article) {
+                    if ($article->hasGroupId() && $article->getGroupId() !== null) {
+                        $orderItem->setGroupId('0');
+                        break;
+                    }
                 }
-            }
 
-            $list[] = $orderItem;
+                $list[] = $orderItem;
+            }
         }
 
         return $list;
@@ -130,7 +136,7 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
      *
      * @return OrderItemEntity
      */
-    public function getOrderItem(\OxidEsales\Eshop\Application\Model\BasketItem $item)
+    public function getOrderItem(BasketItem $item)
     {
         $orderItem = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\OrderItemEntity::class);
         $orderItem->setProductId($item->getArticle()->oxarticles__oxid->value);
@@ -152,11 +158,27 @@ class OrderItemDataProvider extends \Arvato\AfterpayModule\Application\Model\Dat
      *
      * @param BasketItem $item
      *
+     * @throws oxArticleInputException
+     * @throws oxNoArticleException
      * @return string
      */
-    protected function getItemDescription(\OxidEsales\Eshop\Application\Model\BasketItem $item)
+    protected function getItemDescription(BasketItem $item)
     {
-        $description = $item->getTitle();
+        $article = $item->getArticle();
+        // Using article.oxtitle here since the basket item title already contains the oxvarselect
+        $description = $article->getFieldData('oxtitle');
+
+        $manufacturerSetting = Registry::getConfig()->getConfigParam('arvatoAfterpayManufacturerInDescription');
+        if ($manufacturerSetting === 'manufacturer' && ($manufacturer = $article->getManufacturer())) {
+            $description = $manufacturer->getTitle() . ' ' . $description;
+        } elseif ($manufacturerSetting === 'vendor' && ($vendor = $article->getVendor())) {
+            $description = $vendor->getTitle() . ' ' . $description;
+        }
+
+        $addVarSelect = Registry::getConfig()->getConfigParam('arvatoAfterpayVariantInDescription') === 'yes';
+        if ($addVarSelect && $article->getFieldData('oxvarselect')) {
+            $description .= ' ' . $article->getFieldData('oxvarselect');
+        }
 
         if (!empty($item->getChosenSelList())) {
             $description .= ' | ' . $item->getChosenSelList();
