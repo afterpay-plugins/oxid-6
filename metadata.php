@@ -34,7 +34,7 @@ $aModule = [
         'en' => 'standalone release of the Arvato AfterPay Module'
     ],
     'thumbnail'   => 'Application/views/out/img/AfterPay_logo_green.png',
-    'version' => '2.1.0-beta.3',
+    'version' => '2.1.0',
     'author' => 'norisk GmbH',
     'url' => '',
     'email' => '',
