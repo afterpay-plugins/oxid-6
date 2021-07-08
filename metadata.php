@@ -221,11 +221,20 @@ $aModule = [
 
         [
             'group' => 'arvatoAfterpayApi',
+//            'name'  => 'arvatoAfterpayApiSandboxMode',
+            'name'  => 'arvatoAfterpayApiMode',
+            'type'  => 'select',
+            'value' => 'sandbox',
+            'constraints' => 'live|partner|sandbox'
+        ],
+
+        //region Live settings
+        [
+            'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiUrl',
             'type'  => 'str',
             'value' => 'https://api.afterpay.io/'
         ],
-
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiKeyDE',
@@ -268,20 +277,14 @@ $aModule = [
             'type'  => 'str',
             'value' => ''
         ],
-
-        [
-            'group' => 'arvatoAfterpayApi',
-            'name'  => 'arvatoAfterpayApiSandboxMode',
-            'type'  => 'bool',
-            'value' => false
-        ],
+        //endregion
+        //region Sandbox settings
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiSandboxUrl',
             'type'  => 'str',
             'value' => 'https://sandboxapi.horizonafs.com/eCommerceServicesWebApi/api/v3/'
         ],
-
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiSandboxKeyDE',
@@ -324,6 +327,57 @@ $aModule = [
             'type'  => 'str',
             'value' => ''
         ],
+        //endregion
+        //region Partner test settings
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerUrl',
+            'type'  => 'str',
+            'value' => 'https://api-pt.afterpay.io/api/v3/'
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyDE',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyDEInstallment',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyAT',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyATInstallment',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyCH',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyNL',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        [
+            'group' => 'arvatoAfterpayApi',
+            'name'  => 'arvatoAfterpayApiPartnerKeyBE',
+            'type'  => 'str',
+            'value' => ''
+        ],
+        //endregion
         [
             'group' => 'arvatoAfterpayApi',
             'name'  => 'arvatoAfterpayApiRequestLogging',

@@ -52,7 +52,7 @@ class ValidateBankAccountServiceTest extends UnitTestCase
 
     public function testIsValidNosandboxNotvalid()
     {
-        Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', false);
+        Registry::getConfig()->setConfigParam('arvatoAfterpayApiMode', 'live');
 
         $client =
             $this->getMockBuilder(WebServiceClient::class)
@@ -88,7 +88,7 @@ class ValidateBankAccountServiceTest extends UnitTestCase
 
     public function testIsValidNosandboxValid()
     {
-        Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', false);
+        Registry::getConfig()->setConfigParam('arvatoAfterpayApiMode', 'live');
 
         $entity = oxNew(ValidateBankAccountResponseEntity::class);
         $entity->setIsValid('FOOBAR');
@@ -127,7 +127,7 @@ class ValidateBankAccountServiceTest extends UnitTestCase
 
     public function testIsValidSandbox()
     {
-        Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', true);
+        Registry::getConfig()->setConfigParam('arvatoAfterpayApiMode', 'sandbox');
         $sut = oxNew(ValidateBankAccountService::class);
         $this->assertTrue($sut->isValid(123, 456));
     }

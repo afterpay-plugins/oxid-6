@@ -40,7 +40,7 @@ class ValidateBankAccountService extends \Arvato\AfterpayModule\Core\Service
      */
     public function isValid($IBAN, $BIC)
     {
-        if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxMode')) {
+        if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiMode', 'sandbox') === 'sandbox') {
             return true;
         }
 

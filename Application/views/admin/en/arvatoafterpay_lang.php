@@ -48,9 +48,12 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API key NL',
     'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API key BE',
 
-    'SHOP_MODULE_arvatoAfterpayApiSandboxMode' => 'Sandbox mode',
-    'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'  => 'Sandbox API URL',
+    'SHOP_MODULE_arvatoAfterpayApiMode'         => 'API mode',
+    'SHOP_MODULE_arvatoAfterpayApiMode_live'    => 'Live',
+    'SHOP_MODULE_arvatoAfterpayApiMode_partner' => 'Partner Test',
+    'SHOP_MODULE_arvatoAfterpayApiMode_sandbox' => 'Sandbox',
 
+    'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'              => 'Sandbox API URL',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyDE'            => 'Sandbox API key GER',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyDEInstallment' => 'Sandbox API key for installments GER',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyAT'            => 'Sandbox API key AUT',
@@ -58,6 +61,15 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API key CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API key NL',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API key BE',
+
+    'SHOP_MODULE_arvatoAfterpayApiPartnerUrl'              => 'Partner Test API URL',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyDE'            => 'Partner Test API key GER',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyDEInstallment' => 'Partner Test API key for installments GER',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyAT'            => 'Partner Test API key AUT',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyATInstallment' => 'Partner Test API key for installments AUT',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyCH'            => 'Partner Test API key CH',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL'            => 'Partner Test API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE'            => 'Partner Test API key BE',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'API request logging',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',

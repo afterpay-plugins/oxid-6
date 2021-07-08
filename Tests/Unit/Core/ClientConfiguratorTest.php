@@ -185,7 +185,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetBaseClientOkSandbox()
     {
-        Registry::getConfig()->setConfigParam('arvatoAfterpayApiSandboxMode', true);
+        Registry::getConfig()->setConfigParam('arvatoAfterpayApiMode', 'sandbox');
         $sut = $this->getSUT();
         $this->assertInstanceOf(
             WebServiceClient::class,

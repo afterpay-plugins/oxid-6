@@ -47,9 +47,12 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API Schlüssel NL',
     'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API Schlüssel BE',
 
-    'SHOP_MODULE_arvatoAfterpayApiSandboxMode' => 'Sandbox Modus',
-    'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'  => 'Sandbox API URL',
+    'SHOP_MODULE_arvatoAfterpayApiMode'         => 'API Modus',
+    'SHOP_MODULE_arvatoAfterpayApiMode_live'    => 'Live',
+    'SHOP_MODULE_arvatoAfterpayApiMode_partner' => 'Partner Test',
+    'SHOP_MODULE_arvatoAfterpayApiMode_sandbox' => 'Sandbox',
 
+    'SHOP_MODULE_arvatoAfterpayApiSandboxUrl'              => 'Sandbox API URL',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyDE'            => 'Sandbox API Schlüssel DE',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyDEInstallment' => 'Sandbox API Schlüssel für Ratenkauf DE',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyAT'            => 'Sandbox API Schlüssel AT',
@@ -57,6 +60,15 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API Schlüssel NL',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API Schlüssel BE',
+
+    'SHOP_MODULE_arvatoAfterpayApiPartnerUrl'              => 'Partner Test API URL',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyDE'            => 'Partner Test API Schlüssel DE',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyDEInstallment' => 'Partner Test API Schlüssel für Ratenkauf DE',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyAT'            => 'Partner Test API Schlüssel AT',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyATInstallment' => 'Partner Test API Schlüssel für Ratenkauf AT',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyCH'            => 'Partner Test API Schlüssel CH',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL'            => 'Partner Test API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE'            => 'Partner Test API Schlüssel BE',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'Api Anfragenprotokollierung',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',
