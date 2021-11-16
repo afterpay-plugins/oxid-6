@@ -21,7 +21,7 @@ class ClientConfigurator
      */
     public function saveApiKeyToSession($isInstallmentApi)
     {
-        list($url, $key) = $this->getApiCredentials($isInstallmentApi);
+        [$url, $key] = $this->getApiCredentials($isInstallmentApi);
 
         if (!isAdmin()) {
             Registry::getSession()->setVariable('arvatoAfterpayApiKey', $key);
@@ -264,7 +264,7 @@ class ClientConfigurator
             throw new \Arvato\AfterpayModule\Core\Exception\CurlException('function was empty');
         }
 
-        list($url, $key) = $this->getApiCredentials($isInstallmentApi, $recordedApiKey);
+        [$url, $key] = $this->getApiCredentials($isInstallmentApi, $recordedApiKey);
 
         $client = oxNew(\Arvato\AfterpayModule\Core\WebServiceClient::class);
         $client->setBaseUrl($url);
@@ -292,20 +292,18 @@ class ClientConfigurator
 
         $customerCountryCode = $this->getUserCountryCodeIdFromSession();
 
-        if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxMode')) {
-            $url = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxUrl'));
-            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiSandboxKey' . $customerCountryCode . $isInstallmentApi));
-        } else {
-            $url = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiUrl'));
-            $key = trim(Registry::getConfig()->getConfigParam('arvatoAfterpayApiKey' . $customerCountryCode . $isInstallmentApi));
-        }
+        $apiMode = Registry::getConfig()->getConfigParam('arvatoAfterpayApiMode', 'sandbox');
+        $keyPart = $apiMode === 'live' ? '' : ucfirst($apiMode);
+        $keyConfig = "arvatoAfterpayApi{$keyPart}Key{$customerCountryCode}{$isInstallmentApi}";
+        $key = trim(Registry::getConfig()->getConfigParam($keyConfig));
 
-        if (substr($url, -1) != '/') {
+        $urlConfig = "arvatoAfterpayApi{$keyPart}Url";
+        $url = trim(Registry::getConfig()->getConfigParam($urlConfig));
+        if (substr($url, -1) !== '/') {
             $url .= '/';
         }
 
         $sessionApiKey = Registry::getSession()->getVariable('arvatoAfterpayApiKey');
-
         if ($recordedApiKey) {
             $key = $recordedApiKey;
         } elseif ($sessionApiKey && !isAdmin()) {
