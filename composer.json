@@ -1,5 +1,5 @@
 {
-    "name": "arvato/afterpay",
+    "name": "arvato/afterpay-oxid-module",
     "description": "Oxid plugin for Arvato afterpay.",
     "type": "oxideshop-module",
     "keywords": ["oxid", "modules", "eShop"],
