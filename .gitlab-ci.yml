@@ -1,0 +1,16 @@
+stages:
+  - deploy
+
+deploy_to_nrsweb08:
+  stage: deploy
+  only:
+    - 'dev2.x'
+  script:
+    # copy to webserver and unpack
+    - 'scp /home/gitlab-runner/releases/$CI_BUILD_REF.tar.gz nrdeploy@172.16.16.23:/var/wwwfile/deploy_tmp/$CI_BUILD_REF.tar.gz'
+    - 'ssh nrdeploy@172.16.16.23 "mkdir -p /var/wwwfile/deploy_tmp/$CI_BUILD_REF"'
+    - 'ssh nrdeploy@172.16.16.23 "tar xzf /var/wwwfile/deploy_tmp/$CI_BUILD_REF.tar.gz -C /var/wwwfile/deploy_tmp/$CI_BUILD_REF/."'
+    - 'ssh nrdeploy@172.16.16.23 "rsync --delete -rlDvze --exclude=.git /var/wwwfile/deploy_tmp/$CI_BUILD_REF/ /var/wwwfile/36520/source/modules/arvato/afterpay"'
+    - 'ssh nrdeploy@172.16.16.23 "rm -r /var/wwwfile/deploy_tmp/$CI_BUILD_REF /var/wwwfile/deploy_tmp/$CI_BUILD_REF.tar.gz"'
+    # finally delete cache
+    - 'ssh nrdeploy@172.16.16.23 "cd /var/wwwfile/36520/source; php delete_cache.php"'
