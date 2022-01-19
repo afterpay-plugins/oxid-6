@@ -9,7 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <img src="https://cdn.myafterpay.com/logo/AfterPay_logo.svg" class="frontendAfterpayLogoAsTitle">
+                <img src="[{$oViewConf->getAfterpayLogoUrl()}]" class="frontendAfterpayLogoAsTitle">
             </h3>
         </div>
         <div class="panel-body">

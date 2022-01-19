@@ -9,7 +9,7 @@
     <div class="card-wrapper">
         <div class="card">
             <h3 class="card-header">
-                <img src="https://cdn.myafterpay.com/logo/AfterPay_logo.svg" class="frontendAfterpayLogoAsTitle">
+                <img src="[{$oViewConf->getAfterpayLogoUrl()}]" class="frontendAfterpayLogoAsTitle">
             </h3>
         </div>
         <div class="card-body">

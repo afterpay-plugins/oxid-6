@@ -33,7 +33,7 @@ $aModule = [
         'de' => 'Standalone-Version des Arvato AfterPay-Moduls',
         'en' => 'standalone release of the Arvato AfterPay Module'
     ],
-    'thumbnail'   => 'Application/views/out/img/AfterPay_logo_green.png',
+    'thumbnail'   => 'Application/views/out/img/AfterPay_logo_checkout.png',
     'version' => '2.1.0-beta.3',
     'author' => 'norisk GmbH',
     'url' => '',
@@ -49,7 +49,9 @@ $aModule = [
         \OxidEsales\Eshop\Application\Controller\PaymentController::class  => Arvato\AfterpayModule\Application\Controller\PaymentController::class,
         // Model
         \OxidEsales\Eshop\Application\Model\Article::class => Arvato\AfterpayModule\Application\Model\Article::class,
-        \OxidEsales\Eshop\Application\Model\Order::class   => Arvato\AfterpayModule\Application\Model\Order::class
+        \OxidEsales\Eshop\Application\Model\Order::class   => Arvato\AfterpayModule\Application\Model\Order::class,
+        // Core
+        \OxidEsales\Eshop\Core\ViewConfig::class => Arvato\AfterpayModule\Core\ViewConfig::class,
     ],
     'controllers' => [
         'OrderAfterpay' => Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class
@@ -215,6 +217,13 @@ $aModule = [
             'type' => 'select',
             'value' => 'yes',
             'constraints' => 'yes|no',
+        ],
+        [
+            'group'       => 'arvatoAfterpayGeneral',
+            'name'        => 'arvatoAfterpayLogo',
+            'type'        => 'select',
+            'value'       => 'Checkout',
+            'constraints' => 'Checkout||Black|White|Grey',
         ],
 
         // API

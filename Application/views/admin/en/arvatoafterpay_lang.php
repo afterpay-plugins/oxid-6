@@ -36,6 +36,13 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayVariantInDescription'                   => 'Variante mit übergeben',
     'SHOP_MODULE_arvatoAfterpayVariantInDescription_yes'               => 'Ja',
     'SHOP_MODULE_arvatoAfterpayVariantInDescription_no'                => 'Nein',
+    'SHOP_MODULE_arvatoAfterpayLogo'          => 'Logo displayed in checkout',
+    'HELP_SHOP_MODULE_arvatoAfterpayLogo'     => 'All possible logos are listed <a href="https://developer.afterpay.io/documentation/logo-visual-guidelines/">here</a>.',
+    'SHOP_MODULE_arvatoAfterpayLogo_Checkout' => 'Checkout',
+    'SHOP_MODULE_arvatoAfterpayLogo_'         => 'Original',
+    'SHOP_MODULE_arvatoAfterpayLogo_Black'    => 'Black',
+    'SHOP_MODULE_arvatoAfterpayLogo_White'    => 'White',
+    'SHOP_MODULE_arvatoAfterpayLogo_Grey'     => 'Grey',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayApi' => 'API Settings',
     'SHOP_MODULE_arvatoAfterpayApiUrl'    => 'API Url',
