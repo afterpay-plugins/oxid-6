@@ -7,6 +7,7 @@ deploy_to_nrsweb08:
     - 'dev2.x'
   script:
     # copy to webserver and unpack
+    - 'tar --exclude="./node_modules" -zcf /home/gitlab-runner/releases/$CI_BUILD_REF.tar.gz . --exclude-vcs'
     - 'scp /home/gitlab-runner/releases/$CI_BUILD_REF.tar.gz nrdeploy@172.16.16.23:/var/wwwfile/deploy_tmp/$CI_BUILD_REF.tar.gz'
     - 'ssh nrdeploy@172.16.16.23 "mkdir -p /var/wwwfile/deploy_tmp/$CI_BUILD_REF"'
     - 'ssh nrdeploy@172.16.16.23 "tar xzf /var/wwwfile/deploy_tmp/$CI_BUILD_REF.tar.gz -C /var/wwwfile/deploy_tmp/$CI_BUILD_REF/."'
