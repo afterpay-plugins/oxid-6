@@ -16,7 +16,7 @@
     <input type="hidden" name="editlanguage" value="[{ $editlanguage }]">
 </form>
 
-<img src="https://cdn.myafterpay.com/logo/AfterPay_logo.svg" class="frontendAfterpayLogo" style="max-height: 32px; max-width:170px; padding:8px; float: right;">
+<img src="[{$oViewConf->getAfterpayLogoUrl()}]" class="frontendAfterpayLogo" style="max-height: 32px; max-width:170px; padding:8px; float: right;">
 
 
 [{if $oOrder}]
