@@ -64,11 +64,13 @@ $aModule = [
         'flow/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
         'flow/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
         'flow/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl',
+        'flow/page/checkout/inc/payment_tracking.tpl'            => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_tracking.tpl',
         'wave/page/checkout/inc/payment_afterpayinstallment.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinstallment.tpl',
         'wave/page/checkout/inc/payment_afterpaydebitnote.tpl'   => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpaydebitnote.tpl',
         'wave/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
         'wave/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
-        'wave/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl'
+        'wave/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl',
+        'wave/page/checkout/inc/payment_tracking.tpl'            => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_tracking.tpl'
     ],
     'blocks' => [
         [
@@ -456,10 +458,11 @@ $aModule = [
         // Profile Tracking
 
         [
-            'group' => 'arvatoAfterpayProfileTracking',
-            'name'  => 'arvatoAfterpayProfileTrackingEnabled',
-            'type'  => 'bool',
-            'value' => false
+            'group'       => 'arvatoAfterpayProfileTracking',
+            'name'        => 'arvatoAfterpayProfileTrackingEnabled',
+            'type'        => 'select',
+            'value'       => 'inactive',
+            'constraints' => 'inactive|mandatory|optional',
         ],
         [
             'group' => 'arvatoAfterpayProfileTracking',

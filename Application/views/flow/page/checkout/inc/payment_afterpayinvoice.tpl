@@ -22,8 +22,13 @@
             [{/if}]
         [{/if}]
 
-        [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Invoice"}]
+        [{if $trackingvalue == "mandatory"}]
+            [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
+        [{/if}]
 
+        <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
+            [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Invoice"}]
+        </div>
 
         <div style="clear:both"></div>
         [{block name="checkout_payment_longdesc"}]
@@ -33,7 +38,5 @@
                 </div>
             [{/if}]
         [{/block}]
-
-
     </dd>
 </dl>

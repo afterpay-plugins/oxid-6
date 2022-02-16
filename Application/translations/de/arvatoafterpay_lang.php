@@ -52,4 +52,8 @@ $aLang = [
     'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT'   => '<p><small>Mit meiner Bestellung ermächtige ich die Arvato Payment Solutions GmbH, Gläubiger-Identifikationsnummer DE23ZZZ00001986600, Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von dem Zahlungsempfänger auf mein Konto gezogenen Lastschriften einzulösen. Hinweis: Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.</small></p> <p>Der Gesamtbetrag könnte sich noch durch Versandkosten, Gutscheine etc. ändern. Die endgültigen Preise werden im letzten Bestellschritt angezeigt.</p>',
 
     'MESSAGE_USER_CHECK_CHANGED_ADDRESS'          => 'Wir haben einen möglichen Fehler in Ihrer Adresse gefunden und korrigiert. Bitte überprüfen Sie Ihre Adresse.',
+
+    'AFTERPAYOPTIN_PAYMENT_TEXT'                    => 'Um diese Zahlarten zu nutzen benötigen wir vorab Ihre Zustimmung.',
+    'AFTERPAYOPTIN_PAYMENT_LABEL'                   => 'Hiermit willige ich die Verarbeitung meiner Daten zur Betrugsprävention gemäß der <a href="/Datenschutz">Datenschutzbestimmungen</a> ein.',
+    'AFTERPAYOPTIN_PAYMENT_BUTTON'                  => 'Bestätigen',
 ];

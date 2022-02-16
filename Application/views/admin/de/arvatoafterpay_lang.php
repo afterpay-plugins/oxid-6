@@ -99,6 +99,9 @@ $aLang = [
 
     'SHOP_MODULE_GROUP_arvatoAfterpayProfileTracking'  => 'Profile Tracking (Browsergestützte Betrugserkennung)',
     'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled' => 'Profile Tracking aktivieren',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_inactive' => 'inaktiv',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_mandatory' => 'Pflicht',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_optional' => 'Optional',
     'SHOP_MODULE_arvatoAfterpayProfileTrackingUrl'     => 'Profile Tracking URL',
     'SHOP_MODULE_arvatoAfterpayProfileTrackingId'      => 'Profile Tracking Client ID',
 

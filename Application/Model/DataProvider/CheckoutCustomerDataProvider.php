@@ -92,7 +92,7 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
         // Profile Tracking
 
-        if (!isAdmin() && Registry::getConfig()->getConfigParam('arvatoAfterpayProfileTrackingEnabled')) {
+        if (!isAdmin() && Registry::getConfig()->getConfigParam('arvatoAfterpayProfileTrackingEnabled') == "mandatory") {
             $riskData = new \stdClass();
             $riskData->profileTrackingId = 'md5' . md5(Registry::getSession()->getId());
             $riskData->ipAddress = $_SERVER['REMOTE_ADDR'];

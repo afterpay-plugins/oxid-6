@@ -50,6 +50,11 @@ class PaymentController extends PaymentController_parent
         return $this->parentRender();
     }
 
+    public function getTrackingOption()
+    {
+        return Registry::getConfig()->getConfigParam( 'arvatoAfterpayProfileTrackingEnabled' );
+    }
+
     public function getOrderStateSelectInstallmentConstant()
     {
         return self::ARVATO_ORDER_STATE_SELECTINSTALLMENT;
