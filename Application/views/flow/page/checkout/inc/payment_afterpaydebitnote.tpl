@@ -22,7 +22,7 @@
             [{/if}]
         [{/if}]
 
-        [{if $trackingvalue == "mandatory"}]
+        [{if $trackingvalue != "inactive"}]
             [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
         [{/if}]
 
