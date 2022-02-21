@@ -98,10 +98,13 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayDebitRequiresFon'              => 'Debit requires phone number',
     'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresFon'       => 'Installments require phone number',
 
-    'SHOP_MODULE_GROUP_arvatoAfterpayProfileTracking'          => 'Profile Tracking',
-    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled'         => 'Activate profile tracking',
-    'SHOP_MODULE_arvatoAfterpayProfileTrackingUrl'             => 'Profile tracking URL',
-    'SHOP_MODULE_arvatoAfterpayProfileTrackingId'              => 'Profile tracking client ID',
+    'SHOP_MODULE_GROUP_arvatoAfterpayProfileTracking'           => 'Profile Tracking',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled'          => 'Profile tracking',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_inactive' => 'Inactive',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_mandatory'=> 'Required',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_optional' => 'Optional',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingUrl'              => 'Profile tracking URL',
+    'SHOP_MODULE_arvatoAfterpayProfileTrackingId'               => 'Profile tracking client ID',
 
     'HELP_ARTICLE_MAIN_AAPPRODUCTGROUP' => 'Define the AfterPay product group. If you leave this field empty, the shop will attempt to find the product group based on the assigned categories. The bracket shows the found and submitted product group.',
     'ORDER_AFTERPAY_FORCAPTURENO'       => 'for capture number',

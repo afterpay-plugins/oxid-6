@@ -118,6 +118,10 @@ class PaymentController extends PaymentController_parent
             $error = $this->validateInstallment($dynValue);
         }
 
+        if ($this->getRequestOrSessionParameter('AfterPayTrackingEnabled')) {
+            Registry::getSession()->setVariable('AfterPayTrackingEnabled', true);
+        }
+
         $this->_sPaymentError = $error;
 
         // Everything null on error, return parent::return if everything is ok.
