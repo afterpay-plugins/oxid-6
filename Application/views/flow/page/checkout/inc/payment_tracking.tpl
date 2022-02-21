@@ -6,7 +6,7 @@
                 <p>[{oxmultilang ident="AFTERPAYOPTIN_PAYMENT_TEXT"}]</p>
             [{/if}]
             <label for="afterpay-optin-[{$sPaymentID}]">
-                <input class="js-afterpay-optin" type="checkbox" value="1" name="afterpay-optin" id="afterpay-optin-[{$sPaymentID}]" />
+                <input class="js-afterpay-optin" type="checkbox" value="1" name="AfterPayTrackingEnabled" id="afterpay-optin-[{$sPaymentID}]" />
                 <span>[{oxmultilang ident="AFTERPAYOPTIN_PAYMENT_LABEL"}]</span>
             </label>
             [{if $trackingvalue == "mandatory"}]
