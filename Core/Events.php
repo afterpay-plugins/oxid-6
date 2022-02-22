@@ -86,6 +86,16 @@ class Events
     }
 
     /**
+     * removeBankCodeRequirementFromDebit
+     * -----------------------------------------------------------------------------------------------------------------
+     * Removes BIC requirement from debit payment
+     */
+    public static function removeBankCodeRequirementFromDebit()
+    {
+        self::executeSQL('UPDATE oxpayments SET OXVALDESC = "apdebitbankaccount__@@@@apbirthday__@@apphone__@@apssn__@@" WHERE OXID = "afterpaydebitnote"');
+    }
+
+    /**
      * insertAfterpayInstallment
      * -----------------------------------------------------------------------------------------------------------------
      *
@@ -241,6 +251,7 @@ class Events
             self::insertAfterpayDebitnote();
             self::afterpayDebitnoteTypeQuery();
         }
+        self::removeBankCodeRequirementFromDebit();
 
         if (self::tableExists($tablePayments) && !$paymentModel->load( 'afterpayinstallment')) {
             self::insertAfterpayInstallment();

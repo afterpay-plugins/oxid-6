@@ -81,7 +81,6 @@ $aLang = [
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',
     'AFTERPAY_ONLY_FOR_AFTERPAY_PAYMENT'               => 'Diese Bestellung wurde nicht mit AfterPay bezahlt',
     'ORDER_OVERVIEW_APDEBITBANKACCOUNT'                => 'IBAN',
-    'ORDER_OVERVIEW_APDEBITBANKCODE'                   => 'BIC',
     'ORDER_OVERVIEW_APINSTALLMENTBANKACCOUNT'          => 'IBAN',
     'ORDER_OVERVIEW_APINSTALLMENTBANKCODE'             => 'BIC',
     'ORDER_OVERVIEW_AFTERPAYINSTALLMENTPROFILEID'      => 'Ratenzahlungsprofil',

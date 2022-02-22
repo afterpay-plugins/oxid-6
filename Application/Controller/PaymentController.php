@@ -185,9 +185,7 @@ class PaymentController extends PaymentController_parent
     {
         if (
             !isset($dynValue['apdebitbankaccount'])
-            || !isset($dynValue['apdebitbankcode'])
             || !$dynValue['apdebitbankaccount']
-            || !$dynValue['apdebitbankcode']
         ) {
             return 1; //Complete fields correctly
         }

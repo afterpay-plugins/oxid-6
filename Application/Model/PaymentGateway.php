@@ -161,20 +161,16 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     {
         // Bank account ok? - Redundant to former call but makes process tamper-proof
 
-        $apdebitbankaccount = $apdebitbankcode = null;
+        $apdebitbankaccount = null;
         foreach ($this->_oPaymentInfo->_aDynValues as $dynValue) {
             if ('apdebitbankaccount' === $dynValue->name) {
                 $apdebitbankaccount = $dynValue->value;
-            }
-            if ('apdebitbankcode' === $dynValue->name) {
-                $apdebitbankcode = $dynValue->value;
             }
         }
 
         if (
             !$apdebitbankaccount ||
-            !$apdebitbankcode ||
-            !$this->getValidateBankAccountService()->isValid($apdebitbankaccount, $apdebitbankcode)
+            !$this->getValidateBankAccountService()->isValid($apdebitbankaccount, '')
         ) {
             return false;
         }
@@ -186,7 +182,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         }
 
         $this->getSession()->setVariable('arvatoAfterpayIBAN', $apdebitbankaccount);
-        $this->getSession()->setVariable('arvatoAfterpayBIC', $apdebitbankcode);
 
 
         return true;
