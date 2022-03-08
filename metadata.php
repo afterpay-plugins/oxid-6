@@ -52,6 +52,7 @@ $aModule = [
         \OxidEsales\Eshop\Application\Model\Order::class   => Arvato\AfterpayModule\Application\Model\Order::class,
         // Core
         \OxidEsales\Eshop\Core\ViewConfig::class => Arvato\AfterpayModule\Core\ViewConfig::class,
+        \OxidEsales\Eshop\Core\Utils::class => Arvato\AfterpayModule\Core\Afterpay_Utils::class,
     ],
     'controllers' => [
         'OrderAfterpay' => Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class
