@@ -274,6 +274,8 @@ class Events
 
         self::afterpayPaymentsInsert();
 
+        self::setDefaultSandboxAPIURL();
+
         self::createTableArvatoAfterpayAfterpayOrder();
 
         // Check if oxcategories.AAPPRODUCTGROUP exists
@@ -321,5 +323,16 @@ class Events
      */
     public static function onDeactivate()
     {
+    }
+
+    /**
+     * setDefaultSandboxAPIURL
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    public static function setDefaultSandboxAPIURL()
+    {
+        Registry::getConfig()->saveShopConfVar('str','arvatoAfterpayApiSandboxUrl',' https://sandbox.afterpay.io/api/v3/',null ,'module:arvatoafterpay');
     }
 }

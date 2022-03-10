@@ -55,7 +55,23 @@ $aModule = [
         \OxidEsales\Eshop\Core\Utils::class => Arvato\AfterpayModule\Core\Afterpay_Utils::class,
     ],
     'controllers' => [
-        'OrderAfterpay' => Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class
+        'OrderAfterpay' => Arvato\AfterpayModule\Application\Controller\Admin\OrderAfterpay::class,
+        // admin
+        'AfterpayConfig'        => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayConfig::class,
+        'AfterpayConfigList'    => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayConfigList::class,
+        'AfterpayConfigTab'     => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayConfigTab::class,
+
+        'AfterpayApi'       => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayApi::class,
+        'AfterpayApiList'   => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayApiList::class,
+        'AfterpayApiTab'    => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayApiTab::class,
+
+        'AfterpayRequiredfields'        => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayRequiredfields::class,
+        'AfterpayRequiredfieldsList'    => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayRequiredfieldsList::class,
+        'AfterpayRequiredfieldsTab'     => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayRequiredfieldsTab::class,
+
+        'AfterpayProfileTracking'       => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayProfileTracking::class,
+        'AfterpayProfileTrackingList'   => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayProfileTrackingList::class,
+        'AfterpayProfileTrackingTab'    => Arvato\AfterpayModule\Application\Controller\Admin\AfterpayProfileTrackingTab::class,
     ],
     'templates' => [
         'order_afterpay.tpl'                                     => 'arvato/afterpay/Application/views/admin/tpl/order_afterpay.tpl',
@@ -71,7 +87,25 @@ $aModule = [
         'wave/page/checkout/inc/payment_afterpayinvoice.tpl'     => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_afterpayinvoice.tpl',
         'wave/page/checkout/inc/order_installmentplan_boxes.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/order_installmentplan_boxes.tpl',
         'wave/page/checkout/inc/afterpay_required_dynvalues.tpl' => 'arvato/afterpay/Application/views/flow/page/checkout/inc/afterpay_required_dynvalues.tpl',
-        'wave/page/checkout/inc/payment_tracking.tpl'            => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_tracking.tpl'
+        'wave/page/checkout/inc/payment_tracking.tpl'            => 'arvato/afterpay/Application/views/flow/page/checkout/inc/payment_tracking.tpl',
+        
+        // admin
+        'afterpay_config.tpl'                    => 'arvato/afterpay/Application/views/admin/tpl/afterpay_config.tpl',
+        'afterpay_config_list.tpl'               => 'arvato/afterpay/Application/views/admin/tpl/afterpay_config_list.tpl',
+        'afterpay_config_tab.tpl'                => 'arvato/afterpay/Application/views/admin/tpl/afterpay_config_tab.tpl',
+
+        'afterpay_api.tpl'                    => 'arvato/afterpay/Application/views/admin/tpl/afterpay_api.tpl',
+        'afterpay_api_list.tpl'               => 'arvato/afterpay/Application/views/admin/tpl/afterpay_api_list.tpl',
+        'afterpay_api_tab.tpl'                => 'arvato/afterpay/Application/views/admin/tpl/afterpay_api_tab.tpl',
+
+        'afterpay_requiredfields.tpl'                    => 'arvato/afterpay/Application/views/admin/tpl/afterpay_requiredfields.tpl',
+        'afterpay_requiredfields_list.tpl'               => 'arvato/afterpay/Application/views/admin/tpl/afterpay_requiredfields_list.tpl',
+        'afterpay_requiredfields_tab.tpl'                => 'arvato/afterpay/Application/views/admin/tpl/afterpay_requiredfields_tab.tpl',
+
+        'afterpay_profiletracking.tpl'                    => 'arvato/afterpay/Application/views/admin/tpl/afterpay_profiletracking.tpl',
+        'afterpay_profiletracking_list.tpl'               => 'arvato/afterpay/Application/views/admin/tpl/afterpay_profiletracking_list.tpl',
+        'afterpay_profiletracking_tab.tpl'                => 'arvato/afterpay/Application/views/admin/tpl/afterpay_profiletracking_tab.tpl',
+
     ],
     'blocks' => [
         [

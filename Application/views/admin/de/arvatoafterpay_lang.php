@@ -28,7 +28,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription' => 'Standard Rückerstattungs-Beschreibung',
     'SHOP_MODULE_arvatoAfterpayRiskChannelType'             => 'Risikosteuerung - ChanelType',
     'SHOP_MODULE_arvatoAfterpayRiskDeliveryType'            => 'Risikosteuerung - DeliveryType',
-    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription'              => 'Marke:',
+    'SHOP_MODULE_arvatoAfterpayManufacturerInDescription'              => 'Marke',
     'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_no'           => 'nichts übergeben',
     'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_manufacturer' => 'oxmanufacturer',
     'SHOP_MODULE_arvatoAfterpayManufacturerInDescription_vendor'       => 'oxvendor',
@@ -111,4 +111,12 @@ $aLang = [
     'ORDER_AFTERPAY_TITLE_CAPTUREDELIVERY' => 'Versand erfassen',
 
     'AFTERPAY_ORDER_ALREADY_VOIDED' => 'Diese Bestellung enthält stornierte Zahlungen und kann deshalb nicht weiter bearbeitet werden.',
+
+    //Menu
+    'ARVATOMODULES'                 => 'Arvato Module',
+    'AFTERPAY_TITLE'                => 'Afterpay',
+    'AFTERPAY_SETTINGS'             => 'Einstellungen',
+    'AFTERPAY_SETTINGS_DATA'        => 'AGB & Datenschutz',
+    'AFTERPAY_SAVED'                => 'Einstellungen wurden gespeichert',
+    'AFTERPAY_SAVE_BUTTON'          => 'Speichern',
 ];
