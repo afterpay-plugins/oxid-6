@@ -8,6 +8,7 @@ namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
+use OxidEsales\Eshop\Application\Model\ArticleList;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -26,6 +27,18 @@ class PaymentController extends PaymentController_parent
      * @var string[] Error messages from the AfterPay service.
      */
     protected $_errorMessages;
+
+    public function getPaymentList()
+    {
+        $paymentList = parent::getPaymentList();
+        if (!$this->allowAfterpayPeyment()) {
+            unset($paymentList["afterpayinvoice"]);
+            unset($paymentList["afterpaydebitnote"]);
+            unset($paymentList["afterpayinstallment"]);
+        }
+
+        return $paymentList;
+    }
 
     public function render()
     {
@@ -281,5 +294,30 @@ class PaymentController extends PaymentController_parent
     {
         $requestReturn = Registry::get(Request::class)->getRequestEscapedParameter($paramName);
         return $requestReturn ?: $this->getSession()->getVariable($paramName);
+    }
+
+    /**
+     * allowAfterpayPeyment
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @return bool
+     */
+    public function allowAfterpayPeyment() : bool
+    {
+        $excludedArticlesNrs = Registry::getConfig()->getConfigParam("arvatoAfterpayExcludedArticleNr");
+
+        /** @var ArticleList $basketArticles */
+        $basketArticles = $this->getSession()->getBasket()->getBasketArticles();
+
+        foreach ($basketArticles as $article) {
+            $article->load($article->oxarticles__oxid->value);
+            $articleNum = $article->oxarticles__oxartnum->value;
+
+            if (strpos($excludedArticlesNrs, $articleNum) !== false) {
+                return false;
+            }
+        }
+        return true;
     }
 }

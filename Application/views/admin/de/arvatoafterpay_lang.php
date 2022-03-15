@@ -42,6 +42,8 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayLogo_Black'    => 'Schwarz',
     'SHOP_MODULE_arvatoAfterpayLogo_White'    => 'Weiß',
     'SHOP_MODULE_arvatoAfterpayLogo_Grey'     => 'Grau',
+    'SHOP_MODULE_arvatoAfterpayExcludedArticleNr'     => 'Ausgeschlossene Artikelnummer',
+    'HELP_SHOP_MODULE_arvatoAfterpayExcludedArticleNr'     => 'Alle eingetragenen Artikelnummern sind von der Bezahlung mit Afterpay ausgeschlossen <br> Bitte unbedingt die Artikelnummern mit Komma trennen',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayApi' => 'API Einstellungen',
     'SHOP_MODULE_arvatoAfterpayApiUrl'    => 'API Url',
@@ -113,10 +115,10 @@ $aLang = [
     'AFTERPAY_ORDER_ALREADY_VOIDED' => 'Diese Bestellung enthält stornierte Zahlungen und kann deshalb nicht weiter bearbeitet werden.',
 
     //Menu
-    'ARVATOMODULES'                 => 'Arvato Module',
-    'AFTERPAY_TITLE'                => 'Afterpay',
-    'AFTERPAY_SETTINGS'             => 'Einstellungen',
-    'AFTERPAY_SETTINGS_DATA'        => 'AGB & Datenschutz',
-    'AFTERPAY_SAVED'                => 'Einstellungen wurden gespeichert',
-    'AFTERPAY_SAVE_BUTTON'          => 'Speichern',
+    'ARVATOMODULES'                     => 'Arvato Module',
+    'AFTERPAY_TITLE'                    => 'Afterpay',
+    'AFTERPAY_SETTINGS'                 => 'Einstellungen',
+    'AFTERPAY_SETTINGS_TERMSPRIVACY'    => 'AGB & Datenschutz',
+    'AFTERPAY_SAVED'                    => 'Einstellungen wurden gespeichert',
+    'AFTERPAY_SAVE_BUTTON'              => 'Speichern',
 ];

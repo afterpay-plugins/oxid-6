@@ -141,6 +141,15 @@
 				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayLogo'}]
 			</td>
 		</tr>
+		<tr>
+			<td class="edittext" style="vertical-align: text-top">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayExcludedArticleNr" }]:
+			</td>
+			<td class="edittext">
+				<textarea style="text-align: left; vertical-align: text-top;height: 300px" type="text" class="edittext" name="confstrs[arvatoAfterpayExcludedArticleNr]" [{$readonly}]>[{$confstrs.arvatoAfterpayExcludedArticleNr}]</textarea>
+				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayExcludedArticleNr'}]
+			</td>
+		</tr>
 
 
 		[{********** SAVE & LANGUAGE ********}]

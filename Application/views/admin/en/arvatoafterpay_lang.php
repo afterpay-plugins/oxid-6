@@ -43,6 +43,8 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayLogo_Black'    => 'Black',
     'SHOP_MODULE_arvatoAfterpayLogo_White'    => 'White',
     'SHOP_MODULE_arvatoAfterpayLogo_Grey'     => 'Grey',
+    'SHOP_MODULE_arvatoAfterpayExcludedArticleNr'     => 'Excluded article numbers',
+    'HELP_SHOP_MODULE_arvatoAfterpayExcludedArticleNr'     => 'All entered article numbers are excluded from payment with Afterpay <br> Please separate the article numbers with a comma',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayApi' => 'API Settings',
     'SHOP_MODULE_arvatoAfterpayApiUrl'    => 'API Url',
