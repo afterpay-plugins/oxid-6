@@ -14,9 +14,10 @@ namespace Arvato\AfterpayModule\Core;
 class AfterpayIdStorage
 {
     /**
-     * getReducedAttributeIds
+     * getContries
      * -----------------------------------------------------------------------------------------------------------------
-     *
+     * Get Afterpay counties
+     * Source: https://developer.afterpay.io/documentation/prepare-checkout/collecting-consumer-information/
      *
      * @return string[]
      */
@@ -32,6 +33,26 @@ class AfterpayIdStorage
             'Norway',
             'Finland',
             'Denmark',
+        ];
+    }
+
+    /**
+     * getFields
+     * -----------------------------------------------------------------------------------------------------------------
+     * get the fields for admin UI afterpay configs
+     *
+     * @return string[]
+     */
+    public function getFields()
+    {
+        return [
+            'Salutation',
+            'SSN',
+            'Phone',
+            'Birthdate',
+            'StreetNumber',
+            'Privacy',
+            'TC',
         ];
     }
 }

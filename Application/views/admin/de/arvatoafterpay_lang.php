@@ -118,7 +118,6 @@ $aLang = [
     'ARVATOMODULES'                     => 'Arvato Module',
     'AFTERPAY_TITLE'                    => 'Afterpay',
     'AFTERPAY_SETTINGS'                 => 'Einstellungen',
-    'AFTERPAY_SETTINGS_TERMSPRIVACY'    => 'AGB & Datenschutz',
     'AFTERPAY_SAVED'                    => 'Einstellungen wurden gespeichert',
     'AFTERPAY_SAVE_BUTTON'              => 'Speichern',
 
@@ -139,4 +138,17 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayInvoiceRequiresSalutation'             => 'Rechnung erfordert Anrede',
     'SHOP_MODULE_arvatoAfterpayDebitRequiresSalutation'               => 'Bankeinzug erfordert Anrede',
     'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresSalutation'        => 'Ratenzahlung erfordert Anrede',
+
+    'SHOP_MODULE_arvatoAfterpayRequireFields'       => 'Felder',
+    'SHOP_MODULE_arvatoAfterpayInvoice'             => 'Rechnung',
+    'SHOP_MODULE_arvatoAfterpayDebit'               => 'Bankeinzug',
+    'SHOP_MODULE_arvatoAfterpayInstallments'        => 'Ratenzahlung',
+
+    'SHOP_MODULE_arvatoAfterpayRequiresSalutation'        => 'Anrede',
+    'SHOP_MODULE_arvatoAfterpayRequiresSSN'               => 'SSN',
+    'SHOP_MODULE_arvatoAfterpayRequiresPhone'        => 'Telefonnummer',
+    'SHOP_MODULE_arvatoAfterpayRequiresBirthdate'        => 'Geburtsdatum',
+    'SHOP_MODULE_arvatoAfterpayRequiresStreetNumber'        => 'Hausnummer',
+    'SHOP_MODULE_arvatoAfterpayRequiresPrivacy'        => 'Datenschutz',
+    'SHOP_MODULE_arvatoAfterpayRequiresTC'        => 'AGB',
 ];

@@ -59,7 +59,16 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
     public function getCountries()
     {
         return Registry::get(AfterpayIdStorage::class)->getContries();
-
+    }
+    /**
+     * getCountries
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    public function getFields()
+    {
+        return Registry::get(AfterpayIdStorage::class)->getFields();
     }
 
 
