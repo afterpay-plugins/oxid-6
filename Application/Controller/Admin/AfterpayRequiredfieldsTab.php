@@ -12,6 +12,8 @@
 namespace Arvato\AfterpayModule\Application\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Controller\Admin\ShopConfiguration;
+use OxidEsales\Eshop\Core\Registry;
+use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 
 class AfterpayRequiredfieldsTab extends ShopConfiguration
 {
@@ -47,4 +49,18 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
     {
         return 'module:arvatoafterpay';
     }
+
+    /**
+     * getCountries
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    public function getCountries()
+    {
+        return Registry::get(AfterpayIdStorage::class)->getContries();
+
+    }
+
+
 }

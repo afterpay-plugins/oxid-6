@@ -121,4 +121,22 @@ $aLang = [
     'AFTERPAY_SETTINGS_TERMSPRIVACY'    => 'AGB & Datenschutz',
     'AFTERPAY_SAVED'                    => 'Einstellungen wurden gespeichert',
     'AFTERPAY_SAVE_BUTTON'              => 'Speichern',
+
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Germany'                     => 'Deutschland',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Austria'                     => 'Österreich',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Switzerland'                 => 'Schweiz',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Netherlands'                 => 'Niederlande',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Belgium'                     => 'Belgien',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Sweden'                      => 'Schweden',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Norway'                      => 'Norwegen',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Finland'                     => 'Finnland',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Denmark'                     => 'Dänemark',
+
+    'SHOP_MODULE_arvatoAfterpayInvoiceRequiresStreetNumber'             => 'Rechnung erfordert Hausnummer',
+    'SHOP_MODULE_arvatoAfterpayDebitRequiresStreetNumber'               => 'Bankeinzug erfordert Hausnummer',
+    'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresStreetNumber'        => 'Ratenzahlung erfordert Hausnummer',
+
+    'SHOP_MODULE_arvatoAfterpayInvoiceRequiresSalutation'             => 'Rechnung erfordert Anrede',
+    'SHOP_MODULE_arvatoAfterpayDebitRequiresSalutation'               => 'Bankeinzug erfordert Anrede',
+    'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresSalutation'        => 'Ratenzahlung erfordert Anrede',
 ];

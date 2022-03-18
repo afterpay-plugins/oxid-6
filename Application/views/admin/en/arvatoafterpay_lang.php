@@ -116,4 +116,30 @@ $aLang = [
     'ORDER_AFTERPAY_TITLE_CAPTUREDELIVERY' => 'Capture delivery information',
 
     'AFTERPAY_ORDER_ALREADY_VOIDED' => 'This order contains cancelled payments and hence cannot be edited.',
+
+    //Menu
+    'ARVATOMODULES'                     => 'Arvato Module',
+    'AFTERPAY_TITLE'                    => 'Afterpay',
+    'AFTERPAY_SETTINGS'                 => 'Einstellungen',
+    'AFTERPAY_SETTINGS_TERMSPRIVACY'    => 'AGB & Datenschutz',
+    'AFTERPAY_SAVED'                    => 'Einstellungen wurden gespeichert',
+    'AFTERPAY_SAVE_BUTTON'              => 'Speichern',
+
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Germany'                       => 'Germany',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Austria'                       => 'Austria',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Switzerland'                   => 'Switzerland',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Netherlands'                   => 'Netherlands',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Belgium'                       => 'Belgium',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Sweden'                        => 'Sweden',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Norway'                        => 'Norway',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Finland'                       => 'Finland',
+    'AFTERPAY_COUNTRY_REQUIREDFIELDS_Denmark'                       => 'Denmark',
+
+    'SHOP_MODULE_arvatoAfterpayInvoiceRequiresStreetNumber'             => 'Invoice requires Street Number',
+    'SHOP_MODULE_arvatoAfterpayDebitRequiresStreetNumber'               => 'Debit requires Street Number',
+    'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresStreetNumber'        => 'Installments require Street Number',
+
+    'SHOP_MODULE_arvatoAfterpayInvoiceRequiresSalutation'             => 'Invoice requires Salutation',
+    'SHOP_MODULE_arvatoAfterpayDebitRequiresSalutation'               => 'Bankeinzug erfordert Salutation',
+    'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresSalutation'        => 'Installments require Salutation',
 ];
