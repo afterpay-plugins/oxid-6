@@ -63,7 +63,7 @@ class AfterpayOrderTest extends UnitTestCase
      */
     public function testSetStatusIllegalStatus()
     {
-        $this->setExpectedException(StandardException::class);
+        $this->expectException(StandardException::class);
         $sut = $this->getSUT();
         $sut->setStatus('FooBar!');
     }

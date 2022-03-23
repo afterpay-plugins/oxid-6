@@ -52,7 +52,7 @@ class HttpClientTest extends UnitTestCase
      */
     public function testExecuteHttpRequestNotPOSTorGET()
     {
-        $this->setExpectedException(CurlException::class, 'Unknown httpMethod FOOBAR');
+        $this->expectException(CurlException::class, 'Unknown httpMethod FOOBAR');
         $service = oxNew(HttpClient::class);
         $service->setBaseUrl('https://sandbox.afterpay.io/api/v3/');
         $service->executeHttpRequest('FOOBAR', 'version', 'POST data');
@@ -77,7 +77,7 @@ class HttpClientTest extends UnitTestCase
 
     public function testExecuteHttpRequestBadUrl()
     {
-        $this->setExpectedException(CurlException::class, 'Could not resolve host: nowhere', 6);
+        $this->expectException(CurlException::class, 'Could not resolve host: nowhere', 6);
 
         $service = oxNew(HttpClient::class);
         $service->executeHttpRequest('POST', 'http://nowhere/');
@@ -85,7 +85,7 @@ class HttpClientTest extends UnitTestCase
 
     public function testExecuteHttpRequestNoMethod()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
 
         $service = oxNew(HttpClient::class);
         $service->executeHttpRequest(null, 'http://nowhere/');
@@ -93,7 +93,7 @@ class HttpClientTest extends UnitTestCase
 
     public function testExecuteHttpRequestNoUrl()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
 
         $service = oxNew(HttpClient::class);
         $service->executeHttpRequest('xxx', null);
@@ -101,7 +101,7 @@ class HttpClientTest extends UnitTestCase
 
     public function testExecuteJsonRequestNoMethod()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
 
         $service = oxNew(HttpClient::class);
         $service->executeJsonRequest(null, 'http://nowhere/');
@@ -109,7 +109,7 @@ class HttpClientTest extends UnitTestCase
 
     public function testExecuteJsonRequestNoUrl()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
 
         $service = oxNew(HttpClient::class);
         $service->executeJsonRequest('xxx', null);

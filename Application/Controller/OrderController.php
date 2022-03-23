@@ -14,7 +14,7 @@ use OxidEsales\Eshop\Core\Request;
 /**
  * Class OrderController : Extends order controller with AfterPay service call.
  *
- * @extends order
+ * @extends OrderController
  *
  *  Naming of the "*Order"-Classes:
  *    - Order:           Extension of order - model

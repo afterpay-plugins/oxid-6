@@ -14,7 +14,7 @@ class RefundItemDataProviderTest extends UnitTestCase
      */
     public function testgetRefundDataFromVatSplittedRefundsException()
     {
-        $this->setExpectedException(StandardException::class);
+        $this->expectException(StandardException::class);
 
         $items = [];
 

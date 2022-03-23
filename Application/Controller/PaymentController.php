@@ -15,7 +15,7 @@ use OxidEsales\Eshop\Core\Request;
 /**
  * Class PaymentController : Extends payment controller with AfterPay validation call.
  *
- * @extends Payment
+ * @extends PaymentController
  *
  */
 class PaymentController extends PaymentController_parent
@@ -31,7 +31,7 @@ class PaymentController extends PaymentController_parent
     public function getPaymentList()
     {
         $paymentList = parent::getPaymentList();
-        if (!$this->allowAfterpayPeyment()) {
+        if (!$this->allowAfterpayPayment()) {
             unset($paymentList["afterpayinvoice"]);
             unset($paymentList["afterpaydebitnote"]);
             unset($paymentList["afterpayinstallment"]);
@@ -297,13 +297,13 @@ class PaymentController extends PaymentController_parent
     }
 
     /**
-     * allowAfterpayPeyment
+     * allowAfterpayPayment
      * -----------------------------------------------------------------------------------------------------------------
      *
      *
      * @return bool
      */
-    public function allowAfterpayPeyment() : bool
+    public function allowAfterpayPayment() : bool
     {
         $excludedArticlesNrs = Registry::getConfig()->getConfigParam("arvatoAfterpayExcludedArticleNr");
 

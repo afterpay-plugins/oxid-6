@@ -104,7 +104,7 @@ class CaptureShippingServiceTest extends UnitTestCase
      */
     public function testCaptureShippingException()
     {
-        $this->setExpectedException(StandardException::class);
+        $this->expectException(StandardException::class);
 
         $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitnonafterpayorder');

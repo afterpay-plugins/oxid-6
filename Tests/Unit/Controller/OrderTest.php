@@ -20,7 +20,7 @@ class OrderTest extends UnitTestCase
     public function testrendernoafterpayinstallment()
     {
         $oxSession = Registry::getSession();
-        $oxSession->setVariable('paymentid', 'definitlynotafterpay');
+        $oxSession->setVariable('paymentid', 'definitelynotafterpay');
 
         $sut = $this->getSUTNoInstallment($oxSession);
         $render = $sut->render();
@@ -85,7 +85,27 @@ class OrderTest extends UnitTestCase
     /**
      * @throws ReflectionException
      */
-    public function testgetNextStepOnError()
+    public function testgetNextStepOnCfmError()
+    {
+        $errorMessage = 'customer facing error message';
+
+        $class = new ReflectionClass(ArvatoOrderController::class);
+        $method = $class->getMethod('_getNextStep');
+        $method->setAccessible(true);
+        $sutReturn = $method->invokeArgs(
+            oxNew(OrderController::class),
+            [$errorMessage] // Needs to be longer than 10 characters
+        );
+        $this->assertEquals('user?cfm=1', $sutReturn);
+
+        $oxSession = Registry::getSession();
+        $this->assertEquals($errorMessage, $oxSession->getVariable('arvatoAfterpayCustomerFacingMessage'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testgetNextStepOnAddressCorrection()
     {
         $class = new ReflectionClass(ArvatoOrderController::class);
         $method = $class->getMethod('_getNextStep');

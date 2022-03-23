@@ -32,7 +32,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetCaptureClientEx()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = $this->getSUT();
         $sut->getCaptureClient(0, 'SomeApiKey');
     }
@@ -53,7 +53,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetCaptureShippingClientEx01()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = $this->getSUT();
         $sut->getCaptureShippingClient(0, 1);
     }
@@ -63,7 +63,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetCaptureShippingClientEx10()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = $this->getSUT();
         $sut->getCaptureShippingClient(1, 0);
     }
@@ -94,7 +94,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetRefundClientEx()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = $this->getSUT();
         $sut->getRefundClient(0);
     }
@@ -134,7 +134,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetBaseClientEx01()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = $this->getSUT();
         $this->assertInstanceOf(
             WebServiceClient::class,
@@ -147,7 +147,7 @@ class ClientConfiguratorTest extends UnitTestCase
      */
     public function testGetBaseClientEx10()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = $this->getSUT();
         $this->assertInstanceOf(
             WebServiceClient::class,

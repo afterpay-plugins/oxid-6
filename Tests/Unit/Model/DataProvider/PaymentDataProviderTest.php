@@ -35,7 +35,7 @@ class PaymentDataProviderTest extends UnitTestCase
         $this->assertEquals(2, $sut->getPayment('afterpaydebitnote'));
         $this->assertEquals(3, $sut->getPayment('afterpayinstallment'));
 
-        $this->setExpectedException(PaymentException::class);
+        $this->expectException(PaymentException::class);
         $this->assertEquals(3, $sut->getPayment('foobar'));
     }
 

@@ -21,5 +21,5 @@ REPLACE INTO `oxcategories` (`OXID`,`OXROOTID`,`OXACTIVE`,`OXSHOPID`,`AAPPRODUCT
   ('unitoxcat', 'unitoxcat', '1', '1', 'ProductgroupByCat'),
   ('unitoxcatce', 'unitoxcatce', '1', 'oxbaseshop', 'ProductgroupByCat');
 
-INSERT INTO oxarticles2shop SELECT 1, OXMAPID, now() FROM oxarticles WHERE OXID LIKE 'unit%';
-INSERT INTO oxcategories2shop SELECT 1, OXMAPID, now() FROM oxcategories WHERE OXID LIKE 'unit%';
+INSERT IGNORE INTO oxarticles2shop SELECT 1, OXMAPID, now() FROM oxarticles WHERE OXID LIKE 'unit%';
+INSERT IGNORE INTO oxcategories2shop SELECT 1, OXMAPID, now() FROM oxcategories WHERE OXID LIKE 'unit%';
