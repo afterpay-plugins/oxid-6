@@ -7,6 +7,7 @@ $aLang = [
 
     'ORDER_OVERVIEW_APBIRTHDAY' => 'Geburtstag',
     'ORDER_OVERVIEW_APPHONE'    => 'Telefon',
+    'ORDER_OVERVIEW_APFON'      => 'Telefon',
     'ORDER_OVERVIEW_APSSN'      => 'SSN',
 
     'ORDER_AFTERPAY_ORDERED_AMOUNT'  => 'Bestellte Anzahl',
