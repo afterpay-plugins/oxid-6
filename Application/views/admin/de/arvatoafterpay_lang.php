@@ -151,4 +151,10 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayRequiresStreetNumber'        => 'Hausnummer',
     'SHOP_MODULE_arvatoAfterpayRequiresPrivacy'        => 'Datenschutz',
     'SHOP_MODULE_arvatoAfterpayRequiresTC'        => 'AGB',
+
+    'ORDER_OVERVIEW_FIRSTNAME'      => 'Vorname',
+    'ORDER_OVERVIEW_LASTNAME'       => 'Nachname',
+    'ORDER_OVERVIEW_STREET'         => 'Straße',
+    'ORDER_OVERVIEW_ZIP'            => 'PLZ',
+    'ORDER_OVERVIEW_CITY'           => 'Stadt',
 ];

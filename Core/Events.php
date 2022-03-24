@@ -276,6 +276,8 @@ class Events
 
         self::setDefaultSandboxAPIURL();
 
+        self::setDefaultRequiredFields();
+
         self::createTableArvatoAfterpayAfterpayOrder();
 
         // Check if oxcategories.AAPPRODUCTGROUP exists
@@ -334,5 +336,28 @@ class Events
     public static function setDefaultSandboxAPIURL()
     {
         Registry::getConfig()->saveShopConfVar('str','arvatoAfterpayApiSandboxUrl',' https://sandbox.afterpay.io/api/v3/',null ,'module:arvatoafterpay');
+    }
+
+    /**
+     * setDefaultRequiredFields
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    public static function setDefaultRequiredFields()
+    {
+        $payments = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
+        foreach (array_keys($payments) as $payment) {
+            $stringHelper = 'arvatoAfterpay' . $payment . 'Requires';
+            foreach (Registry::get(AfterpayIdStorage::class)->getContries() as $key => $contry) {
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'FirstName'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'LastName'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Email'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Country'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Zip'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Street'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'City'.$key,true,null ,'module:arvatoafterpay');
+            }
+        }
     }
 }

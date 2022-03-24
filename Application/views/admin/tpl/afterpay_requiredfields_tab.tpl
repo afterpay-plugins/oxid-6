@@ -41,11 +41,11 @@
 	<input type="hidden" name="fnc" value="">
 	<input type="hidden" name="language" value="[{$actlang }]">
 
-	[{foreach from=$oView->getCountries() item="country_group" key="var_group"}]
+	[{foreach from=$oView->getCountries() key="country_id" item="country_name"}]
 	<div class="groupExp">
 		<div>
 			<a href="#" onclick="_groupExp(this);return false;"
-			   class="rc"><b>[{oxmultilang ident="AFTERPAY_COUNTRY_REQUIREDFIELDS_`$country_group`"}]</b></a>
+			   class="rc"><b>[{oxmultilang ident="AFTERPAY_COUNTRY_REQUIREDFIELDS_`$country_name`"}]</b></a>
 			<dl>
 				<table cellspacing="0" cellpadding="0" border="0" id="liste">
 					<thead>
@@ -62,7 +62,7 @@
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
-								[{assign var="config_varname" value="arvatoAfterpayInvoiceRequires$FieldNames$country_group"}]
+								[{assign var="config_varname" value="arvatoAfterpayInvoiceRequires$FieldNames$country_id"}]
 								<input type="hidden" name="confbools[[{$config_varname}]] value=" 0"/>
 								<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
 									   value="1"
@@ -72,7 +72,7 @@
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
-								[{assign var="config_varname" value="arvatoAfterpayDebitRequires$FieldNames$country_group"}]
+								[{assign var="config_varname" value="arvatoAfterpayDebitRequires$FieldNames$country_id"}]
 								<input type="hidden" name="confbools[[{$config_varname}]] value=" 0"/>
 								<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
 								   value="1"
@@ -82,7 +82,7 @@
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
-								[{assign var="config_varname" value="arvatoAfterpayInstallmentsRequires$FieldNames$country_group"}]
+								[{assign var="config_varname" value="arvatoAfterpayInstallmentsRequires$FieldNames$country_id"}]
 							<input type="hidden" name="confbools[[{$config_varname}]] value=" 0"/>
 							<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
 								   value="1"

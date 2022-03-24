@@ -9,6 +9,7 @@ namespace Arvato\AfterpayModule\Application\Controller;
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
 use OxidEsales\Eshop\Application\Model\ArticleList;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -28,17 +29,17 @@ class PaymentController extends PaymentController_parent
      */
     protected $_errorMessages;
 
-    public function getPaymentList()
-    {
-        $paymentList = parent::getPaymentList();
-        if (!$this->allowAfterpayPayment()) {
-            unset($paymentList["afterpayinvoice"]);
-            unset($paymentList["afterpaydebitnote"]);
-            unset($paymentList["afterpayinstallment"]);
-        }
-
-        return $paymentList;
-    }
+//    public function getPaymentList()
+//    {
+//        $paymentList = parent::getPaymentList();
+//        if (!$this->allowAfterpayPayment()) {
+//            unset($paymentList["afterpayinvoice"]);
+//            unset($paymentList["afterpaydebitnote"]);
+//            unset($paymentList["afterpayinstallment"]);
+//        }
+//
+//        return $paymentList;
+//    }
 
     public function render()
     {
@@ -83,21 +84,50 @@ class PaymentController extends PaymentController_parent
         $smarty = Registry::getUtilsView()->getSmarty();
         $requirements = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
 
-        // SSN
-
-        $oxcmp_user = $this->getUser();
-        $alreadyHaveBirthdate = false !== strpos($oxcmp_user->oxuser__oxbirthdate->value, '19');
-        $alreadyHavePhone = $oxcmp_user->oxuser__oxfon->value || $oxcmp_user->oxuser__oxmob->value || $oxcmp_user->oxuser__oxprivfon->value;
+        /** @var User $user */
+        $user = $this->getUser();
+        $alreadyHaveBirthdate = false !== strpos($user->oxuser__oxbirthdate->value, '19');
+        $alreadyHavePhone = $user->oxuser__oxfon->value || $user->oxuser__oxmob->value || $user->oxuser__oxprivfon->value;
+        $alreadyHaveSal = $user->oxuser__oxsal->value;
+        $alreadyHaveZip = $user->oxuser__oxzip->value;
+        $alreadyHaveStreet = $user->oxuser__oxstreet->value;
+        $alreadyHaveStreetNR = $user->oxuser__oxstreetnr->value;
+        $alreadyHaveFName = $user->oxuser__oxfname->value;
+        $alreadyHaveLName = $user->oxuser__oxlname->value;
+        $alreadyHaveCity = $user->oxuser__oxcity->value;
 
         foreach (array_keys($requirements) as $payment) {
-            $requirements[$payment]['SSN'] =
-                Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresSSN');
+            $stringHelper = 'arvatoAfterpay' . $payment . 'Requires';
 
-            $requirements[$payment]['Birthdate'] =
-                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresBirthdate'));
+            $requirements[$payment]['Salutation'] =
+                (!$alreadyHaveSal && Registry::getConfig()->getConfigParam($stringHelper.'Salutation'. $user->getActiveCountry()));
+
+            $requirements[$payment]['SSN'] =
+                Registry::getConfig()->getConfigParam($stringHelper.'SSN'.$user->getActiveCountry());
+
+            $requirements[$payment]['FName'] =
+                (!$alreadyHaveFName && Registry::getConfig()->getConfigParam($stringHelper.'FirstName'. $user->getActiveCountry()));
+
+            $requirements[$payment]['LName'] =
+                (!$alreadyHaveLName && Registry::getConfig()->getConfigParam($stringHelper.'LastName'. $user->getActiveCountry()));
 
             $requirements[$payment]['Fon'] =
-                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresBirthdate'));
+                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam($stringHelper.'Phone'. $user->getActiveCountry()));
+
+            $requirements[$payment]['Birthdate'] =
+                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam($stringHelper.'Birthdate'. $user->getActiveCountry()));
+
+            $requirements[$payment]['Zip'] =
+                (!$alreadyHaveZip && Registry::getConfig()->getConfigParam($stringHelper.'Zip'. $user->getActiveCountry()));
+
+            $requirements[$payment]['Street'] =
+                (!$alreadyHaveStreet && Registry::getConfig()->getConfigParam($stringHelper.'Street'. $user->getActiveCountry()));
+
+            $requirements[$payment]['StreetNumber'] =
+                (!$alreadyHaveStreetNR && Registry::getConfig()->getConfigParam($stringHelper.'StreetNumber'. $user->getActiveCountry()));
+
+            $requirements[$payment]['City'] =
+                (!$alreadyHaveCity && Registry::getConfig()->getConfigParam($stringHelper.'City'. $user->getActiveCountry()));
         }
 
         $smarty->assign('aAfterpayRequiredFields', $requirements);
@@ -136,6 +166,18 @@ class PaymentController extends PaymentController_parent
         }
 
         $this->_sPaymentError = $error;
+
+        file_put_contents(
+            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
+            date('Y-m-d H:i:s') ." parentReturn: ". var_export($parentReturn, true) ."\n",
+            FILE_APPEND
+        );
+
+        file_put_contents(
+            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
+            date('Y-m-d H:i:s') ." error: ". var_export($error ? null : $parentReturn, true) ."\n",
+            FILE_APPEND
+        );
 
         // Everything null on error, return parent::return if everything is ok.
         return $error ? null : $parentReturn;
@@ -196,6 +238,11 @@ class PaymentController extends PaymentController_parent
      */
     protected function validateDebitNote($dynValue)
     {
+        file_put_contents(
+                    \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
+                    date('Y-m-d H:i:s') .":". print_r($dynValue, true) ."\n",
+                    FILE_APPEND
+                );
         if (
             !isset($dynValue['apdebitbankaccount'])
             || !$dynValue['apdebitbankaccount']
@@ -222,7 +269,7 @@ class PaymentController extends PaymentController_parent
         ) {
             return 1; //Complete fields correctly
         }
-        return 0;
+        return 1;
     }
 
     /**

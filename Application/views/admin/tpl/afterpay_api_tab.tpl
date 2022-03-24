@@ -223,6 +223,95 @@
 		</tr>
 		<tr>
 			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerUrl" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerUrl]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerUrl}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyDE" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyDE]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyDE}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyDEInstallment" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyDEInstallment]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyDEInstallment}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyAT" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyAT]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyAT}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyATInstallment" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyATInstallment]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyATInstallment}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyCH" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyCH]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyCH}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyNL]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyNL}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+		<tr>
+			<td class="edittext">
+				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE" }]:
+			</td>
+			<td class="edittext">
+				[{oxhasrights object=$edit readonly=$readonly}]
+			<input type="text" class="editinput" size="50" name="confstrs[arvatoAfterpayApiPartnerKeyBE]"
+				   value="[{$confstrs.arvatoAfterpayApiPartnerKeyBE}]" [{$readonly}]>
+				[{/oxhasrights}]
+			</td>
+		</tr>
+
+		<tr>
+			<td class="edittext">
 				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiRequestLogging" }]
 			</td>
 			<td class="edittext">
