@@ -167,18 +167,6 @@ class PaymentController extends PaymentController_parent
 
         $this->_sPaymentError = $error;
 
-        file_put_contents(
-            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
-            date('Y-m-d H:i:s') ." parentReturn: ". var_export($parentReturn, true) ."\n",
-            FILE_APPEND
-        );
-
-        file_put_contents(
-            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
-            date('Y-m-d H:i:s') ." error: ". var_export($error ? null : $parentReturn, true) ."\n",
-            FILE_APPEND
-        );
-
         // Everything null on error, return parent::return if everything is ok.
         return $error ? null : $parentReturn;
     }
@@ -238,11 +226,6 @@ class PaymentController extends PaymentController_parent
      */
     protected function validateDebitNote($dynValue)
     {
-        file_put_contents(
-                    \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
-                    date('Y-m-d H:i:s') .":". print_r($dynValue, true) ."\n",
-                    FILE_APPEND
-                );
         if (
             !isset($dynValue['apdebitbankaccount'])
             || !$dynValue['apdebitbankaccount']
