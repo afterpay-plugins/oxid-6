@@ -35,11 +35,6 @@ class AfterpayProfileTrackingTab extends ShopConfiguration
     {
         parent::render();
 
-        file_put_contents(
-                    \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'debug.log',
-                    date('Y-m-d H:i:s') .":". $this->getConfig()->getConfigParam('arvatoAfterpayProfileTrackingEnabled') ."\n",
-                    FILE_APPEND
-                );
         return $this->_sThisTemplate;
     }
 

@@ -22,16 +22,18 @@
                 <div style="clear:both"></div>
                 [{assign var="legal" value="AFTERPAY_LEGAL_INSTALLMENT"|oxmultilangassign}]
                 [{assign var="legal" value=$legal|replace:"##READMORELINK##":$afterpayReadMoreLink}]
+                [{assign var="legal" value=$legal|replace:"##AGBLINK##":$AGBLink}]
+                [{assign var="legal" value=$legal|replace:"##PRIVACYLINK##":$PrivacyLink}]
                 [{if !$afterpayShowSecci}]
                     [{assign var="legal" value=$legal|replace:"<!--SECCISTART-->":'<!--SECCISTART '}]
                     [{assign var="legal" value=$legal|replace:"<!--SECCIEND-->":' SECCIEND-->'}]
                 [{/if}]
                 [{$legal}]
-
-            [{elseif $payment->oxpayments__oxid->value eq "afterpaydebitnote"}]
-                [{oxmultilang ident="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"}]
-            [{elseif $payment->oxpayments__oxid->value eq "afterpayinvoice"}]
-                [{oxmultilang ident="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"}]
+            [{else}]
+                [{assign var="legal" value="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"|oxmultilangassign}]
+                [{assign var="legal" value=$legal|replace:"##AGBLINK##":$AGBLink}]
+                [{assign var="legal" value=$legal|replace:"##PRIVACYLINK##":$PrivacyLink}]
+            [{$legal}]
             [{/if}]
 
         </div>

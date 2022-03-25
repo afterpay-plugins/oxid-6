@@ -96,6 +96,7 @@
         </div>
     </div>
 [{/if}]
+
 [{if $aAfterpayRequiredFields.$sPayment.City}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_city">

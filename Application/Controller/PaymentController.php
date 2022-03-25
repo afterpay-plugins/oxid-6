@@ -29,17 +29,17 @@ class PaymentController extends PaymentController_parent
      */
     protected $_errorMessages;
 
-//    public function getPaymentList()
-//    {
-//        $paymentList = parent::getPaymentList();
-//        if (!$this->allowAfterpayPayment()) {
-//            unset($paymentList["afterpayinvoice"]);
-//            unset($paymentList["afterpaydebitnote"]);
-//            unset($paymentList["afterpayinstallment"]);
-//        }
-//
-//        return $paymentList;
-//    }
+    public function getPaymentList()
+    {
+        $paymentList = parent::getPaymentList();
+        if (!$this->allowAfterpayPayment()) {
+            unset($paymentList["afterpayinvoice"]);
+            unset($paymentList["afterpaydebitnote"]);
+            unset($paymentList["afterpayinstallment"]);
+        }
+
+        return $paymentList;
+    }
 
     public function render()
     {
@@ -252,7 +252,7 @@ class PaymentController extends PaymentController_parent
         ) {
             return 1; //Complete fields correctly
         }
-        return 1;
+        return 0;
     }
 
     /**

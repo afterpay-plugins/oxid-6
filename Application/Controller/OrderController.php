@@ -7,7 +7,9 @@
 namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -40,9 +42,76 @@ class OrderController extends OrderController_parent
         if ('afterpayinstallment' == $this->getSession()->getVariable('paymentid')) {
             $this->renderSelectedInstallmentPlan();
         }
+        $this->_setTCLink();
+        $this->_setPrivacyLink();
+
         return $this->parentRender();
     }
 
+    /**
+     * _setTCLink
+     * -----------------------------------------------------------------------------------------------------------------
+     *  set in smarty variable T&C link per payment and country
+     *
+     */
+    protected function _setTCLink()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
+        $lang = $this->getActiveLangAbbr();
+
+        if ($user->getActiveCountry() == "a7c40f6320aeb2ec2.72885259") {
+            $country = 'at';
+        } else {
+            $country = 'de';
+        }
+
+        $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
+        $AGBLink = str_replace('##PAYMENT##','invoice',$AGBLink);
+
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $smarty->assign('AGBLink', $AGBLink);
+    }
+
+    /**
+     * _setPrivacyLink
+     * -----------------------------------------------------------------------------------------------------------------
+     * set in smarty variable privacy link per payment and country
+     *
+     */
+    protected function _setPrivacyLink()
+    {
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
+        $lang = $this->getActiveLangAbbr();
+
+        $user = $this->getUser();
+
+        switch ($user->getActiveCountry()) {
+            case "a7c40f631fc920687.20179984":      //Germany
+                $country = 'de';
+                break;
+            case "a7c40f6320aeb2ec2.72885259":      //Austria
+                $country = 'at';
+                break;
+            case "a7c40f632cdd63c52.64272623":      //Netherlands
+                $country = 'nl';
+                break;
+            case "a7c40f632e04633c9.47194042":      //Belgium
+                $country = 'be';
+                break;
+            default:
+                $country = 'de';
+                $lang = 'en';
+                break;
+        }
+
+        $privacyLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['privacy']);
+
+        $smarty->assign('PrivacyLink', $privacyLink);
+
+    }
     public function getOrderStateCheckAddressConstant()
     {
         return self::ARVATO_ORDER_STATE_CHECKADDRESS;
