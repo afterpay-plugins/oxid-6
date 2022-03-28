@@ -69,6 +69,7 @@ class OrderController extends OrderController_parent
 
         $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
         $AGBLink = str_replace('##PAYMENT##','invoice',$AGBLink);
+        $AGBLink = str_replace('##HORIZON##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$AGBLink);
 
         $smarty = Registry::getUtilsView()->getSmarty();
         $smarty->assign('AGBLink', $AGBLink);
@@ -108,6 +109,7 @@ class OrderController extends OrderController_parent
         }
 
         $privacyLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['privacy']);
+        $privacyLink = str_replace('##HORIZON##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$privacyLink);
 
         $smarty->assign('PrivacyLink', $privacyLink);
 

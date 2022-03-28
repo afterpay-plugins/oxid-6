@@ -66,8 +66,8 @@
 			</td>
 			<td class="edittext">
 				[{oxhasrights object=$edit readonly=$readonly}]
-			<input type="text" class="editinput" size="40" name="confstrs[SHOP_MODULE_arvatoAfterpayProfileTrackingId]"
-				   value="[{$confstrs.SHOP_MODULE_arvatoAfterpayProfileTrackingId}]" [{$readonly}]>
+			<input type="text" class="editinput" size="40" name="confstrs[arvatoAfterpayProfileTrackingId]"
+				   value="[{$confstrs.arvatoAfterpayProfileTrackingId}]" [{$readonly}]>
 				[{/oxhasrights}]
 			</td>
 		</tr>

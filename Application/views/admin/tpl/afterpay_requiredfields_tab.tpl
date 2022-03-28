@@ -92,6 +92,16 @@
 						</tr>
 					[{/foreach}]
 				</table>
+				<td class="edittext">
+					[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayHorizonID" }]:
+				</td>
+				<td class="edittext">
+					[{oxhasrights object=$edit readonly=$readonly}]
+					[{assign var="config_varname" value="arvatoAfterpayHorizonID$country_id"}]
+				<input type="text" class="editinput" size="40" name=confstrs[[{$config_varname}]]
+					   value="[{$confstrs.$config_varname}]" [{$readonly}]>
+					[{/oxhasrights}]
+				</td>
 			</dl>
 		</div>
 	</div>

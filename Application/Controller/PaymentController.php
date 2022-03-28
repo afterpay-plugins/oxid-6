@@ -24,6 +24,7 @@ class PaymentController extends PaymentController_parent
 
     const ARVATO_ORDER_STATE_SELECTINSTALLMENT = -13337;
 
+    protected $map = [];
     /**
      * @var string[] Error messages from the AfterPay service.
      */
@@ -131,9 +132,33 @@ class PaymentController extends PaymentController_parent
         }
 
         $smarty->assign('aAfterpayRequiredFields', $requirements);
+        $this->_assignMap();
 
         // Return value solely for unit testing
         return $requirements;
+    }
+
+    /**
+     * _assignMap
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    protected function _assignMap()
+    {
+        $this->map = [
+            // dynvalue field => required field "name"
+            'apsal'         => 'Salutation',
+            'apssn'         => 'SSN',
+            'apfname'       => 'FName',
+            'aplname'       => 'LName',
+            'apbirthday'    => 'Birthdate',
+            'apfon'         => 'Fon',
+            'apstreet'      => 'Street',
+            'apstreetnr'    => 'StreetNumber',
+            'apzip'         => 'Zip',
+            'apcity'        => 'City',
+        ];
     }
 
     /**
@@ -154,6 +179,10 @@ class PaymentController extends PaymentController_parent
 
         if ($paymentId == "afterpaydebitnote") {
             $error = $this->validateDebitNote($dynValue);
+        }
+
+        if ($paymentId == "afterpayinvoice") {
+            $error = $this->validateInvoice($dynValue);
         }
 
         if ($paymentId == "afterpayinstallment") {
@@ -226,12 +255,18 @@ class PaymentController extends PaymentController_parent
      */
     protected function validateDebitNote($dynValue)
     {
+        $payment = 'Debit';
+        $requiredFields = $this->assignRequiredDynValue()[$payment];
+        if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
+            return 1;
+        }
         if (
             !isset($dynValue['apdebitbankaccount'])
             || !$dynValue['apdebitbankaccount']
         ) {
             return 1; //Complete fields correctly
         }
+
         return 0;
     }
 
@@ -244,6 +279,12 @@ class PaymentController extends PaymentController_parent
      */
     protected function validateInstallment($dynValue)
     {
+        $payment = 'Installments';
+        $requiredFields = $this->assignRequiredDynValue()[$payment];
+
+        if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
+            return 1;
+        }
         if (
             !isset($dynValue['apinstallmentbankaccount'])
             || !isset($dynValue['apinstallmentbankcode'])
@@ -349,5 +390,44 @@ class PaymentController extends PaymentController_parent
             }
         }
         return true;
+    }
+
+    /**
+     * validateInvoice
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @param mixed $dynValue
+     *
+     * @return int
+     */
+    protected function validateInvoice($dynValue)
+    {
+        $payment = 'Invoice';
+        $requiredFields = $this->assignRequiredDynValue()[$payment];
+
+        return $this->_validateRequiredFields($requiredFields,$payment,$dynValue);
+    }
+
+    /**
+     * _validateRequiredFields
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @param $requiredFields
+     * @param $payment
+     *
+     * @return int
+     */
+    protected function _validateRequiredFields($requiredFields,$payment ,$dynValue)
+    {
+        foreach ($this->map as $dynField => $requiredField) {
+            if ($requiredFields[$requiredField] &&
+                (!isset($dynValue[$dynField][$payment]) || !$dynValue[$dynField][$payment])
+            ) {
+                return 1; //Complete fields correctly
+            }
+        }
+        return 0;
     }
 }

@@ -121,10 +121,10 @@ $aLang = [
     //Menu
     'ARVATOMODULES'                     => 'Arvato Module',
     'AFTERPAY_TITLE'                    => 'Afterpay',
-    'AFTERPAY_SETTINGS'                 => 'Einstellungen',
-    'AFTERPAY_SETTINGS_TERMSPRIVACY'    => 'AGB & Datenschutz',
-    'AFTERPAY_SAVED'                    => 'Einstellungen wurden gespeichert',
-    'AFTERPAY_SAVE_BUTTON'              => 'Speichern',
+    'AFTERPAY_SETTINGS'                 => 'Settings',
+    'AFTERPAY_SETTINGS_TERMSPRIVACY'    => 'T&C & Privacy',
+    'AFTERPAY_SAVED'                    => 'Settings were saved',
+    'AFTERPAY_SAVE_BUTTON'              => 'Save',
 
     'AFTERPAY_COUNTRY_REQUIREDFIELDS_Germany'                       => 'Germany',
     'AFTERPAY_COUNTRY_REQUIREDFIELDS_Austria'                       => 'Austria',
@@ -143,4 +143,19 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayInvoiceRequiresSalutation'             => 'Invoice requires Salutation',
     'SHOP_MODULE_arvatoAfterpayDebitRequiresSalutation'               => 'Bankeinzug erfordert Salutation',
     'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresSalutation'        => 'Installments require Salutation',
+
+    'SHOP_MODULE_arvatoAfterpayHorizonID'           => 'Horizon-ID',
+    'SHOP_MODULE_arvatoAfterpayRequiresSalutation'        => 'Salutation',
+    'SHOP_MODULE_arvatoAfterpayRequiresSSN'               => 'SSN',
+    'SHOP_MODULE_arvatoAfterpayRequiresPhone'        => 'Phone',
+    'SHOP_MODULE_arvatoAfterpayRequiresBirthdate'        => 'Birthday',
+    'SHOP_MODULE_arvatoAfterpayRequiresStreetNumber'        => 'Street number',
+    'SHOP_MODULE_arvatoAfterpayRequiresPrivacy'        => 'Privacy',
+    'SHOP_MODULE_arvatoAfterpayRequiresTC'        => 'TC',
+
+    'SHOP_MODULE_arvatoAfterpayRequireFields'       => 'Fields',
+    'SHOP_MODULE_arvatoAfterpayInvoice'             => 'Invoice',
+    'SHOP_MODULE_arvatoAfterpayDebit'               => 'Debit',
+    'SHOP_MODULE_arvatoAfterpayInstallments'        => 'Installment',
+
 ];

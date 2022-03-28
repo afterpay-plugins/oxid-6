@@ -140,6 +140,8 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayDebitRequiresSalutation'               => 'Bankeinzug erfordert Anrede',
     'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresSalutation'        => 'Ratenzahlung erfordert Anrede',
 
+    'SHOP_MODULE_arvatoAfterpayHorizonID'           => 'Horizon-ID',
+
     'SHOP_MODULE_arvatoAfterpayRequireFields'       => 'Felder',
     'SHOP_MODULE_arvatoAfterpayInvoice'             => 'Rechnung',
     'SHOP_MODULE_arvatoAfterpayDebit'               => 'Bankeinzug',
