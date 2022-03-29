@@ -416,6 +416,7 @@ class PaymentController extends PaymentController_parent
      *
      * @param $requiredFields
      * @param $payment
+     * @param $dynValue
      *
      * @return int
      */
