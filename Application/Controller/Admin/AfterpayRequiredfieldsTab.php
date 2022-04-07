@@ -27,7 +27,7 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
     /**
      * render
      * -----------------------------------------------------------------------------------------------------------------
-     * render the nr404 config page
+     * render the required fields config page
      *
      * @compatibleOxidVersion 6.0
      *
