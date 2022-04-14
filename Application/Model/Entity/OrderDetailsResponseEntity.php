@@ -81,7 +81,7 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
 
     public function getRefunds()
     {
-        return $this->getData('captures') ?: [];
+        return $this->getData('refunds') ?: [];
     }
 
     /**
