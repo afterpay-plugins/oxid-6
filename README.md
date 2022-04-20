@@ -1,28 +1,28 @@
-# OXID PS ArvatoAfterPay Module
+# OXID ArvatoAfterPay Module
 
-# Version 2.0.0
+# Version 2.1.1
 
 ## Description
 
- * First standalone release of the Arvato AfterPay Module
- * Supports 3 payment types debit, invoice, installments
- * Supports handling over the oxid admin backend only
+* First standalone release of the Arvato AfterPay Module
+* Supports 3 payment types debit, invoice, installments
+* Supports handling over the oxid admin backend only
 
 ## Installation
 
 Use Composer to add the module to your project
 ```bash
-composer require arvato/afterpay
+composer require arvato/afterpay-oxid-module
 ```
 
- * Activate the module in administration area
- * clear tmp and regenerate views
- * Make sure to take care of all the settings, options and credentials described in the user manual
+* Activate the module in administration area
+* clear tmp and regenerate views
+* Make sure to take care of all the settings, options and credentials described in the user manual
 
 ## Uninstall
 
- * Deactivate the module in administration area
- * remove "arvato/afterpay" from your composer.json
+* Deactivate the module in administration area
+* remove "arvato/afterpay-oxid-module" from your composer.json
 
 Run Composer again to remove Module from vendor
 ```bash
@@ -38,3 +38,16 @@ composer update
 ### Version 2.0.0
 
 * Version for OXID6 installable via Composer
+
+### Version 2.1.0
+
+* APM-17 Add configuration options for brand and variant
+* APM-22 Support for belgium
+* APM-23 Save order on afterpay request
+
+### Version 2.1.1
+
+* APM-26 Change Sandbox URL
+* APM-28 Renaming in Composer
+* APM-33 Replace logo in module
+* APM-38 Packagist naming for Oxid plugin
