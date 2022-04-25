@@ -21,5 +21,23 @@ REPLACE INTO `oxcategories` (`OXID`,`OXROOTID`,`OXACTIVE`,`OXSHOPID`,`AAPPRODUCT
   ('unitoxcat', 'unitoxcat', '1', '1', 'ProductgroupByCat'),
   ('unitoxcatce', 'unitoxcatce', '1', 'oxbaseshop', 'ProductgroupByCat');
 
+CREATE TABLE IF NOT EXISTS `oxarticles2shop` (
+    `OXSHOPID` int(11) NOT NULL COMMENT 'Mapped shop id',
+    `OXMAPOBJECTID` bigint(20) NOT NULL COMMENT 'Mapped object id',
+    `OXTIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Timestamp',
+    UNIQUE KEY `OXMAPIDX` (`OXSHOPID`,`OXMAPOBJECTID`),
+    KEY `OXMAPOBJECTID` (`OXMAPOBJECTID`),
+    KEY `OXSHOPID` (`OXSHOPID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Mapping table for element subshop assignments';
+
+CREATE TABLE IF NOT EXISTS `oxcategories2shop` (
+    `OXSHOPID` int(11) NOT NULL COMMENT 'Mapped shop id',
+    `OXMAPOBJECTID` bigint(20) NOT NULL COMMENT 'Mapped object id',
+    `OXTIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Timestamp',
+    UNIQUE KEY `OXMAPIDX` (`OXSHOPID`,`OXMAPOBJECTID`),
+    KEY `OXMAPOBJECTID` (`OXMAPOBJECTID`),
+    KEY `OXSHOPID` (`OXSHOPID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Mapping table for element subshop assignments';
+
 INSERT IGNORE INTO oxarticles2shop SELECT 1, OXMAPID, now() FROM oxarticles WHERE OXID LIKE 'unit%';
 INSERT IGNORE INTO oxcategories2shop SELECT 1, OXMAPID, now() FROM oxcategories WHERE OXID LIKE 'unit%';
