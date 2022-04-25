@@ -4,6 +4,7 @@ namespace Arvato\AfterpayModule\Tests\Unit\Controller;
 
 use Arvato\AfterpayModule\Application\Controller\OrderController as ArvatoOrderController;
 use OxidEsales\Eshop\Application\Controller\OrderController;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -193,11 +194,20 @@ class OrderTest extends UnitTestCase
      */
     protected function getSUTNoInstallment($oxSession = null)
     {
+        $user = $this->getMockBuilder(User::class)
+            ->setMethods(['getActiveCountry'])
+            ->getMock();
+        $user->expects($this->atLeastOnce())
+            ->method('getActiveCountry')
+            ->will($this->returnValue('a7c40f6320aeb2ec2.72885259'));
+
         $sut = $this->getMockBuilder(OrderController::class)
-                    ->setMethods(['parentRender', 'getSession'])
+                    ->setMethods(['parentRender', 'getSession', 'getUser'])
                     ->getMock();
         $sut->method('parentRender')
             ->will($this->returnValue('parent_render_called.tpl'));
+        $sut->method('getUser')
+            ->will($this->returnValue($user));
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));
@@ -241,16 +251,26 @@ class OrderTest extends UnitTestCase
      */
     protected function getSUTInstallment($oxSession = null)
     {
+        $user = $this->getMockBuilder(User::class)
+                     ->setMethods(['getActiveCountry'])
+                     ->getMock();
+        $user->expects($this->atLeastOnce())
+             ->method('getActiveCountry')
+             ->will($this->returnValue('a7c40f6320aeb2ec2.72885259'));
+
         $sut = $this->getMockBuilder(OrderController::class)
                     ->setMethods([
                         'parentRender',
                         'getSession',
                         'updateSelectedInstallmentPlanProfileIdInSession',
                         'getAvailableInstallmentPlans',
+                        'getUser'
                     ])
                     ->getMock();
         $sut->method('parentRender')
             ->will($this->returnValue('parent_render_called.tpl'));
+        $sut->method('getUser')
+            ->will($this->returnValue($user));
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));

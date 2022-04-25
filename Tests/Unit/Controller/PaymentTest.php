@@ -6,6 +6,7 @@ use Arvato\AfterpayModule\Application\Controller\PaymentController as ArvatoPaym
 use Arvato\AfterpayModule\Application\Model\Article;
 use OxidEsales\Eshop\Application\Controller\PaymentController;
 use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
@@ -167,8 +168,14 @@ class PaymentTest extends UnitTestCase
                     ->setMethods(['getUser'])
                     ->getMock();
 
+        $user = $this->getMockBuilder(User::class)
+                     ->setMethods(['getActiveCountry'])
+                     ->getMock();
+        $user->expects($this->atLeastOnce())
+             ->method('getActiveCountry')
+             ->will($this->returnValue('a7c40f6320aeb2ec2.72885259'));
         $sut->method('getUser')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue($user));
 
         $this->assertTrue((bool) $sut->assignRequiredDynValue());
     }
