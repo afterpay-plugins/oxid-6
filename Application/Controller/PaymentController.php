@@ -12,6 +12,7 @@ use OxidEsales\Eshop\Application\Model\ArticleList;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 
 /**
  * Class PaymentController : Extends payment controller with AfterPay validation call.
@@ -430,5 +431,28 @@ class PaymentController extends PaymentController_parent
             }
         }
         return 0;
+    }
+
+    /**
+     * getActiveLocale
+     * ----------------------------------------------------------------------------------------------------------------
+     * gets the locale for the current locale (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getActiveLocale()
+    {
+        $user = $this->getUser();
+        $locale = "de_de";
+        if ($user) {
+            $oLang = \OxidEsales\Eshop\Core\Registry::getLang();
+            $sLang = $oLang->getLanguageAbbr($oLang->getTplLanguage());
+            $sql = "SELECT oxisoalpha2 FROM oxcountry where oxid ='" . $user->oxuser__oxcountryid->value . "'";
+            $countryiso = DatabaseProvider::getDb()->getOne($sql);
+
+            $locale = strtolower($sLang . "_" . $countryiso);
+        }
+
+        return $locale;
     }
 }

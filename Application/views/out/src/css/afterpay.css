@@ -42,6 +42,14 @@ body.cl-payment form#payment dd dl dd {
     padding: 10px
 }
 
+.AP_Info {
+    margin: 20px 0;
+}
+
+.AP_Info a {
+    text-decoration: underline;
+}
+
 .AP_InstallmentOption {
     border: 2px solid #c9c9c9;
     background: #f8f8f8;
