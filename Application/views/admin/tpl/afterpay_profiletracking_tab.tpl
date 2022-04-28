@@ -2,21 +2,14 @@
 
 [{if $readonly}]
 	[{assign var="readonly" value="readonly disabled"}]
-	[{else}]
+[{else}]
 	[{assign var="readonly" value=""}]
-	[{/if}]
-
-<br/>
-[{if $readonly}]
-	[{assign var="readonly" value="readonly disabled"}]
-	[{else}]
-	[{assign var="readonly" value=""}]
-	[{/if}]
+[{/if}]
 
 <form name="myedit" id="myedit" action="[{$oViewConf->getSelfLink() }]" method="post"
 	  style="padding: 0px;margin: 0px;height:0px;">
-	[{block name='AFTERPAY_CONFIG_FORM'}]
-	[{$oViewConf->getHiddenSid()}]
+[{block name='AFTERPAY_CONFIG_FORM'}]
+[{$oViewConf->getHiddenSid()}]
 <input type="hidden" name="cl" value="AfterpayProfileTrackingTab">
 <input type="hidden" name="fnc" value="">
 <input type="hidden" name="oxid" value="[{$oxid}]">
@@ -46,6 +39,7 @@
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled_optional"}]
 					</option>
 				</select>
+				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayProfileTrackingEnabled'}]
 			</td>
 		</tr>
 
@@ -58,6 +52,7 @@
 			<input type="text" class="editinput" size="40" name="confstrs[arvatoAfterpayProfileTrackingUrl]"
 				   value="[{$confstrs.arvatoAfterpayProfileTrackingUrl}]" [{$readonly}]>
 				[{/oxhasrights}]
+				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayProfileTrackingUrl'}]
 			</td>
 		</tr>
 		<tr>
@@ -69,6 +64,7 @@
 			<input type="text" class="editinput" size="40" name="confstrs[arvatoAfterpayProfileTrackingId]"
 				   value="[{$confstrs.arvatoAfterpayProfileTrackingId}]" [{$readonly}]>
 				[{/oxhasrights}]
+				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayProfileTrackingId'}]
 			</td>
 		</tr>
 

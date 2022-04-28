@@ -2,16 +2,9 @@
 
 [{if $readonly}]
 	[{assign var="readonly" value="readonly disabled"}]
-	[{else}]
+[{else}]
 	[{assign var="readonly" value=""}]
-	[{/if}]
-
-<br/>
-[{if $readonly}]
-	[{assign var="readonly" value="readonly disabled"}]
-	[{else}]
-	[{assign var="readonly" value=""}]
-	[{/if}]
+[{/if}]
 
 <form name="myedit" id="myedit" action="[{$oViewConf->getSelfLink() }]" method="post"
 	  style="padding: 0px;margin: 0px;height:0px;">
@@ -28,49 +21,54 @@
 		</colgroup>
 		<tr>
 			<td class="edittext">
-				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiDefaultShippingCompany" }]:
+				<label for="arvatoAfterpayApiDefaultShippingCompany">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiDefaultShippingCompany" }]</label>
 			</td>
 			<td class="edittext">
 				<input type="text" class="editinput" size="40" name="confstrs[arvatoAfterpayApiDefaultShippingCompany]"
-					   value="[{$confstrs.arvatoAfterpayApiDefaultShippingCompany}]" [{$readonly}]>
+					   value="[{$confstrs.arvatoAfterpayApiDefaultShippingCompany}]" [{$readonly}]
+					   id="arvatoAfterpayApiDefaultShippingCompany">
+				[{oxinputhelp ident="HELP_SHOP_MODULE_arvatoAfterpayApiDefaultShippingCompany"}]
 			</td>
 		</tr>
 		<tr>
 			<td class="edittext">
-				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription" }]:
+				<label for="arvatoAfterpayApiDefaultRefundDescription">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription" }]</label>
 			</td>
 			<td class="edittext">
-				<input type="text" class="editinput" size="40"
+				<input type="text" class="editinput" size="40" id="arvatoAfterpayApiDefaultRefundDescription"
 					   name="confstrs[arvatoAfterpayApiDefaultRefundDescription]"
 					   value="[{$confstrs.arvatoAfterpayApiDefaultRefundDescription}]" [{$readonly}]>
+				[{oxinputhelp ident="HELP_SHOP_MODULE_arvatoAfterpayApiDefaultRefundDescription"}]
 			</td>
 		</tr>
 		<tr>
 			<td class="edittext">
-				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayRiskChannelType" }]:
+				<label for="arvatoAfterpayRiskChannelType">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayRiskChannelType" }]</label>
 			</td>
 			<td class="edittext">
 				[{oxhasrights object=$edit readonly=$readonly}]
 			<input type="text" class="editinput" size="40" name="confstrs[arvatoAfterpayRiskChannelType]"
-				   value="[{$confstrs.arvatoAfterpayRiskChannelType}]" [{$readonly}]>
+				   value="[{$confstrs.arvatoAfterpayRiskChannelType}]" [{$readonly}] id="arvatoAfterpayRiskChannelType">
 				[{/oxhasrights}]
+				[{oxinputhelp ident="HELP_SHOP_MODULE_arvatoAfterpayRiskChannelType"}]
 			</td>
 		</tr>
 		<tr>
 			<td class="edittext">
-				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayRiskDeliveryType" }]:
+				<label for="arvatoAfterpayRiskDeliveryType">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayRiskDeliveryType" }]</label>
 			</td>
 			<td class="edittext">
 				[{oxhasrights object=$edit readonly=$readonly}]
 			<input type="text" class="editinput" size="40" name="confstrs[arvatoAfterpayRiskDeliveryType]"
-				   value="[{$confstrs.arvatoAfterpayRiskDeliveryType}]" [{$readonly}]>
+				   value="[{$confstrs.arvatoAfterpayRiskDeliveryType}]" [{$readonly}] id="arvatoAfterpayRiskDeliveryType">
 				[{/oxhasrights}]
+				[{oxinputhelp ident="HELP_SHOP_MODULE_arvatoAfterpayRiskDeliveryType"}]
 			</td>
 		</tr>
 
 		<tr>
 			<td class="edittext">
-				<label>[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayManufacturerInDescription" }]: </label>
+				<label for="arvatoAfterpayManufacturerInDescription">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayManufacturerInDescription" }]</label>
 			</td>
 			<td class="edittext">
 				<select name="confselects[arvatoAfterpayManufacturerInDescription]" id="arvatoAfterpayManufacturerInDescription" [{$readonly}]>
@@ -87,12 +85,13 @@
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayManufacturerInDescription_vendor"}]
 					</option>
 				</select>
+				[{oxinputhelp ident="HELP_SHOP_MODULE_arvatoAfterpayManufacturerInDescription"}]
 			</td>
 		</tr>
 
 		<tr>
 			<td class="edittext">
-				<label>[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayVariantInDescription" }]: </label>
+				<label for="arvatoAfterpayVariantInDescription">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayVariantInDescription" }]</label>
 			</td>
 			<td class="edittext">
 				<select name="confselects[arvatoAfterpayVariantInDescription]" id="arvatoAfterpayVariantInDescription" [{$readonly}]>
@@ -105,36 +104,29 @@
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayVariantInDescription_no"}]
 					</option>
 				</select>
+				[{oxinputhelp ident="HELP_SHOP_MODULE_arvatoAfterpayVariantInDescription"}]
 			</td>
 		</tr>
 
 		<tr>
 			<td class="edittext">
-				<label>[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo" }]: </label>
+				<label for="arvatoAfterpayLogo">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo" }]: </label>
 			</td>
 			<td class="edittext">
 				<select name="confselects[arvatoAfterpayLogo]" id="arvatoAfterpayLogo" [{$readonly}]>
-					<option value="Checkout"
-							[{if $confselects.arvatoAfterpayLogo == "Checkout"}] selected [{/if}]>
+					<option value="Checkout" [{if $confselects.arvatoAfterpayLogo == "Checkout"}]selected[{/if}]>
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo_Checkout"}]
 					</option>
-					<option value=""
-							[{if $confselects.arvatoAfterpayLogo == ""}] selected [{/if}]>
+					<option value="" [{if $confselects.arvatoAfterpayLogo == ""}]selected[{/if}]>
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo_"}]
 					</option>
-					<option value="Black"
-							[{if $confselects.arvatoAfterpayLogo == "Black"}]
-							selected [{/if}]>
+					<option value="Black" [{if $confselects.arvatoAfterpayLogo == "Black"}]selected[{/if}]>
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo_Black"}]
 					</option>
-					<option value="White""
-							[{if $confselects.arvatoAfterpayLogo == "White"}]
-							selected [{/if}]>
+					<option value="White" [{if $confselects.arvatoAfterpayLogo == "White"}]selected[{/if}]>
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo_White"}]
 					</option>
-					<option value="Grey""
-							[{if $confselects.arvatoAfterpayLogo == "Grey"}]
-							selected [{/if}]>
+					<option value="Grey" [{if $confselects.arvatoAfterpayLogo == "Grey"}]selected[{/if}]>
 						[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayLogo_Grey"}]
 					</option>
 				</select>
@@ -143,10 +135,12 @@
 		</tr>
 		<tr>
 			<td class="edittext" style="vertical-align: text-top">
-				[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayExcludedArticleNr" }]:
+				<label for="arvatoAfterpayExcludedArticleNr">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayExcludedArticleNr" }]</label>
 			</td>
 			<td class="edittext">
-				<textarea style="text-align: left; vertical-align: text-top;height: 300px" type="text" class="edittext" name="confstrs[arvatoAfterpayExcludedArticleNr]" [{$readonly}]>[{$confstrs.arvatoAfterpayExcludedArticleNr}]</textarea>
+				<textarea style="text-align: left; vertical-align: text-top;height: 300px" type="text" class="edittext" name="confstrs[arvatoAfterpayExcludedArticleNr]"
+						  id="arvatoAfterpayExcludedArticleNr"
+						[{$readonly}]>[{$confstrs.arvatoAfterpayExcludedArticleNr}]</textarea>
 				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayExcludedArticleNr'}]
 			</td>
 		</tr>

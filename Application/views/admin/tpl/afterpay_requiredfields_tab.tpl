@@ -2,9 +2,9 @@
 <br/>
 [{if $readonly}]
 	[{assign var="readonly" value="readonly disabled"}]
-	[{else}]
+[{else}]
 	[{assign var="readonly" value=""}]
-	[{/if}]
+[{/if}]
 <style>
     td, th {
         padding: 3px 8px;
@@ -41,13 +41,16 @@
 	<input type="hidden" name="fnc" value="">
 	<input type="hidden" name="language" value="[{$actlang }]">
 
+	[{oxmultilang ident='SHOP_MODULE_arvatoAfterpayRequireFieldsExplanation'}]
+	<br><br>
+
 	[{foreach from=$oView->getCountries() key="country_id" item="country_name"}]
 	<div class="groupExp">
 		<div>
 			<a href="#" onclick="_groupExp(this);return false;"
 			   class="rc"><b>[{oxmultilang ident="AFTERPAY_COUNTRY_REQUIREDFIELDS_`$country_name`"}]</b></a>
 			<dl>
-				<table cellspacing="0" cellpadding="0" border="0" id="liste">
+				<table cellspacing="0" cellpadding="0" border="0">
 					<thead>
 						<tr>
 							<th>[{oxmultilang ident='SHOP_MODULE_arvatoAfterpayRequireFields'}]</th>
@@ -63,45 +66,45 @@
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayInvoiceRequires$FieldNames$country_id"}]
-								<input type="hidden" name="confbools[[{$config_varname}]] value=" 0"/>
+								<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
 								<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
-									   value="1"
-									   [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+									   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
 								[{/oxhasrights}]
 							</td>
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayDebitRequires$FieldNames$country_id"}]
-								<input type="hidden" name="confbools[[{$config_varname}]] value=" 0"/>
+								<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
 								<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
-								   value="1"
-								   [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
 								[{/oxhasrights}]
 							</td>
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayInstallmentsRequires$FieldNames$country_id"}]
-							<input type="hidden" name="confbools[[{$config_varname}]] value=" 0"/>
+							<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
 							<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
-								   value="1"
-								   [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
 								[{/oxhasrights}]
 							</td>
 						</tr>
 					[{/foreach}]
 				</table>
-				<td class="edittext">
-					[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayHorizonID" }]:
-				</td>
-				<td class="edittext">
-					[{oxhasrights object=$edit readonly=$readonly}]
-					[{assign var="config_varname" value="arvatoAfterpayHorizonID$country_id"}]
-				<input type="text" class="editinput" size="40" name=confstrs[[{$config_varname}]]
-					   value="[{$confstrs.$config_varname}]" [{$readonly}]>
-					[{/oxhasrights}]
-				</td>
+				<table>
+					<td class="edittext">
+						<label for="[{$config_varname}]">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayHorizonID" }]</label>
+					</td>
+					<td class="edittext">
+						[{oxhasrights object=$edit readonly=$readonly}]
+						[{assign var="config_varname" value="arvatoAfterpayHorizonID$country_id"}]
+					<input type="text" class="editinput" size="40" name=confstrs[[{$config_varname}]]
+						   value="[{$confstrs.$config_varname}]" [{$readonly}] id="[{$config_varname}]">
+						[{/oxhasrights}]
+						[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayHorizonID'}]
+					</td>
+				</table>
 			</dl>
 		</div>
 	</div>
