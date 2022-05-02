@@ -12,6 +12,7 @@ use OxidEsales\Eshop\Application\Model\BasketItem;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\DbMetaDataHandler;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Exception\OutOfStockException;
@@ -35,6 +36,13 @@ class AuthorizePaymentDataProviderTest extends UnitTestCase
             $query = trim($query);
             if ($query) {
                 DatabaseProvider::getDb()->execute($query);
+            }
+        }
+
+        foreach (['oxarticles', 'oxcategories'] as $table) {
+            if (!in_array('OXMAPID', array_keys(Registry::get(DbMetaDataHandler::class)->getFields($table)), true)) {
+                // No auto_increment here: not necessary for our tests
+                DatabaseProvider::getDb()->execute("ALTER TABLE $table ADD COLUMN OXMAPID BIGINT NOT NULL");
             }
         }
     }
