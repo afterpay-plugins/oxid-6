@@ -36,6 +36,7 @@ class AuthorizePaymentDataProviderTest extends UnitTestCase
             if (!in_array('OXMAPID', array_keys(Registry::get(DbMetaDataHandler::class)->getFields($table)), true)) {
                 // No auto_increment here: not necessary for our tests
                 DatabaseProvider::getDb()->execute("ALTER TABLE $table ADD COLUMN OXMAPID BIGINT NOT NULL");
+                oxNew(DbMetaDataHandler::class)->updateViews([$table]);
             }
         }
 
