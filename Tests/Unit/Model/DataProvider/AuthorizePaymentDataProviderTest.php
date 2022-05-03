@@ -31,18 +31,19 @@ class AuthorizePaymentDataProviderTest extends UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/dataproviders_setUp.sql');
-        foreach (explode(';', $sql) as $query) {
-            $query = trim($query);
-            if ($query) {
-                DatabaseProvider::getDb()->execute($query);
-            }
-        }
 
         foreach (['oxarticles', 'oxcategories'] as $table) {
             if (!in_array('OXMAPID', array_keys(Registry::get(DbMetaDataHandler::class)->getFields($table)), true)) {
                 // No auto_increment here: not necessary for our tests
                 DatabaseProvider::getDb()->execute("ALTER TABLE $table ADD COLUMN OXMAPID BIGINT NOT NULL");
+            }
+        }
+
+        $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/dataproviders_setUp.sql');
+        foreach (explode(';', $sql) as $query) {
+            $query = trim($query);
+            if ($query) {
+                DatabaseProvider::getDb()->execute($query);
             }
         }
     }
