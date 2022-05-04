@@ -68,6 +68,12 @@ class PaymentController extends PaymentController_parent
 
     public function getTrackingOption()
     {
+
+        $possibleStates = ['inactive', 'mandatory', 'optional'];
+        if (!in_array(Registry::getConfig()->getConfigParam( 'arvatoAfterpayProfileTrackingEnabled' ), $possibleStates)) {
+            return 'inactive';
+        }
+
         return Registry::getConfig()->getConfigParam( 'arvatoAfterpayProfileTrackingEnabled' );
     }
 
