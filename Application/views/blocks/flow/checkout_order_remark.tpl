@@ -30,10 +30,17 @@
                 [{/if}]
                 [{$legal}]
             [{else}]
+                [{assign var="oConfig" value=$oViewConf->getConfig()}]
+                [{assign var="configString" value='arvatoAfterpayInvoiceRequiresTC'|cat:$oxcmp_user->oxuser__oxcountryid->value}]
+                [{assign var="agbEnnabled" value=$oConfig->getConfigParam($configString)}]
+
+                [{if $agbEnnabled}]
+                    <input id="checkAfterPayAgbTop" type="checkbox" name="ord_afterpay_agb" value="1">
+                [{/if}]
                 [{assign var="legal" value="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"|oxmultilangassign}]
                 [{assign var="legal" value=$legal|replace:"##AGBLINK##":$AGBLink}]
                 [{assign var="legal" value=$legal|replace:"##PRIVACYLINK##":$PrivacyLink}]
-            [{$legal}]
+                [{$legal}]
             [{/if}]
 
         </div>

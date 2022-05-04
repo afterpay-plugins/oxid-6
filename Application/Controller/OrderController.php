@@ -295,9 +295,14 @@ class OrderController extends OrderController_parent
     {
         $paymentId = $this->getSession()->getVariable('paymentid');
         $isAfterpay = (false !== strpos($paymentId, 'afterpay'));
+        $ouser = $this->getUser();
+        $configString = "arvatoAfterpayInvoiceRequiresTC" . $ouser->oxuser__oxcountryid->value;
+        $agb = Registry::getConfig()->getConfigParam($configString);
 
-        if ($isAfterpay && !$this->getRequestParameter('ord_afterpay_agb')) {
-            return false;
+        if ($agb) {
+            if ($isAfterpay && !$this->getRequestParameter('ord_afterpay_agb')) {
+                return false;
+            }
         }
 
         return parent::_validateTermsAndConditions();

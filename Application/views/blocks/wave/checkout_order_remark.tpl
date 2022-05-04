@@ -16,22 +16,31 @@
 
             [{if $payment->oxpayments__oxid->value eq "afterpayinstallment"}]
 
-                <div>
+            <div>
                     [{include file="wave/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId finalOrderStep=true}]
-                </div>
-                <div style="clear:both"></div>
+            </div>
+            <div style="clear:both"></div>
                 [{assign var="legal" value="AFTERPAY_LEGAL_INSTALLMENT"|oxmultilangassign}]
                 [{assign var="legal" value=$legal|replace:"##READMORELINK##":$afterpayReadMoreLink}]
+                [{assign var="legal" value=$legal|replace:"##AGBLINK##":$AGBLink}]
+                [{assign var="legal" value=$legal|replace:"##PRIVACYLINK##":$PrivacyLink}]
                 [{if !$afterpayShowSecci}]
                     [{assign var="legal" value=$legal|replace:"<!--SECCISTART-->":'<!--SECCISTART '}]
                     [{assign var="legal" value=$legal|replace:"<!--SECCIEND-->":' SECCIEND-->'}]
                 [{/if}]
                 [{$legal}]
+            [{else}]
+                [{assign var="oConfig" value=$oViewConf->getConfig()}]
+                [{assign var="configString" value='arvatoAfterpayInvoiceRequiresTC'|cat:$oxcmp_user->oxuser__oxcountryid->value}]
+                [{assign var="agbEnnabled" value=$oConfig->getConfigParam($configString)}]
 
-            [{elseif $payment->oxpayments__oxid->value eq "afterpaydebitnote"}]
-                [{oxmultilang ident="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"}]
-            [{elseif $payment->oxpayments__oxid->value eq "afterpayinvoice"}]
-                [{oxmultilang ident="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"}]
+                [{if $agbEnnabled}]
+                    <input id="checkAfterPayAgbTop" type="checkbox" name="ord_afterpay_agb" value="1">
+                [{/if}]
+                [{assign var="legal" value="AFTERPAY_LEGAL_INVOICE_DEBITNOTE"|oxmultilangassign}]
+                [{assign var="legal" value=$legal|replace:"##AGBLINK##":$AGBLink}]
+                [{assign var="legal" value=$legal|replace:"##PRIVACYLINK##":$PrivacyLink}]
+                [{$legal}]
             [{/if}]
 
         </div>
