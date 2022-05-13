@@ -22,33 +22,37 @@
             [{/if}]
         [{/if}]
 
+        [{if $trackingvalue != "inactive"}]
+            [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
+        [{/if}]
+
         [{if $aAvailableAfterpayInstallmentPlans}]
+            <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
+                <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
 
-            <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
+                [{include file="flow/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
 
-            [{include file="flow/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
+                <div class="clearfix"></div>
 
-            <div class="clearfix"></div>
-
-            <div class="form-group">
-                <label class="control-label col-lg-3" for="afterpayinstallment_1">
-                    *IBAN
-                </label>
-                <div class="col-lg-9">
-                    <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="">
+                <div class="form-group">
+                    <label class="control-label col-lg-3" for="afterpayinstallment_1">
+                        *IBAN
+                    </label>
+                    <div class="col-lg-9">
+                        <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-lg-3" for="afterpayinstallment_2">
-                    *BIC
-                </label>
-                <div class="col-lg-9">
-                    <input id="afterpayinstallment_2" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankcode]" value="">
+                <div class="form-group">
+                    <label class="control-label col-lg-3" for="afterpayinstallment_2">
+                        *BIC
+                    </label>
+                    <div class="col-lg-9">
+                        <input id="afterpayinstallment_2" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankcode]" value="">
+                    </div>
                 </div>
+
+                [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Installments"}]
             </div>
-
-            [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Installments"}]
-
 
             <div style="clear:both"></div>
 
