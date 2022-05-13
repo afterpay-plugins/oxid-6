@@ -86,11 +86,11 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL'            => 'Partner Test API Schlüssel NL',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE'            => 'Partner Test API Schlüssel BE',
 
-    'HELP_SHOP_MODULE_arvatoAfterpayApiMode'             => 'API-Modus: Legt fest, welche der drei Sets an Einstellungen (Live, Sandbox, Partner Test) für Afterpay-API-Requests verwendet werden soll',
-    'HELP_SHOP_MODULE_arvatoAfterpayApiRequestLogging'   => 'Aktiviert Logging für API Requests und Response. Das Log befindet sich im OXID-Log-Ordner unter dem Namen: AFTERPAY.log',
-    'HELP_SHOP_MODULE_arvatoAfterpayApiUrl'              => 'Diese URL wird für Requests an die Afterpay-API verwendet',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiMode'             => 'API-Modus: Legt fest, welche der drei Sets an Einstellungen (Live, Sandbox, Partner Test) für Afterpay-API-Requests verwendet werden soll.',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiRequestLogging'   => 'Aktiviert Logging für API-Requests und Response. Das Log befindet sich im OXID-Log-Ordner unter dem Namen: AFTERPAY.log',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiUrl'              => 'Diese URL wird für Requests an die Afterpay-API verwendet.',
     'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDE'            => 'Dieser API-Key wird für Anfragen für Bestellungen im jeweiligen Land verwendet.',
-    'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDEInstallment' => 'Dieser API-Key wird für Anfragen für Ratenzahlungs-Bestellungen im jeweiligen Land verwendet',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDEInstallment' => 'Dieser API-Key wird für Anfragen für Ratenzahlungs-Bestellungen im jeweiligen Land verwendet.',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'Api Anfragenprotokollierung',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',

@@ -87,11 +87,11 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL'            => 'Partner Test API key NL',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE'            => 'Partner Test API key BE',
 
-    'HELP_SHOP_MODULE_arvatoAfterpayApiMode'             => 'API mode: Defines which of the three sets of settings (live, sandbox, partner test) should be used when making API requests',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiMode'             => 'API mode: Defines which of the three sets of settings (live, sandbox, partner test) should be used when making API requests.',
     'HELP_SHOP_MODULE_arvatoAfterpayApiRequestLogging'   => 'Enables logging of request and response. Log can be found in the OXID logging directory: AFTERPAY.log',
-    'HELP_SHOP_MODULE_arvatoAfterpayApiUrl'              => 'Sets the URL for the API',
-    'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDE'            => 'Sets the API key to be used for the respective country',
-    'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDEInstallment' => 'Sets the API key to be used for the respective country (only for installments)',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiUrl'              => 'Sets the URL for the API.',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDE'            => 'Sets the API key to be used for the respective country.',
+    'HELP_SHOP_MODULE_arvatoAfterpayApiKeyDEInstallment' => 'Sets the API key to be used for the respective country (only for installments).',
 
     'SHOP_MODULE_arvatoAfterpayApiRequestLogging'      => 'API request logging',
     'arvato_afterpay_controllers_admin_order_afterpay' => 'AfterPay',
