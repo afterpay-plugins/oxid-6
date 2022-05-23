@@ -8,7 +8,7 @@ $sLangName = 'Deutsch';
 
 $aLang = [
     'charset' => 'UTF-8',
-
+    'ORDER_OVERVIEW_SALUTATION'                          => 'Anrede',
     'ORDER_OVERVIEW_APBIRTHDAY'                          => 'Geburtstag (tt.mm.jjjj)',
     'ORDER_OVERVIEW_APPHONE'                             => 'Telefon',
     'ORDER_OVERVIEW_APSSN'                               => 'SSN',

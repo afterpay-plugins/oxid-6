@@ -1,10 +1,10 @@
-[{if $aAfterpayRequiredFields.$sPayment.Salutation}]
+w[{if $aAfterpayRequiredFields.$sPayment.Salutation}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_sal">
-            * [{oxmultilang ident="SHOP_MODULE_arvatoAfterpayRequiresSalutation"}]
+            * [{oxmultilang ident="TITLE"}]
         </label>
         <div class="col-lg-9">
-            <input id="afterpay[{$sPayment}]_sal" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apsal][[{$sPayment}]]" value="">
+            [{include file="form/fieldset/salutation.tpl" id="afterpay`$sPayment`_sal" name="dynvalue[apsal][`$sPayment`]" class="form-control selectpicker" value="" }]
         </div>
     </div>
     [{/if}]
@@ -23,7 +23,7 @@
 [{if $aAfterpayRequiredFields.$sPayment.FName}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_fname">
-            * [{oxmultilang ident="ORDER_OVERVIEW_FIRSTNAME"}]
+            * [{oxmultilang ident="FIRST_NAME"}]
         </label>
         <div class="col-lg-9">
             <input id="afterpay[{$sPayment}]_fname" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apfname][[{$sPayment}]]" value="">
@@ -34,7 +34,7 @@
 [{if $aAfterpayRequiredFields.$sPayment.LName}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_lname">
-            * [{oxmultilang ident="ORDER_OVERVIEW_LASTNAME"}]
+            * [{oxmultilang ident="LAST_NAME"}]
         </label>
         <div class="col-lg-9">
             <input id="afterpay[{$sPayment}]_lname" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[aplname][[{$sPayment}]]" value="">
@@ -64,45 +64,29 @@
     </div>
 [{/if}]
 
-[{if $aAfterpayRequiredFields.$sPayment.Street}]
+[{if $aAfterpayRequiredFields.$sPayment.Street or $aAfterpayRequiredFields.$sPayment.StreetNumber}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_street">
-            * [{oxmultilang ident="ORDER_OVERVIEW_STREET"}]
+            * [{oxmultilang ident="STREET_AND_STREETNO"}]
         </label>
-        <div class="col-lg-9">
+        <div class="col-xs-8 col-lg-6">
             <input id="afterpay[{$sPayment}]_street" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apstreet][[{$sPayment}]]" value="">
         </div>
-    </div>
-[{/if}]
-
-[{if $aAfterpayRequiredFields.$sPayment.StreetNumber}]
-    <div class="form-group">
-        <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_streetnr">
-            * [{oxmultilang ident="SHOP_MODULE_arvatoAfterpayRequiresStreetNumber"}]
-        </label>
-        <div class="col-lg-9">
+        <div class="col-xs-4 col-lg-3">
             <input id="afterpay[{$sPayment}]_streetnr" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apstreetnr][[{$sPayment}]]" value="">
         </div>
     </div>
 [{/if}]
 
-[{if $aAfterpayRequiredFields.$sPayment.Zip}]
+[{if $aAfterpayRequiredFields.$sPayment.Zip or $aAfterpayRequiredFields.$sPayment.City}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_ssn">
-            * [{oxmultilang ident="ORDER_OVERVIEW_ZIP"}]
+            * [{oxmultilang ident="POSTAL_CODE_AND_CITY"}]
         </label>
-        <div class="col-lg-9">
+        <div class="col-xs-5 col-lg-3">
             <input id="afterpay[{$sPayment}]_zip" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apzip][[{$sPayment}]]" value="">
         </div>
-    </div>
-[{/if}]
-
-[{if $aAfterpayRequiredFields.$sPayment.City}]
-    <div class="form-group">
-        <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_city">
-            * [{oxmultilang ident="ORDER_OVERVIEW_CITY"}]
-        </label>
-        <div class="col-lg-9">
+        <div class="col-xs-7 col-lg-6">
             <input id="afterpay[{$sPayment}]_city" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apcity][[{$sPayment}]]" value="">
         </div>
     </div>
