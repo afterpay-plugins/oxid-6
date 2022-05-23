@@ -291,7 +291,7 @@ class OrderController extends OrderController_parent
      * @return bool
      * @phpcs:disable
      */
-    public function _validateTermsAndConditions()
+    protected function _validateTermsAndConditions()
     {
         $paymentId = $this->getSession()->getVariable('paymentid');
         $isAfterpay = (false !== strpos($paymentId, 'afterpay'));
