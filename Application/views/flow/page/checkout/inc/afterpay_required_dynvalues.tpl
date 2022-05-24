@@ -80,7 +80,7 @@ w[{if $aAfterpayRequiredFields.$sPayment.Salutation}]
 
 [{if $aAfterpayRequiredFields.$sPayment.Zip or $aAfterpayRequiredFields.$sPayment.City}]
     <div class="form-group">
-        <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_ssn">
+        <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_city">
             * [{oxmultilang ident="POSTAL_CODE_AND_CITY"}]
         </label>
         <div class="col-xs-5 col-lg-3">
