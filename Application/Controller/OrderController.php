@@ -61,7 +61,8 @@ class OrderController extends OrderController_parent
         $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
         $lang = $this->getActiveLangAbbr();
 
-        if ($user->getActiveCountry() == "a7c40f6320aeb2ec2.72885259") {
+        // if Austria
+        if ($user->oxuser__oxcountryid->value == "a7c40f6320aeb2ec2.72885259") {
             $country = 'at';
         } else {
             $country = 'de';
@@ -80,7 +81,7 @@ class OrderController extends OrderController_parent
         }
         $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
         $AGBLink = str_replace('##PAYMENT##', $paymentId, $AGBLink);
-        if ($horizonID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry())) {
+        if ($horizonID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->oxuser__oxcountryid->value)) {
             $AGBLink = str_replace('##HORIZON##', $horizonID, $AGBLink);
         } else {
             $AGBLink = str_replace('##HORIZON##', 'muster-merchant', $AGBLink);
@@ -104,7 +105,7 @@ class OrderController extends OrderController_parent
 
         $user = $this->getUser();
 
-        switch ($user->getActiveCountry()) {
+        switch ($user->oxuser__oxcountryid->value) {
             case "a7c40f631fc920687.20179984":      //Germany
                 $country = 'de';
                 break;
