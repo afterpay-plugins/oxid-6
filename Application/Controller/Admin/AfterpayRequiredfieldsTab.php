@@ -1,6 +1,5 @@
 <?php
 /**
- * ${CARET}
  * ---------------------------------------------------------------------------------------------------------------------
  *
  * @package
@@ -25,22 +24,8 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
     protected $_sThisTemplate = 'afterpay_requiredfields_tab.tpl';
 
     /**
-     * render
+     * _getModuleForConfigVars
      * -----------------------------------------------------------------------------------------------------------------
-     * render the required fields config page
-     *
-     * @compatibleOxidVersion 6.0
-     *
-     * @return string
-     */
-    public function render()
-    {
-        parent::render();
-
-        return $this->_sThisTemplate;
-    }
-
-    /**
      * return theme filter for config variables
      *
      * @return string
@@ -60,8 +45,9 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
     {
         return Registry::get(AfterpayIdStorage::class)->getContries();
     }
+
     /**
-     * getCountries
+     * getFields
      * -----------------------------------------------------------------------------------------------------------------
      *
      *
@@ -71,5 +57,17 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
         return Registry::get(AfterpayIdStorage::class)->getFields();
     }
 
-
+    /**
+     * getViewId
+     * -----------------------------------------------------------------------------------------------------------------
+     * Role management for Admin UI
+     *
+     * @compatibleOxidVersion 5.2.x
+     *
+     * @return string
+     */
+    public function getViewId()
+    {
+        return "SHOP_MODULE_GROUP_arvatoAfterpayRequiredFields";
+    }
 }

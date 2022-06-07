@@ -34,8 +34,8 @@
         }
     }
 </script>
-<form name="myedit" id="myedit" enctype="multipart/form-data" action="[{$oViewConf->getSelfLink()}]"
-	  method="post">
+<form name="myedit" id="myedit" enctype="multipart/form-data" action="[{$oViewConf->getSelfLink()}]" method="post">
+	[{block name='AFTERPAY_PROFILETRACKING_FORM'}]
 	[{$oViewConf->getHiddenSid() }]
 	<input type="hidden" name="cl" value="AfterpayRequiredfieldsTab">
 	<input type="hidden" name="fnc" value="">
@@ -111,5 +111,6 @@
 	[{/foreach}]
 	<input type="submit" class="confinput" name="save" value="[{oxmultilang ident="GENERAL_SAVE"}]"
 		   onClick="Javascript:document.myedit.fnc.value='save'" [{$readonly}]>
+	[{/block}]
 </form>
 [{include file="bottomitem.tpl"}]

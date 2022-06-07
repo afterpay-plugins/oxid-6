@@ -1,6 +1,5 @@
 <?php
 /**
- * ${CARET}
  * ---------------------------------------------------------------------------------------------------------------------
  *
  * @package
@@ -21,16 +20,4 @@ class AfterpayProfileTracking extends AdminController
      * @var string
      */
     protected $_sThisTemplate = 'afterpay_profiletracking.tpl';
-
-    /**
-     * __construct
-     * -----------------------------------------------------------------------------------------------------------------
-     * constructor; sends ga data
-     *
-     * @compatibleOxidVersion 6.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 }

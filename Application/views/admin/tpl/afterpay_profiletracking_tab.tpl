@@ -8,7 +8,7 @@
 
 <form name="myedit" id="myedit" action="[{$oViewConf->getSelfLink() }]" method="post"
 	  style="padding: 0px;margin: 0px;height:0px;">
-[{block name='AFTERPAY_CONFIG_FORM'}]
+[{block name='AFTERPAY_PROFILETRACKING_FORM'}]
 [{$oViewConf->getHiddenSid()}]
 <input type="hidden" name="cl" value="AfterpayProfileTrackingTab">
 <input type="hidden" name="fnc" value="">
@@ -67,7 +67,6 @@
 				[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayProfileTrackingId'}]
 			</td>
 		</tr>
-
 
 
 		[{********** SAVE & LANGUAGE ********}]

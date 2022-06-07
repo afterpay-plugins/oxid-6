@@ -5,7 +5,7 @@
 [{else}]
     [{assign var="readonly" value=""}]
 [{/if}]
-
+[{block name='AFTERPAY_API_FORM'}]
 <form name="myedit" id="myedit" enctype="multipart/form-data" action="[{$oViewConf->getSelfLink() }]"
       method="post">
     [{$oViewConf->getHiddenSid() }]
@@ -15,6 +15,7 @@
 
     <table cellspacing="5" cellpadding="5">
 
+        [{block name='AFTERPAY_APITAB_APIMODE'}]
         <tr>
             <td colspan="2">
                 <fieldset>
@@ -66,7 +67,9 @@
                 </fieldset>
             </td>
         </tr>
+        [{/block}]
 
+        [{block name='AFTERPAY_APITAB_LIVE'}]
         <tr>
             <td colspan="2">
                 <fieldset>
@@ -184,7 +187,9 @@
                 </fieldset>
             </td>
         </tr>
+        [{/block}]
 
+        [{block name='AFTERPAY_APITAB_SANDBOX'}]
         <tr>
             <td colspan="2">
                 <fieldset>
@@ -304,7 +309,9 @@
                 </fieldset>
             </td>
         </tr>
+        [{/block}]
 
+        [{block name='AFTERPAY_APITAB_PATNERTEST'}]
         <tr>
             <td colspan="2">
                 <fieldset>
@@ -424,8 +431,10 @@
                 </fieldset>
             </td>
         </tr>
+        [{/block}]
 
         [{********** SAVE & LANGUAGE ********}]
+        [{block name='AFTERPAY_APITAB_SAVE'}]
         <tr>
             <td colspan="3">
                 [{if $error != ''}]
@@ -435,6 +444,7 @@
                 [{/if}]
             </td>
         </tr>
+        [{/block}]
 
         <tr>
             <td class="edittext">&nbsp;
@@ -458,4 +468,5 @@
         </tr>
     </table>
 </form>
+    [{/block}]
 [{include file="bottomitem.tpl"}]

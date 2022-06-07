@@ -67,9 +67,24 @@ class OrderController extends OrderController_parent
             $country = 'de';
         }
 
+        switch ($this->getSession()->getVariable('paymentid')) {
+            case "afterpayinvoice":
+                $paymentId = "invoice";
+                break;
+            case "afterpayinstallment":
+                $paymentId = "fix_installments";
+                break;
+            case "afterpaydebitnote":
+                $paymentId = "direct_debit";
+                break;
+        }
         $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
-        $AGBLink = str_replace('##PAYMENT##','invoice',$AGBLink);
-        $AGBLink = str_replace('##HORIZON##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$AGBLink);
+        $AGBLink = str_replace('##PAYMENT##', $paymentId, $AGBLink);
+        if ($horizonID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry())) {
+            $AGBLink = str_replace('##HORIZON##', $horizonID, $AGBLink);
+        } else {
+            $AGBLink = str_replace('##HORIZON##', 'muster-merchant', $AGBLink);
+        }
 
         $smarty = Registry::getUtilsView()->getSmarty();
         $smarty->assign('AGBLink', $AGBLink);

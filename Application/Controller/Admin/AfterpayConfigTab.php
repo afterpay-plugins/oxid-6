@@ -1,6 +1,5 @@
 <?php
 /**
- * ${CARET}
  * ---------------------------------------------------------------------------------------------------------------------
  *
  * @package
@@ -23,21 +22,6 @@ class AfterpayConfigTab extends ShopConfiguration
     protected $_sThisTemplate = 'afterpay_config_tab.tpl';
 
     /**
-     * render
-     * -----------------------------------------------------------------------------------------------------------------
-     * render the nr404 config page
-     *
-     * @compatibleOxidVersion 6.0
-     *
-     * @return string
-     */
-    public function render()
-    {
-        parent::render();
-
-        return $this->_sThisTemplate;
-    }
-    /**
      * return theme filter for config variables
      *
      * @return string
@@ -45,5 +29,19 @@ class AfterpayConfigTab extends ShopConfiguration
     protected function _getModuleForConfigVars()
     {
         return 'module:arvatoafterpay';
+    }
+
+    /**
+     * getViewId
+     * -----------------------------------------------------------------------------------------------------------------
+     * Role management for Admin UI
+     *
+     * @compatibleOxidVersion 5.2.x
+     *
+     * @return string
+     */
+    public function getViewId()
+    {
+        return "AFTERPAY_SETTINGS";
     }
 }

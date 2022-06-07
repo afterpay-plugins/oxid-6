@@ -1,6 +1,5 @@
 <?php
 /**
- * ${CARET}
  * ---------------------------------------------------------------------------------------------------------------------
  *
  * @package
@@ -21,16 +20,4 @@ class AfterpayApi extends AdminController
      * @var string
      */
     protected $_sThisTemplate = 'afterpay_api.tpl';
-
-    /**
-     * __construct
-     * -----------------------------------------------------------------------------------------------------------------
-     * constructor; sends ga data
-     *
-     * @compatibleOxidVersion 6.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 }
