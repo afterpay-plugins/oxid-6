@@ -94,7 +94,7 @@
 				</table>
 				<table>
 					<td class="edittext">
-						<label for="[{$config_varname}]">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayHorizonID" }]</label>
+						<label for="[{$config_varname}]">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayMerchantID" }]</label>
 					</td>
 					<td class="edittext">
 						[{oxhasrights object=$edit readonly=$readonly}]

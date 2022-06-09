@@ -10,6 +10,7 @@ use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResp
 use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
@@ -81,10 +82,10 @@ class OrderController extends OrderController_parent
         }
         $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
         $AGBLink = str_replace('##PAYMENT##', $paymentId, $AGBLink);
-        if ($horizonID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->oxuser__oxcountryid->value)) {
-            $AGBLink = str_replace('##HORIZON##', $horizonID, $AGBLink);
+        if ($merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->oxuser__oxcountryid->value)) {
+            $AGBLink = str_replace('##MERCHANT##', $merchantID, $AGBLink);
         } else {
-            $AGBLink = str_replace('##HORIZON##', 'muster-merchant', $AGBLink);
+            $AGBLink = str_replace('##MERCHANT##', 'muster-merchant', $AGBLink);
         }
 
         $smarty = Registry::getUtilsView()->getSmarty();
@@ -125,11 +126,11 @@ class OrderController extends OrderController_parent
         }
 
         $privacyLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['privacy']);
-        $privacyLink = str_replace('##HORIZON##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$privacyLink);
+        $privacyLink = str_replace('##MERCHANT##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$privacyLink);
 
         $smarty->assign('PrivacyLink', $privacyLink);
-
     }
+
     public function getOrderStateCheckAddressConstant()
     {
         return self::ARVATO_ORDER_STATE_CHECKADDRESS;
@@ -377,4 +378,50 @@ class OrderController extends OrderController_parent
     }
 
     // @codeCoverageIgnoreEnd
+
+    /**
+     * getActiveLocale
+     * ----------------------------------------------------------------------------------------------------------------
+     * gets the locale for the current locale (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getActiveLocale()
+    {
+        $user = $this->getUser();
+        $locale = "de_de";
+        if ($user) {
+            $oLang = \OxidEsales\Eshop\Core\Registry::getLang();
+            $sLang = $oLang->getLanguageAbbr($oLang->getTplLanguage());
+            $sql = "SELECT oxisoalpha2 FROM oxcountry where oxid ='" . $user->oxuser__oxcountryid->value . "'";
+            $countryiso = DatabaseProvider::getDb()->getOne($sql);
+
+            $locale = strtolower($sLang . "_" . $countryiso);
+        }
+
+        return $locale;
+    }
+
+    /**
+     * getActiveLocale
+     * ----------------------------------------------------------------------------------------------------------------
+     * gets the locale for the current locale (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getMerchantId()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID' . $user->oxuser__oxcountryid->value);
+        file_put_contents(
+            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'asadek.log',
+            date('Y-m-d H:i:s') ." getMerchantId: ". var_export($merchantID, true) ."\n",
+            FILE_APPEND
+        );
+        if ($merchantID) {
+            return $merchantID;
+        }
+        return "muster-merchant";
+    }
 }

@@ -66,8 +66,8 @@ class AfterpayIdStorage
     public function getTCPrivacyLinks()
     {
         return [
-            'TC' => 'https://documents.myafterpay.com/consumer-terms-conditions/##LANGCOUNTRY##/##HORIZON##/##PAYMENT##',
-            'privacy' => 'https://documents.myafterpay.com/privacy-statement/##LANGCOUNTRY##/##HORIZON##',
+            'TC' => 'https://documents.myafterpay.com/consumer-terms-conditions/##LANGCOUNTRY##/##MERCHANT##/##PAYMENT##',
+            'privacy' => 'https://documents.myafterpay.com/privacy-statement/##LANGCOUNTRY##/##MERCHANT##',
         ];
     }
 }

@@ -18,7 +18,7 @@ $aLang = [
     'ORDER_OVERVIEW_ZIP'                                 => 'PLZ',
     'ORDER_OVERVIEW_CITY'                                => 'Stadt',
     'MESSAGE_PAYMENT_BANK_ACCOUNT_INVALID'               => 'Bitte geben Sie eine gültige Bankverbindung an!',
-    "MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"            => 'Bitte wählen Sie einen Ratenzahlungsplan aus.',
+    "MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"            => 'Bitte wähle einen Ratenzahlungsplan aus.',
     "AFTERPAY_INSTALLMENT_BASKETAMOUNT"                  => 'Barzahlungspreis',
     "AFTERPAY_INSTALLMENT_NUMBEROFINSTALLMENTS"          => 'Anzahl Raten',
     "AFTERPAY_INSTALLMENT_INSTALLMENTAMOUNT"             => 'Monatliche Rate',
@@ -52,7 +52,7 @@ $aLang = [
     'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT'          => '<p><small>Mit meiner Bestellung ermächtige ich die Arvato Payment Solutions GmbH, Gläubiger-Identifikationsnummer DE23ZZZ00001986600, Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von dem Zahlungsempfänger auf mein Konto gezogenen Lastschriften einzulösen. Hinweis: Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.</small></p> <p>Der Gesamtbetrag könnte sich noch durch Versandkosten, Gutscheine etc. ändern. Die endgültigen Preise werden im letzten Bestellschritt angezeigt.</p>',
     'MESSAGE_USER_CHECK_CHANGED_ADDRESS'                 => 'Wir haben einen möglichen Fehler in Ihrer Adresse gefunden und korrigiert. Bitte überprüfen Sie Ihre Adresse.',
     'AFTERPAYOPTIN_PAYMENT_TEXT'                         => 'Um diese Zahlarten zu nutzen benötigen wir vorab Ihre Zustimmung.',
-    'AFTERPAYOPTIN_PAYMENT_LABEL'                        => 'Hiermit willige ich in die Verarbeitung meiner Daten zur Betrugsprävention gemäß der <a href="/Datenschutz">Datenschutzbestimmungen</a> ein.',
+    'AFTERPAYOPTIN_PAYMENT_LABEL'                        => 'Ich stimme zu, dass meine Daten zum Zweck der Betrugsprävention gemäß Ziffer 4.1.2 der <a href="##PRIVACYLINK##">Datenschutzbestimmungen</a> verarbeitet werden..',
     'AFTERPAYOPTIN_PAYMENT_BUTTON'                       => 'Bestätigen',
     'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION' => 'Hier findest du die <a target="_new" href="%s">Pflichtangaben nach § 507 BGB</a>, die <a target="_new" href="%s">Europäischen Standardinformationen für Verbraucherkredite</a> und die <a target="_new" href="%s">Datenschutzerklärung</a> von AfterPay.<br><br>Es gelten die <a target="_new" href="%s">Allgemeinen Geschäftsbedingungen für AfterPay</a>.',
 ];

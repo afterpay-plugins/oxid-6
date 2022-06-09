@@ -7,6 +7,7 @@
 namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
 use OxidEsales\Eshop\Application\Model\ArticleList;
 use OxidEsales\Eshop\Application\Model\User;
@@ -88,6 +89,7 @@ class PaymentController extends PaymentController_parent
         if (!$this->getUser()) {
             return null;
         }
+        $this->_setPrivacyLink();
 
         $smarty = Registry::getUtilsView()->getSmarty();
         $requirements = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
@@ -460,5 +462,66 @@ class PaymentController extends PaymentController_parent
         }
 
         return $locale;
+    }
+
+    /**
+     * getMerchantId
+     * ----------------------------------------------------------------------------------------------------------------
+     *
+     * @return string
+     */
+    public function getMerchantId()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID' . $user->oxuser__oxcountryid->value);
+        file_put_contents(
+            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'asadek.log',
+            date('Y-m-d H:i:s') ." getMerchantId: ". var_export($merchantID, true) ."\n",
+            FILE_APPEND
+        );
+        if ($merchantID) {
+            return $merchantID;
+        }
+        return "muster-merchant";
+    }
+
+    /**
+     * _setPrivacyLink
+     * -----------------------------------------------------------------------------------------------------------------
+     * set in smarty variable privacy link per payment and country
+     *
+     */
+    protected function _setPrivacyLink()
+    {
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
+        $lang = $this->getActiveLangAbbr();
+
+        $user = $this->getUser();
+
+        switch ($user->oxuser__oxcountryid->value) {
+            case "a7c40f631fc920687.20179984":      //Germany
+                $country = 'de';
+                break;
+            case "a7c40f6320aeb2ec2.72885259":      //Austria
+                $country = 'at';
+                break;
+            case "a7c40f632cdd63c52.64272623":      //Netherlands
+                $country = 'nl';
+                break;
+            case "a7c40f632e04633c9.47194042":      //Belgium
+                $country = 'be';
+                break;
+            default:
+                $country = 'de';
+                $lang = 'en';
+                break;
+        }
+
+        $privacyLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['privacy']);
+        $privacyLink = str_replace('##MERCHANT##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$privacyLink);
+
+        $smarty->assign('PrivacyLink', $privacyLink);
     }
 }

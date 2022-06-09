@@ -1,4 +1,4 @@
-w[{if $aAfterpayRequiredFields.$sPayment.Salutation}]
+[{if $aAfterpayRequiredFields.$sPayment.Salutation}]
     <div class="form-group">
         <label class="control-label col-lg-3" for="afterpay[{$sPayment}]_sal">
             * [{oxmultilang ident="TITLE"}]

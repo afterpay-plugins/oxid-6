@@ -132,7 +132,7 @@ $aLang = [
 
     //Menu
     'ARVATOMODULES'                     => 'Arvato Module',
-    'AFTERPAY_TITLE'                    => 'Afterpay',
+    'AFTERPAY_TITLE'                    => 'AfterPay',
     'AFTERPAY_SETTINGS'                 => 'Einstellungen',
     'AFTERPAY_SAVED'                    => 'Einstellungen wurden gespeichert',
     'AFTERPAY_SAVE_BUTTON'              => 'Speichern',
@@ -157,7 +157,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayDebitRequiresSalutation'               => 'Bankeinzug erfordert Anrede',
     'SHOP_MODULE_arvatoAfterpayInstallmentsRequiresSalutation'        => 'Ratenzahlung erfordert Anrede',
 
-    'SHOP_MODULE_arvatoAfterpayHorizonID'           => 'Horizon-ID',
+    'SHOP_MODULE_arvatoAfterpayMerchantID'           => 'Merchant ID',
 
     'SHOP_MODULE_arvatoAfterpayRequireFields'       => 'Felder',
     'SHOP_MODULE_arvatoAfterpayInvoice'             => 'Rechnung',
