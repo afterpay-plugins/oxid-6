@@ -18,15 +18,13 @@ class ValidateBankAccountDataProvider extends \Arvato\AfterpayModule\Application
 {
     /**
      * @param string $IBAN
-     * @param string $BIC
      *
      * @return ValidateBankAccountEntity
      */
-    public function getDataObject($IBAN, $BIC)
+    public function getDataObject($IBAN)
     {
         $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\ValidateBankAccountEntity::class);
         $dataObject->setBankAccount($IBAN);
-        $dataObject->setBankCode($BIC);
         return $dataObject;
     }
 }

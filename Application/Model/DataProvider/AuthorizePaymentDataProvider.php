@@ -120,7 +120,6 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
         return oxNew(PaymentDataProvider::class)->getPayment(
             $basket->getPaymentId(),
             $session->getVariable('arvatoAfterpayIBAN'),
-            $session->getVariable('arvatoAfterpayBIC'),
             $selectedInstallmentPlanProfileId
         );
     }

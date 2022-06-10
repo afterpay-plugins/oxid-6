@@ -98,7 +98,6 @@ $aLang = [
     'AFTERPAY_ONLY_FOR_AFTERPAY_PAYMENT'               => 'This order was not paid via AfterPay',
     'ORDER_OVERVIEW_APDEBITBANKACCOUNT'                => 'IBAN',
     'ORDER_OVERVIEW_APINSTALLMENTBANKACCOUNT'          => 'IBAN',
-    'ORDER_OVERVIEW_APINSTALLMENTBANKCODE'             => 'BIC',
     'ORDER_OVERVIEW_AFTERPAYINSTALLMENTPROFILEID'      => 'Installment profile',
 
     'SHOP_MODULE_GROUP_arvatoAfterpayRequiredFields'          => 'Required fields',

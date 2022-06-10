@@ -21,9 +21,9 @@ class ValidateBankAccountService extends \Arvato\AfterpayModule\Core\Service
      *
      * @return ValidateBankAccountResponseEntity
      */
-    public function validate($IBAN, $BIC)
+    public function validate($IBAN)
     {
-        $data = $this->getRequestData($IBAN, $BIC);
+        $data = $this->getRequestData($IBAN);
         $client = $this->getClient();
         $response = $client->execute($data);
         $this->_entity = $this->parseResponse($response);
@@ -34,17 +34,16 @@ class ValidateBankAccountService extends \Arvato\AfterpayModule\Core\Service
      * Returns hardcoded "true" if in sandbox mode, since sandbox would always fail.
      *
      * @param string $IBAN
-     * @param string $BIC
      *
      * @return bool
      */
-    public function isValid($IBAN, $BIC)
+    public function isValid($IBAN)
     {
         if (Registry::getConfig()->getConfigParam('arvatoAfterpayApiMode', 'sandbox') === 'sandbox') {
             return true;
         }
 
-        $validateBankAccountResponseEntity = $this->validate($IBAN, $BIC);
+        $validateBankAccountResponseEntity = $this->validate($IBAN);
 
         if ($validateBankAccountResponseEntity instanceof ValidateBankAccountResponseEntity) {
             return $validateBankAccountResponseEntity->getIsValid();
@@ -55,14 +54,13 @@ class ValidateBankAccountService extends \Arvato\AfterpayModule\Core\Service
 
     /**
      * @param $IBAN
-     * @param $BIC
      *
      * @return object
      * @codeCoverageIgnore mock helper method
      */
-    protected function getRequestData($IBAN, $BIC)
+    protected function getRequestData($IBAN)
     {
-        return oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\ValidateBankAccountDataProvider::class)->getDataObject($IBAN, $BIC)->exportData();
+        return oxNew(\Arvato\AfterpayModule\Application\Model\DataProvider\ValidateBankAccountDataProvider::class)->getDataObject($IBAN)->exportData();
     }
 
     /**

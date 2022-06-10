@@ -42,14 +42,6 @@
                         <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-lg-3" for="afterpayinstallment_2">
-                        *BIC
-                    </label>
-                    <div class="col-lg-9">
-                        <input id="afterpayinstallment_2" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankcode]" value="">
-                    </div>
-                </div>
 
                 [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Installments"}]
             </div>

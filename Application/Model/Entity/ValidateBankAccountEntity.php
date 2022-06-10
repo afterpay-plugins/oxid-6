@@ -28,9 +28,4 @@ class ValidateBankAccountEntity extends \Arvato\AfterpayModule\Application\Model
     {
         return $this->getData('bankCode');
     }
-
-    public function setBankCode($BIC)
-    {
-        return $this->setData('bankCode', $BIC);
-    }
 }

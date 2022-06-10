@@ -296,9 +296,7 @@ class PaymentController extends PaymentController_parent
         }
         if (
             !isset($dynValue['apinstallmentbankaccount'])
-            || !isset($dynValue['apinstallmentbankcode'])
             || !$dynValue['apinstallmentbankaccount']
-            || !$dynValue['apinstallmentbankcode']
         ) {
             return 1; //Complete fields correctly
         }
@@ -475,11 +473,7 @@ class PaymentController extends PaymentController_parent
         /** @var User $user */
         $user = $this->getUser();
         $merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID' . $user->oxuser__oxcountryid->value);
-        file_put_contents(
-            \OxidEsales\Eshop\Core\Registry::getConfig()->getLogsDir() . 'asadek.log',
-            date('Y-m-d H:i:s') ." getMerchantId: ". var_export($merchantID, true) ."\n",
-            FILE_APPEND
-        );
+
         if ($merchantID) {
             return $merchantID;
         }
