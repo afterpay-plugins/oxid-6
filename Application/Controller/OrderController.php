@@ -403,9 +403,9 @@ class OrderController extends OrderController_parent
     }
 
     /**
-     * getActiveLocale
+     * getMerchantId
      * ----------------------------------------------------------------------------------------------------------------
-     * gets the locale for the current locale (needed for link in tpl)
+     * get Merchant Id from Config (needed for link in tpl)
      *
      * @return string
      */

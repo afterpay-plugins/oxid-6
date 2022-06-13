@@ -465,6 +465,7 @@ class PaymentController extends PaymentController_parent
     /**
      * getMerchantId
      * ----------------------------------------------------------------------------------------------------------------
+     * get Merchant Id from Config (needed for link in tpl)
      *
      * @return string
      */

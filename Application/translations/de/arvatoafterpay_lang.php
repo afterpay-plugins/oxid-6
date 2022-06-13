@@ -18,7 +18,7 @@ $aLang = [
     'ORDER_OVERVIEW_ZIP'                                 => 'PLZ',
     'ORDER_OVERVIEW_CITY'                                => 'Stadt',
     'MESSAGE_PAYMENT_BANK_ACCOUNT_INVALID'               => 'Bitte geben Sie eine gültige Bankverbindung an!',
-    "MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"            => 'Bitte wähle einen Ratenzahlungsplan aus.',
+    "MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"            => 'Ratenplan wählen:',
     "AFTERPAY_INSTALLMENT_BASKETAMOUNT"                  => 'Barzahlungspreis',
     "AFTERPAY_INSTALLMENT_NUMBEROFINSTALLMENTS"          => 'Anzahl Raten',
     "AFTERPAY_INSTALLMENT_INSTALLMENTAMOUNT"             => 'Monatliche Rate',
@@ -31,6 +31,7 @@ $aLang = [
     "AFTERPAY_INSTALLMENT_MONTHLYFEE"                    => 'Monatliche Gebühr',
     "AFTERPAY_INSTALLMENT_TOTALAMOUNT"                   => 'Gesamtbetrag',
     "AFTERPAY_INSTALLMENT_READMORE"                      => 'Rechtliche Angaben',
+    "AFTERPAY_INSTALLMENT_IBAN"                          => 'Bankverbindung (IBAN)',
     "AFTERPAY_INSTALLMENT_TOTALINSTALLMENTCOST"          => 'Finanzierungskosten',
     "AFTERPAY_NO_INSTALLMENT"                            => 'Derzeit ist eine Ratenzahlung leider nicht verfügbar. Bitte wählen Sie eine andere Zahlungsart.',
     "AFTERPAY_LEGAL_INVOICE_DEBITNOTE"                   => 'Ich habe die <a href="##AGBLINK##" target="_new" style="text-decoration:underline">Allgemeinen Geschäftsbedingungen</a> und <a href="##PRIVACYLINK##" target="_new" style="text-decoration:underline">Datenschutzbestimmungen</a> von AfterPay gelesen und akzeptiere diese.',
@@ -54,5 +55,5 @@ $aLang = [
     'AFTERPAYOPTIN_PAYMENT_TEXT'                         => 'Um diese Zahlarten zu nutzen benötigen wir vorab Ihre Zustimmung.',
     'AFTERPAYOPTIN_PAYMENT_LABEL'                        => 'Ich stimme zu, dass meine Daten zum Zweck der Betrugsprävention gemäß Ziffer 4.1.2 der <a href="##PRIVACYLINK##">Datenschutzbestimmungen</a> verarbeitet werden..',
     'AFTERPAYOPTIN_PAYMENT_BUTTON'                       => 'Bestätigen',
-    'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION' => 'Hier findest du die <a target="_new" href="%s">Pflichtangaben nach § 507 BGB</a>, die <a target="_new" href="%s">Europäischen Standardinformationen für Verbraucherkredite</a> und die <a target="_new" href="%s">Datenschutzerklärung</a> von AfterPay.<br><br>Es gelten die <a target="_new" href="%s">Allgemeinen Geschäftsbedingungen für AfterPay</a>.',
+    'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION' => 'Hier findest du die <a target="_new" href="%s">Pflichtangaben nach § 507 BGB</a>, die <a target="_new" href="%s">Europäischen Standardinformationen für Verbraucherkredite</a> und von AfterPay.<br><br>Es gelten die <a target="_new" href="%s">Allgemeinen Geschäftsbedingungen</a> der AfterPay Zahlart. Die Datenschutzerklärung der AfterPay Zahlart befindet sich <a target="_new" href="%s">hier</a>',
 ];

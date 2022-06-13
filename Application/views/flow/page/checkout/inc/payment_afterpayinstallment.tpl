@@ -28,32 +28,26 @@
 
         [{if $aAvailableAfterpayInstallmentPlans}]
             <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
-                <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
-
-                [{include file="flow/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
-
                 <div class="clearfix"></div>
 
                 <div class="form-group">
-                    <label class="control-label col-lg-3" for="afterpayinstallment_1">
-                        *IBAN
+                    <label class="control-label col-md-2" for="afterpayinstallment_1">
+                        [{oxmultilang ident="AFTERPAY_INSTALLMENT_IBAN"}]
                     </label>
-                    <div class="col-lg-9">
-                        <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="">
+                    <div class="col-lg-4">
+                        <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="" required>
                     </div>
                 </div>
 
                 [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Installments"}]
-            </div>
+                <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
+				[{include file="flow/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
+
+			</div>
 
             <div style="clear:both"></div>
 
-            <div class="alert alert-info col-lg-offset-3 desc">
-                [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT"}]
-                [{if $paymentmethod->oxpayments__oxlongdesc->value|strip_tags|trim}]
-                    [{$paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
-                [{/if}]
-            </div>
+
 
         [{else}]
             [{block name="checkout_payment_longdesc"}]

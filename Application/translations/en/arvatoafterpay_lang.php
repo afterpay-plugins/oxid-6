@@ -22,6 +22,7 @@ $aLang = [
     "AFTERPAY_INSTALLMENT_MONTHLYFEE"                    => 'Monthly fee',
     "AFTERPAY_INSTALLMENT_TOTALAMOUNT"                   => 'Total amount',
     "AFTERPAY_INSTALLMENT_READMORE"                      => 'Legal documents',
+    "AFTERPAY_INSTALLMENT_IBAN"                          => 'Bank details (IBAN)',
     "AFTERPAY_INSTALLMENT_TOTALINSTALLMENTCOST"          => 'Total financing costs',
     "AFTERPAY_NO_INSTALLMENT"                            => 'We apologize for not being able to provide any installments plans right now. Please select another payment method.',
     "AFTERPAY_LEGAL_INVOICE_DEBITNOTE"                   => 'I have read and accept the <a href="https://www.afterpay.de/agb" target="_new" style="text-decoration:underline">Terms & Conditions</a> and <a href="https://www.afterpay.de/datenschutz" target="_new" style="text-decoration:underline">data protection regulations</a> of AfterPay.',
