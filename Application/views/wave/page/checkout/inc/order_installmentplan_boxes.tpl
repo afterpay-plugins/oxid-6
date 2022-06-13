@@ -88,7 +88,6 @@
                 </div>
             [{/foreach}]
         </div>
-
     </div>
 
     <div class="AP_Info">
@@ -96,17 +95,13 @@
         [{assign var=merchant_id value=$oView->getMerchantId()}]
 
         [{assign var="pflichtangabenLink" value="https://documents.myafterpay.com/consumer-terms-conditions/de_DE/default/bgb507"}]
-        [{assign var="kostenLink"         value="https://documents.myafterpay.com/consumer-terms-conditions/de_de/default/fix_installments#6kosten"}]
+        [{assign var="kostenLink"         value=$afterpayReadMoreLink}]
         [{assign var="datenschutzLink"    value="https://documents.myafterpay.com/privacy-statement/$lang_country/$merchant_id"}]
         [{assign var="agbLink"            value="https://documents.myafterpay.com/consumer-terms-conditions/$lang_country/$merchant_id/fix_installments"}]
         [{assign var="string"             value=$pflichtangabenLink|cat:","|cat:$kostenLink|cat:","|cat:$datenschutzLink|cat:","|cat:$agbLink}]
         [{assign var="args"               value=","|explode:$string}]
 
         [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION" args=$args}]
-    </div>
-
-    <div class="AP_IBANInput">
-        Wir ziehen die Raten bequem und komfortabel von Deinem Konto ein. Bitte gib daher Deine IBAN ein:
     </div>
 </div>
 
