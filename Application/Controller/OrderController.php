@@ -253,7 +253,6 @@ class OrderController extends OrderController_parent
         $availableInstallmentPlans,
         $selectedInstallmentPlanProfileIdInSession
     ) {
-
         $smarty = Registry::getUtilsView()->getSmarty();
 
         // Assign installment plan formatting ...
@@ -267,7 +266,11 @@ class OrderController extends OrderController_parent
             :
             reset( $availableInstallmentPlans);
 
-        $smarty->assign('afterpayReadMoreLink', $selectedInstallmentPlan->readMore);
+        $secciLink = $selectedInstallmentPlan->readMore;
+        if($this->getActiveLangAbbr != 'de') {
+            $secciLink = str_replace("de_de","en_de",$secciLink);
+        }
+        $smarty->assign('afterpayReadMoreLink', $secciLink);
 
         // ... and price info for interests ...
         $smarty->assign('afterpayTotalInterestAmount', $selectedInstallmentPlan->totalInterestAmount);
