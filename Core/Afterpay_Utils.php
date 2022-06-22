@@ -11,6 +11,8 @@
 
 namespace Arvato\AfterpayModule\Core;
 
+use OxidEsales\Eshop\Core\Registry;
+
 class Afterpay_Utils extends Afterpay_Utils_parent
 {
     /**
@@ -27,11 +29,18 @@ class Afterpay_Utils extends Afterpay_Utils_parent
     {
         $sRet = "";
         reset($aIn);
+        $paymentIdMapping = [
+            'afterpayinstallment' => 'Installments',
+            'afterpayinvoice'     => 'Invoice',
+            'afterpaydebitnote'   => 'Debit'
+        ];
+
+        $paymentId = $paymentIdMapping[Registry::getSession()->getVariable('paymentid')];
         foreach ($aIn as $sKey => $sVal) {
             $sRet .= $sKey;
             $sRet .= "__";
             if (is_array($sVal)) {
-                $sVal = current($sVal);
+                $sVal = isset($sVal[$paymentId]) ? $sVal[$paymentId] : current($sVal);
             }
             $sRet .= $sVal;
             $sRet .= "@@";
