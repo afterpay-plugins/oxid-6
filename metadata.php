@@ -213,6 +213,12 @@ $aModule = [
             'template' => 'include/category_main_form.tpl',
             'block'    => 'admin_category_main_form',
             'file'     => 'Application/views/blocks/admin_category_main_form.tpl'
-        ]
+        ],
+        [
+            'theme'    => 'flow',
+            'template' => 'page/checkout/thankyou.tpl',
+            'block'    => 'checkout_thankyou_info',
+            'file'     => 'Application/views/blocks/flow/checkout_thankyou_info.tpl'
+        ],
     ],
 ];
