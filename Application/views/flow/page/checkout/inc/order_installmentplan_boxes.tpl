@@ -95,7 +95,7 @@
         [{assign var=merchant_id value=$oView->getMerchantId()}]
 
         [{assign var="pflichtangabenLink" value="https://documents.myafterpay.com/consumer-terms-conditions/de_DE/default/bgb507"}]
-        [{assign var="kostenLink"         value=$afterpayReadMoreLink}]
+        [{assign var="kostenLink"         value="https://documents.myafterpay.com/consumer-terms-conditions/de_de/default/fix_installments#6kosten"}]
         [{assign var="agbLink"            value="https://documents.myafterpay.com/consumer-terms-conditions/$lang_country/$merchant_id/fix_installments"}]
         [{assign var="datenschutzLink"    value="https://documents.myafterpay.com/privacy-statement/$lang_country/$merchant_id"}]
         [{assign var="string"             value=$pflichtangabenLink|cat:","|cat:$kostenLink|cat:","|cat:$agbLink|cat:","|cat:$datenschutzLink}]
