@@ -47,6 +47,7 @@ $aModule = [
         \OxidEsales\Eshop\Application\Controller\OrderController::class    => Arvato\AfterpayModule\Application\Controller\OrderController::class,
         \OxidEsales\Eshop\Application\Controller\UserController::class     => Arvato\AfterpayModule\Application\Controller\UserController::class,
         \OxidEsales\Eshop\Application\Controller\PaymentController::class  => Arvato\AfterpayModule\Application\Controller\PaymentController::class,
+        \OxidEsales\Eshop\Application\Controller\ThankYouController::class  => Arvato\AfterpayModule\Application\Controller\ThankYouController::class,
         // Model
         \OxidEsales\Eshop\Application\Model\Article::class => Arvato\AfterpayModule\Application\Model\Article::class,
         \OxidEsales\Eshop\Application\Model\Order::class   => Arvato\AfterpayModule\Application\Model\Order::class,
