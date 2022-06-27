@@ -62,7 +62,9 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyATInstallment' => 'API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiKeyCH'            => 'API key CH',
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiKeyNLInstallment' => 'API key for installments NL',
     'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API key BE',
+    'SHOP_MODULE_arvatoAfterpayApiKeyBEInstallment' => 'API key for installments BE',
 
     'SHOP_MODULE_arvatoAfterpayApiMode'         => 'API mode',
     'SHOP_MODULE_arvatoAfterpayApiMode_live'    => 'Live',
@@ -76,7 +78,9 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyATInstallment' => 'Sandbox API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API key CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNLInstallment' => 'Sandbox API key for installments NL',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API key BE',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBEInstallment' => 'Sandbox API key for installments BE',
 
     'SHOP_MODULE_arvatoAfterpayApiPartnerUrl'              => 'Partner Test API URL',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyDE'            => 'Partner Test API key GER',
@@ -85,7 +89,9 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyATInstallment' => 'Partner Test API key for installments AUT',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyCH'            => 'Partner Test API key CH',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL'            => 'Partner Test API key NL',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNLInstallment' => 'Partner Test API key for installments NL',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE'            => 'Partner Test API key BE',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBEInstallment' => 'Partner Test API key for installments BE',
 
     'HELP_SHOP_MODULE_arvatoAfterpayApiMode'             => 'API mode: Defines which of the three sets of settings (live, sandbox, partner test) should be used when making API requests.',
     'HELP_SHOP_MODULE_arvatoAfterpayApiRequestLogging'   => 'Enables logging of request and response. Log can be found in the OXID logging directory: AFTERPAY.log',
@@ -166,8 +172,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayRequiresPhone'        => 'Phone',
     'SHOP_MODULE_arvatoAfterpayRequiresBirthdate'        => 'Birthday',
     'SHOP_MODULE_arvatoAfterpayRequiresStreetNumber'        => 'Street number',
-    'SHOP_MODULE_arvatoAfterpayRequiresPrivacy'        => 'Privacy',
-    'SHOP_MODULE_arvatoAfterpayRequiresTC'        => 'TC',
+    'SHOP_MODULE_arvatoAfterpayRequiresTC_Privacy'        => 'TC & Privacy',
 
     'SHOP_MODULE_arvatoAfterpayRequireFields'       => 'Fields',
     'SHOP_MODULE_arvatoAfterpayInvoice'             => 'Invoice',

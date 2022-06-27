@@ -61,7 +61,9 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiKeyATInstallment' => 'API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiKeyCH'            => 'API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiKeyNL'            => 'API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiKeyNLInstallment' => 'API Schlüssel für Ratenkauf NL',
     'SHOP_MODULE_arvatoAfterpayApiKeyBE'            => 'API Schlüssel BE',
+    'SHOP_MODULE_arvatoAfterpayApiKeyBEInstallment' => 'API Schlüssel für Ratenkauf BE',
 
     'SHOP_MODULE_arvatoAfterpayApiMode'         => 'API Modus',
     'SHOP_MODULE_arvatoAfterpayApiMode_live'    => 'Live',
@@ -75,7 +77,9 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyATInstallment' => 'Sandbox API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyCH'            => 'Sandbox API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNL'            => 'Sandbox API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyNLInstallment' => 'Sandbox API Schlüssel für Ratenkauf NL',
     'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE'            => 'Sandbox API Schlüssel BE',
+    'SHOP_MODULE_arvatoAfterpayApiSandboxKeyBEInstallment' => 'Sandbox API Schlüssel für Ratenkauf BE',
 
     'SHOP_MODULE_arvatoAfterpayApiPartnerUrl'              => 'Partner Test API URL',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyDE'            => 'Partner Test API Schlüssel DE',
@@ -84,7 +88,9 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyATInstallment' => 'Partner Test API Schlüssel für Ratenkauf AT',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyCH'            => 'Partner Test API Schlüssel CH',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNL'            => 'Partner Test API Schlüssel NL',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyNLInstallment' => 'Partner Test API Schlüssel für Ratenkauf NL',
     'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE'            => 'Partner Test API Schlüssel BE',
+    'SHOP_MODULE_arvatoAfterpayApiPartnerKeyBEInstallment' => 'Partner Test API Schlüssel für Ratenkauf BE',
 
     'HELP_SHOP_MODULE_arvatoAfterpayApiMode'             => 'API-Modus: Legt fest, welche der drei Sets an Einstellungen (Live, Sandbox, Partner Test) für Afterpay-API-Requests verwendet werden soll.',
     'HELP_SHOP_MODULE_arvatoAfterpayApiRequestLogging'   => 'Aktiviert Logging für API-Requests und Response. Das Log befindet sich im OXID-Log-Ordner unter dem Namen: AFTERPAY.log',
@@ -168,8 +174,7 @@ $aLang = [
     'SHOP_MODULE_arvatoAfterpayRequiresPhone'        => 'Telefonnummer',
     'SHOP_MODULE_arvatoAfterpayRequiresBirthdate'        => 'Geburtsdatum',
     'SHOP_MODULE_arvatoAfterpayRequiresStreetNumber'        => 'Hausnummer',
-    'SHOP_MODULE_arvatoAfterpayRequiresPrivacy'        => 'Datenschutz',
-    'SHOP_MODULE_arvatoAfterpayRequiresTC'        => 'AGB',
+    'SHOP_MODULE_arvatoAfterpayRequiresTC_Privacy'        => 'AGB & Datenschutz',
 
     'ORDER_OVERVIEW_FIRSTNAME'      => 'Vorname',
     'ORDER_OVERVIEW_LASTNAME'       => 'Nachname',

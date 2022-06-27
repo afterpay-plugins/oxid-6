@@ -171,6 +171,19 @@
                         </tr>
                         <tr>
                             <td class="edittext">
+                                <label for="arvatoAfterpayApiKeyNLInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiKeyNLInstallment" }]</label>
+                            </td>
+                            <td class="edittext">
+                                [{oxhasrights object=$edit readonly=$readonly}]
+                            <input type="text" class="editinput" size="50"
+                                   name="confstrs[arvatoAfterpayApiKeyNLInstallment]"
+                                   id="arvatoAfterpayApiKeyNLInstallment"
+                                   value="[{$confstrs.arvatoAfterpayApiKeyNLInstallment}]" [{$readonly}]>
+                                [{/oxhasrights}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="edittext">
                                 <label for="arvatoAfterpayApiKeyBE">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiKeyBE" }]</label>
                             </td>
                             <td class="edittext">
@@ -181,8 +194,19 @@
                                 [{/oxhasrights}]
                             </td>
                         </tr>
-
-
+                        <tr>
+                            <td class="edittext">
+                                <label for="arvatoAfterpayApiKeyBEInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiKeyBEInstallment" }]</label>
+                            </td>
+                            <td class="edittext">
+                                [{oxhasrights object=$edit readonly=$readonly}]
+                            <input type="text" class="editinput" size="50"
+                                   name="confstrs[arvatoAfterpayApiKeyBEInstallment]"
+                                   id="arvatoAfterpayApiKeyBEInstallment"
+                                   value="[{$confstrs.arvatoAfterpayApiKeyBEInstallment}]" [{$readonly}]>
+                                [{/oxhasrights}]
+                            </td>
+                        </tr>
                     </table>
                 </fieldset>
             </td>
@@ -292,6 +316,19 @@
                         </tr>
                         <tr>
                             <td class="edittext">
+                                <label for="arvatoAfterpayApiSandboxKeyNLInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiSandboxKeyNLInstallment" }]</label>
+                            </td>
+                            <td class="edittext">
+                                [{oxhasrights object=$edit readonly=$readonly}]
+                            <input type="text" class="editinput" size="50"
+                                   name="confstrs[arvatoAfterpayApiSandboxKeyNLInstallment]"
+                                   id="arvatoAfterpayApiSandboxKeyNLInstallment"
+                                   value="[{$confstrs.arvatoAfterpayApiSandboxKeyNLInstallment}]" [{$readonly}]>
+                                [{/oxhasrights}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="edittext">
                                 <label for="arvatoAfterpayApiSandboxKeyBE">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiSandboxKeyBE" }]</label>
                             </td>
                             <td class="edittext">
@@ -303,7 +340,19 @@
                                 [{/oxhasrights}]
                             </td>
                         </tr>
-
+                        <tr>
+                            <td class="edittext">
+                                <label for="arvatoAfterpayApiSandboxKeyBEInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiSandboxKeyBEInstallment" }]</label>
+                            </td>
+                            <td class="edittext">
+                                [{oxhasrights object=$edit readonly=$readonly}]
+                            <input type="text" class="editinput" size="50"
+                                   name="confstrs[arvatoAfterpayApiSandboxKeyBEInstallment]"
+                                   id="arvatoAfterpayApiSandboxKeyBEInstallment"
+                                   value="[{$confstrs.arvatoAfterpayApiSandboxKeyBEInstallment}]" [{$readonly}]>
+                                [{/oxhasrights}]
+                            </td>
+                        </tr>
 
                     </table>
                 </fieldset>
@@ -414,6 +463,19 @@
                         </tr>
                         <tr>
                             <td class="edittext">
+                                <label for="arvatoAfterpayApiPartnerKeyNLInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyNLInstallment" }]</label>
+                            </td>
+                            <td class="edittext">
+                                [{oxhasrights object=$edit readonly=$readonly}]
+                            <input type="text" class="editinput" size="50"
+                                   name="confstrs[arvatoAfterpayApiPartnerKeyNLInstallment]"
+                                   id="arvatoAfterpayApiPartnerKeyNLInstallment"
+                                   value="[{$confstrs.arvatoAfterpayApiPartnerKeyNLInstallment}]" [{$readonly}]>
+                                [{/oxhasrights}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="edittext">
                                 <label for="arvatoAfterpayApiPartnerKeyBE">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyBE" }]</label>
                             </td>
                             <td class="edittext">
@@ -425,7 +487,19 @@
                                 [{/oxhasrights}]
                             </td>
                         </tr>
-
+                        <tr>
+                            <td class="edittext">
+                                <label for="arvatoAfterpayApiPartnerKeyBEInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyBEInstallment" }]</label>
+                            </td>
+                            <td class="edittext">
+                                [{oxhasrights object=$edit readonly=$readonly}]
+                            <input type="text" class="editinput" size="50"
+                                   name="confstrs[arvatoAfterpayApiPartnerKeyBEInstallment]"
+                                   id="arvatoAfterpayApiPartnerKeyBEInstallment"
+                                   value="[{$confstrs.arvatoAfterpayApiPartnerKeyBEInstallment}]" [{$readonly}]>
+                                [{/oxhasrights}]
+                            </td>
+                        </tr>
 
                     </table>
                 </fieldset>

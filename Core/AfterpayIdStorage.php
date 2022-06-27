@@ -51,8 +51,7 @@ class AfterpayIdStorage
             'Phone',
             'Birthdate',
             'StreetNumber',
-            'Privacy',
-            'TC',
+            'TC_Privacy',
         ];
     }
 
