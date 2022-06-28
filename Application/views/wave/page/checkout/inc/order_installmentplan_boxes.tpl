@@ -28,6 +28,7 @@
                 [{assign var="active" value=false}]
                 [{if $afterpayInstallmentProfileId eq $installment->installmentProfileNumber}]
                     [{assign var="active" value=true}]
+                    [{assign var="InstallLink" value=$installment->readMore}]
                 [{/if}]
                 <div class="AP_InstallmentOption [{if $first}]AP_InstallmentOption_first[{/if}] [{if $active}]AP_InstallmentOption_active[{/if}] [{if $first and $active}]AP_InstallmentOption_first_active[{/if}]"
                      data-ap-installment-profile="[{$installment->installmentProfileNumber}]"
@@ -38,6 +39,7 @@
                     $(this).addClass('AP_InstallmentOption_active');
                     $('#AP_InstallmentDetail_[{$installment->installmentProfileNumber}]').addClass('AP_InstallmentDetail_active');
                     $('#afterpayInstallmentProfileId').val([{$installment->installmentProfileNumber}]);
+                    $('.AP_Info .AP_Installment_Info_Link')[0].href = '[{$installment->readMore}]';
 
                     [{if $finalOrderStep}] $('#changeInstallmentPlan').submit(); [{/if}]"
                 >
@@ -95,7 +97,7 @@
         [{assign var=merchant_id value=$oView->getMerchantId()}]
 
         [{assign var="pflichtangabenLink" value="https://documents.myafterpay.com/consumer-terms-conditions/de_DE/default/bgb507"}]
-        [{assign var="kostenLink"         value="https://documents.myafterpay.com/consumer-terms-conditions/de_de/default/fix_installments#6kosten"}]
+        [{assign var="kostenLink"         value=$InstallLink}]
         [{assign var="datenschutzLink"    value="https://documents.myafterpay.com/privacy-statement/$lang_country/$merchant_id"}]
         [{assign var="agbLink"            value="https://documents.myafterpay.com/consumer-terms-conditions/$lang_country/$merchant_id/fix_installments"}]
         [{assign var="string"             value=$pflichtangabenLink|cat:","|cat:$kostenLink|cat:","|cat:$datenschutzLink|cat:","|cat:$agbLink}]

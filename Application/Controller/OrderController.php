@@ -182,7 +182,7 @@ class OrderController extends OrderController_parent
 
 
         if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
-            foreach ($availableInstallmentPlans  as &$plan) {
+            foreach ($availableInstallmentPlans as &$plan) {
                 unset($plan->effectiveAnnualPercentageRate);
             }
 

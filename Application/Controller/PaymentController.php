@@ -224,7 +224,7 @@ class PaymentController extends PaymentController_parent
 
         $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
         $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-        $availableInstallmentPlans  = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
+        $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
         if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
             foreach ($availableInstallmentPlans as &$plan) {
