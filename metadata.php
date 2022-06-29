@@ -37,17 +37,18 @@ $aModule = [
     'version' => '2.1.0-beta.3',
     'author' => 'norisk GmbH',
     'url' => '',
-    'email' => '',
+    'email' => 'info@noriskshop.de',
     'events' => [
         'onActivate'   => 'Arvato\AfterpayModule\Core\Events::onActivate',
         'onDeactivate' => 'Arvato\AfterpayModule\Core\Events::onDeactivate'
     ],
     'extend' => [
         // Controller
-        \OxidEsales\Eshop\Application\Controller\OrderController::class    => Arvato\AfterpayModule\Application\Controller\OrderController::class,
-        \OxidEsales\Eshop\Application\Controller\UserController::class     => Arvato\AfterpayModule\Application\Controller\UserController::class,
-        \OxidEsales\Eshop\Application\Controller\PaymentController::class  => Arvato\AfterpayModule\Application\Controller\PaymentController::class,
-        \OxidEsales\Eshop\Application\Controller\ThankYouController::class  => Arvato\AfterpayModule\Application\Controller\ThankYouController::class,
+        \OxidEsales\Eshop\Application\Controller\OrderController::class         => Arvato\AfterpayModule\Application\Controller\OrderController::class,
+        \OxidEsales\Eshop\Application\Controller\UserController::class          => Arvato\AfterpayModule\Application\Controller\UserController::class,
+        \OxidEsales\Eshop\Application\Controller\PaymentController::class       => Arvato\AfterpayModule\Application\Controller\PaymentController::class,
+        \OxidEsales\Eshop\Application\Controller\ThankYouController::class      => Arvato\AfterpayModule\Application\Controller\ThankYouController::class,
+        \OxidEsales\Eshop\Application\Controller\Admin\RolesBackendMain::class  => Arvato\AfterpayModule\Application\Controller\Admin\RolesBackendMain::class,
         // Model
         \OxidEsales\Eshop\Application\Model\Article::class => Arvato\AfterpayModule\Application\Model\Article::class,
         \OxidEsales\Eshop\Application\Model\Order::class   => Arvato\AfterpayModule\Application\Model\Order::class,

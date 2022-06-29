@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
@@ -26,7 +22,26 @@ class PaymentController extends PaymentController_parent
 
     const ARVATO_ORDER_STATE_SELECTINSTALLMENT = -13337;
 
+    /**
+     * @var string[]
+     */
     protected $map = [];
+
+    /**
+     * @var string[]
+     */
+    protected $userMapping = [
+        'apsal'         => 'OXSAL',
+        'apfname'       => 'OXFNAME',
+        'aplname'       => 'OXLNAME',
+        'apbirthday'    => 'OXBIRTHDATE',
+        'apfon'         => 'OXFON',
+        'apstreet'      => 'OXSTREET',
+        'apstreetnr'    => 'OXSTREETNR',
+        'apzip'         => 'OXZIP',
+        'apcity'        => 'OXCITY',
+    ];
+
     /**
      * @var string[] Error messages from the AfterPay service.
      */
@@ -53,7 +68,7 @@ class PaymentController extends PaymentController_parent
         $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... their formatting ...
-        $availableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
+        $availableInstallmentPlanFormattings = oxNew(AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
         $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $availableInstallmentPlanFormattings);
 
         // ... and currently selected installment plan (if there is a selected one)
@@ -269,13 +284,12 @@ class PaymentController extends PaymentController_parent
         if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
             return 1;
         }
-        if (
-            !isset($dynValue['apdebitbankaccount'])
+        if (!isset($dynValue['apdebitbankaccount'])
             || !$dynValue['apdebitbankaccount']
         ) {
             return 1; //Complete fields correctly
         }
-
+        $this->_setDynUserValues($dynValue, $requiredFields, $payment);
         return 0;
     }
 
@@ -294,12 +308,12 @@ class PaymentController extends PaymentController_parent
         if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
             return 1;
         }
-        if (
-            !isset($dynValue['apinstallmentbankaccount'])
+        if (!isset($dynValue['apinstallmentbankaccount'])
             || !$dynValue['apinstallmentbankaccount']
         ) {
             return 1; //Complete fields correctly
         }
+        $this->_setDynUserValues($dynValue, $requiredFields, $payment);
         return 0;
     }
 
@@ -412,8 +426,11 @@ class PaymentController extends PaymentController_parent
     {
         $payment = 'Invoice';
         $requiredFields = $this->assignRequiredDynValue()[$payment];
-
-        return $this->_validateRequiredFields($requiredFields,$payment,$dynValue);
+        $validationResult = $this->_validateRequiredFields($requiredFields,$payment,$dynValue);
+        if (!$validationResult) {
+            $this->_setDynUserValues($dynValue, $requiredFields, $payment);
+        }
+        return $validationResult;
     }
 
     /**
@@ -421,17 +438,17 @@ class PaymentController extends PaymentController_parent
      * -----------------------------------------------------------------------------------------------------------------
      *
      *
-     * @param $requiredFields
-     * @param $payment
-     * @param $dynValue
+     * @param array  $requiredFields
+     * @param string $payment
+     * @param array  $dynValue
      *
      * @return int
      */
-    protected function _validateRequiredFields($requiredFields,$payment ,$dynValue)
+    protected function _validateRequiredFields($requiredFields, $payment, &$dynValue)
     {
         foreach ($this->map as $dynField => $requiredField) {
-            if ($requiredFields[$requiredField] &&
-                (!isset($dynValue[$dynField][$payment]) || !$dynValue[$dynField][$payment])
+            if ($requiredFields[$requiredField]
+                && (!isset($dynValue[$dynField][$payment]) || !$dynValue[$dynField][$payment])
             ) {
                 return 1; //Complete fields correctly
             }
@@ -515,8 +532,40 @@ class PaymentController extends PaymentController_parent
         }
 
         $privacyLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['privacy']);
-        $privacyLink = str_replace('##MERCHANT##',Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),$privacyLink);
+        $privacyLink = str_replace(
+            '##MERCHANT##',
+            Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),
+            $privacyLink
+        );
 
         $smarty->assign('PrivacyLink', $privacyLink);
+    }
+
+    /**
+     * _setDynUserValues
+     * -----------------------------------------------------------------------------------------------------------------
+     * check if we have user values in the dynvalues and adds them to the user
+     *
+     * @param array  $dynValues      dynamic Values from the session or post request
+     * @param array  $requiredFields fields required in this case salutation, or other things
+     * @param string $payment        payment name
+     */
+    protected function _setDynUserValues($dynValues, $requiredFields, $payment)
+    {
+        $userValues = [];
+        foreach ($this->map as $dynField => $requiredField) {
+            if ($requiredFields[$requiredField]
+                && isset($dynValues[$dynField][$payment])
+                && isset($this->userMapping[$dynField])
+            ) {
+                $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
+            }
+        }
+        if (!empty($userValues)) {
+            /** @var User $user */
+            $user = $this->getUser();
+            $user->assign($userValues);
+            $user->save();
+        }
     }
 }
