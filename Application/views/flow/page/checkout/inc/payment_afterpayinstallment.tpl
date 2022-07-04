@@ -31,10 +31,10 @@
                 <div class="clearfix"></div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="afterpayinstallment_1">
+                    <label class="control-label col-lg-3" for="afterpayinstallment_1">
                         [{oxmultilang ident="AFTERPAY_INSTALLMENT_IBAN"}]
                     </label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9">
                         <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="" required>
                     </div>
                 </div>

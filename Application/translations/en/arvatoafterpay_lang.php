@@ -25,14 +25,14 @@ $aLang = [
     "AFTERPAY_INSTALLMENT_IBAN"                          => 'Bank details (IBAN)',
     "AFTERPAY_INSTALLMENT_TOTALINSTALLMENTCOST"          => 'Total financing costs',
     "AFTERPAY_NO_INSTALLMENT"                            => 'We apologize for not being able to provide any installments plans right now. Please select another payment method.',
-    "AFTERPAY_LEGAL_INVOICE_DEBITNOTE"                   => 'I have read and accept the <a href="https://www.afterpay.de/agb" target="_new" style="text-decoration:underline">Terms & Conditions</a> and <a href="https://www.afterpay.de/datenschutz" target="_new" style="text-decoration:underline">data protection regulations</a> of AfterPay.',
+    "AFTERPAY_LEGAL_INVOICE_DEBITNOTE"                   => 'I have read and accept the <a href="##AGBLINK##"  target="_new" style="text-decoration:underline">Terms & Conditions</a> and <a href="##PRIVACYLINK##" target="_new" style="text-decoration:underline">data protection regulations</a> of AfterPay.',
     "AFTERPAY_LEGAL_INSTALLMENT"                         => '<hr>
                                                       <p>Please click <a href="##READMORELINK##" target="_new" style="text-decoration:underline">here</a>  for a repayment plan based on example totals. You do not have to provide insurance or other security.</p>
                                                       <!--SECCISTART-->
                                                       <p>Standard European Consumer Credit Information (SECCI) <a href="##READMORELINK##" target="_new" style="text-decoration:underline">show</a>.</p>
                                                       <!--SECCIEND-->
                                                       <hr>
-                                                      <p>I have read and accept the <a href="https://www.afterpay.de/agb" target="_new" style="text-decoration:underline">Terms & Conditions</a> and <a href="https://www.afterpay.de/datenschutz" target="_new" style="text-decoration:underline">data protection regulations</a> of AfterPay.
+                                                      <p>I have read and accept the <a href="##AGBLINK##" target="_new" style="text-decoration:underline">Terms & Conditions</a> and <a href="##PRIVACYLINK##" target="_new" style="text-decoration:underline">data protection regulations</a> of AfterPay.
                                                       <p>For the part payments I have also read the
                                                         <a href="##READMORELINK##" target="_new" style="text-decoration:underline">Special Terms & Conditions for installments</a>
                                                         <!--SECCISTART-->
@@ -49,7 +49,7 @@ $aLang = [
     'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION' => 'Here you will find the <a target="_new" href="%s">mandatory information</a> according to § 507 BGB (German Civil Code), the <a target="_new" class="AP_Installment_Info_Link" href="%s">European Standard Information for Consumer Credit</a> and the <a target="_new" href="%s">Privacy Policy</a> of AfterPay. The <a target="_new" href="%s">General Terms and Conditions for AfterPay</a> apply.',
     'AFTERPAY_THANKYOU_SHOPFIRST'                        => 'shop first, pay later with AfterPay',
     'AFTERPAY_THANKYOU_TEXT'                             => 'Thank you for your purchase at %s and for choosing AfterPay as your payment method. An email with the order confirmation, details and tracking info is on the way, but feel free to discover what AfterPay can do for you.
-                                                            <a target="_new" href="https://www.myafterpay.com/en-de/feature/app">Download our app</a>
+                                                            </b><a target="_new" href="https://www.myafterpay.com/en-de/feature/app">Download our app</a>
                                                             on your smartphone or visit <a target="_new" href="https://www.myafterpay.com/">MyAfterPay</a>
                                                             in your browser to find out the easiest way to keep track of outstanding payments, pause payments for returns or keep track and many more options.'
 ];
