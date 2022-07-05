@@ -36,7 +36,7 @@ $aLang = [
     "AFTERPAY_NO_INSTALLMENT"                            => 'Derzeit ist eine Ratenzahlung leider nicht verfügbar. Bitte wählen Sie eine andere Zahlungsart.',
     "AFTERPAY_LEGAL_INVOICE_DEBITNOTE"                   => 'Ich habe die <a href="##AGBLINK##" target="_new" style="text-decoration:underline">Allgemeinen Geschäftsbedingungen</a> und <a href="##PRIVACYLINK##" target="_new" style="text-decoration:underline">Datenschutzbestimmungen</a> von AfterPay gelesen und akzeptiere diese.',
     "AFTERPAY_LEGAL_INSTALLMENT"                         => '<hr>
-                                                              <p>Bitte klicken Sie <a href="##READMORELINK##" target="_new" style="text-decoration:underline">hier</a> für einen Tilgungsplan anhand beispielhafter Gesamtbeträge. Sie müssen keine Versicherung oder andere Sicherheiten stellen.</p>
+                                                              <p>Bitte klicke <a href="##READMORELINK##" target="_new" style="text-decoration:underline">hier</a> für einen Tilgungsplan anhand beispielhafter Gesamtbeträge. Du musst keine Versicherung oder andere Sicherheiten stellen.</p>
                                                               <!--SECCISTART-->
                                                               <p>Europäische Standardinformationen für Verbraucherkredite (SECCI) <a href="##READMORELINK##" target="_new" style="text-decoration:underline">anzeigen</a></p>
                                                               <!--SECCIEND-->
@@ -57,8 +57,8 @@ $aLang = [
     'AFTERPAYOPTIN_PAYMENT_BUTTON'                       => 'Bestätigen',
     'AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION' => 'Hier findest du die <a target="_new" href="%s">Pflichtangaben nach § 507 BGB</a>, die <a target="_new" class="AP_Installment_Info_Link" href="%s">Europäischen Standardinformationen für Verbraucherkredite</a> und von AfterPay.<br><br>Es gelten die <a target="_new" href="%s">Allgemeinen Geschäftsbedingungen</a> der AfterPay Zahlart. Die Datenschutzerklärung der AfterPay Zahlart befindet sich <a target="_new" href="%s">hier</a>',
     'AFTERPAY_THANKYOU_SHOPFIRST'                        => 'Kauf zuerst ein, zahle später mit AfterPay',
-    'AFTERPAY_THANKYOU_TEXT'                             => 'Danke für Deinen Einkauf bei %s und dass du AfterPay als Bezahlungsart ausgewählt hast. Du erhältst in Kürze eine E-Mail mit der Bestellbestätigung sowie Informationen zum Tracking, in der Zwischenzeit, sieh dir doch gerne an, was AfterPay für Dich tun kann.
-                                                            </b><a target="_new" href="https://www.myafterpay.com/de-de/feature/app">Lade unsere App</a>
+    'AFTERPAY_THANKYOU_TEXT'                             => 'Danke für Deinen Einkauf bei %s und dass Du AfterPay als Bezahlungsart ausgewählt hast. Du erhältst in Kürze eine E-Mail mit der Bestellbestätigung sowie Informationen zum Tracking, in der Zwischenzeit, sieh dir doch gerne an, was AfterPay für Dich tun kann.<br>
+                                                            <a target="_new" href="https://www.myafterpay.com/de-de/feature/app">Lade unsere App</a>
                                                             oder besuche <a target="_new" href="https://www.myafterpay.com/">MyAfterPay</a>
                                                             im Browser, um herauszufinden, wie einfach du den Überblick über ausstehende Zahlungen behalten, Zahlungen für Rücksendungen pausieren kannst und vieles mehr.'
 ];
