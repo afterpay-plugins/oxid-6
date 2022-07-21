@@ -65,48 +65,34 @@
                     [{assign var="active" value=true}]
                 [{/if}]
 
-                <div id="AP_InstallmentDetail_[{$installment->installmentProfileNumber}]" class="AP_InstallmentDetail [{if $active}]AP_InstallmentDetail_active[{/if}]"
-                     data-ap-installment-profile="[{$installment->installmentProfileNumber}]">
-                    <ul>
-                        <li>Jeden Monat dieselbe Rate, keine Überraschungen</li>
-                        <li>Fester Zinssatz von <b>[{$installment->interestRate}]%</b> p.a.</li>
-                        <li>Effektiver Zinssatz von <b>[{$installment->effectiveInterestRate}]%</b> p.a.</li>
-                        [{if $installment->basketAmount neq $installment->totalAmount}]
-                            <li>Für den Warenkorb von [{oxprice price=$installment->basketAmount currency=$currency}]
-                                ergibt sich bei der Auswahl der Ratenzahlung über [{$installment->numberOfInstallments}]
-                                Monate ein Gesamtkreditbetrag von
-                                <b>[{oxprice price=$installment->totalAmount currency=$currency}]</b>
-                            </li>
-                        [{/if}]
-                    </ul>
-                    [{if $installment->basketAmount >= 200 and $installment->effectiveInterestRate > 0}]
-                        <div class="AP_InstallmentTotalPrice">
-                            Klicke <a href="http://documents-cdn.afterpay-demo.com/docs/t_c/en_de/234/invoice"
-                                      class="AP_linkToModalView">hier</a> um weitere Informationen
-                            , die Standardinformationen für Verbraucherkredite und beispielhafte Tilgungspläne
-                            anzuzeigen.
-                        </div>
-                    [{/if}]
-                </div>
+            <div id="AP_InstallmentDetail_[{$installment->installmentProfileNumber}]" class="AP_InstallmentDetail [{if $active}]AP_InstallmentDetail_active[{/if}]"
+                 data-ap-installment-profile="[{$installment->installmentProfileNumber}]">
+                [{assign var="installmentInfo" value="AFTERPAY__PAYMENTSELECT_INSTALLMENT_INFO"|oxmultilangassign}]
+                [{assign var="installmentInfo" value=$installmentInfo|replace:"##BASKETAMOUNT##":$installment->basketAmount}]
+                [{assign var="installmentInfo" value=$installmentInfo|replace:"##NUMBEROFINSTALLMENTS##":$installment->numberOfInstallments}]
+                [{assign var="installmentInfo" value=$installmentInfo|replace:"##INTERESTRATE##":$installment->interestRate}]
+                [{assign var="installmentInfo" value=$installmentInfo|replace:"##TOTALAMOUNT##":$installment->totalAmount}]
+
+                [{assign var="installmentInfo" value=$installmentInfo|replace:"##EFFECTIVEINTERESTRATE##":$installment->effectiveInterestRate}]
+                <span>[{$installmentInfo}]</span>
+            </div>
             [{/foreach}]
+            <div class="AP_Info">
+                [{assign var=lang_country value=$oView->getActiveLocale()}]
+                [{assign var=merchant_id value=$oView->getMerchantId()}]
+
+                [{assign var="pflichtangabenLink" value="https://documents.myafterpay.com/consumer-terms-conditions/de_DE/default/bgb507"}]
+                [{assign var="kostenLink"         value=$InstallLink}]
+                [{assign var="agbLink"            value="https://documents.myafterpay.com/consumer-terms-conditions/$lang_country/$merchant_id/fix_installments"}]
+                [{assign var="datenschutzLink"    value="https://documents.myafterpay.com/privacy-statement/$lang_country/$merchant_id"}]
+                [{assign var="string"             value=$pflichtangabenLink|cat:","|cat:$kostenLink|cat:","|cat:$datenschutzLink|cat:","|cat:$agbLink}]
+                [{assign var="args"               value=","|explode:$string}]
+
+                [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION" args=$args}]
+            </div>
         </div>
     </div>
-
-    <div class="AP_Info">
-        [{assign var=lang_country value=$oView->getActiveLocale()}]
-        [{assign var=merchant_id value=$oView->getMerchantId()}]
-
-        [{assign var="pflichtangabenLink" value="https://documents.myafterpay.com/consumer-terms-conditions/de_DE/default/bgb507"}]
-        [{assign var="kostenLink"         value=$InstallLink}]
-        [{assign var="datenschutzLink"    value="https://documents.myafterpay.com/privacy-statement/$lang_country/$merchant_id"}]
-        [{assign var="agbLink"            value="https://documents.myafterpay.com/consumer-terms-conditions/$lang_country/$merchant_id/fix_installments"}]
-        [{assign var="string"             value=$pflichtangabenLink|cat:","|cat:$kostenLink|cat:","|cat:$datenschutzLink|cat:","|cat:$agbLink}]
-        [{assign var="args"               value=","|explode:$string}]
-
-        [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION" args=$args}]
-    </div>
 </div>
-
 
 <script type="text/javascript">
     /* Please specify the hidden field in which the installment number should we written in */
