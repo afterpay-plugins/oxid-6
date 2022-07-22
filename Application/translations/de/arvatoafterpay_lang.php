@@ -65,5 +65,6 @@ $aLang = [
                                                             oder besuche <a target="_new" href="https://www.myafterpay.com/">MyAfterPay</a>
                                                             im Browser, um herauszufinden, wie einfach du den Überblick über ausstehende Zahlungen behalten, Zahlungen für Rücksendungen pausieren kannst und vieles mehr.',
     'AFTERPAY__PAYMENTSELECT_INSTALLMENT_INFO'          => '* Bei einem Warenkob in Höhe von ##BASKETAMOUNT## € und ##NUMBEROFINSTALLMENTS## gleichbeleibenden Raten beläuft sich der Gesamtbetrag auf ##TOTALAMOUNT## €. Soll-Zinssatz ist ##INTERESTRATE## % und Effektivzinssatz ist ##EFFECTIVEINTERESTRATE## %.',
-    'AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH'         => 'Monat'
+    'AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH'         => 'Monat',
+    'AFTERPAY__PAYMENTSELECT_INSTALLMENT_NUMBER'        => 'in ##NUMBEROFINSTALLMENTS## Raten'
 ];
