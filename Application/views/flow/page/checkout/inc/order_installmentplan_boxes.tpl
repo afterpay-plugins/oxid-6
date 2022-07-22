@@ -46,9 +46,9 @@
                     <div class="AP_InstallmentMonthlyAmount">[{oxprice price=$installment->installmentAmount currency=$currency}]
                         / [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH"}] *
                     </div>
+
                     [{assign var="number" value="AFTERPAY__PAYMENTSELECT_INSTALLMENT_NUMBER"|oxmultilangassign}]
                     [{assign var="number" value=$number|replace:"##NUMBEROFINSTALLMENTS##":$installment->numberOfInstallments}]
-
                     <div class="AP_InstallmentMonths">[{$number}]</div>
                     <div class="AP_InstallmentSelected">✓</div>
                     <div style="clear:both"></div>
