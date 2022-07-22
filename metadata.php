@@ -34,7 +34,7 @@ $aModule = [
         'en' => 'standalone release of the Arvato AfterPay Module'
     ],
     'thumbnail'   => 'Application/views/out/img/AfterPay_logo_checkout.png',
-    'version' => '2.1.0-beta.3',
+    'version' => '2.1.0-beta.4',
     'author' => 'norisk GmbH',
     'url' => '',
     'email' => 'info@noriskshop.de',
@@ -130,12 +130,6 @@ $aModule = [
         ],
         [
             'theme'    => 'flow',
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'checkout_order_remark',
-            'file'     => 'Application/views/blocks/flow/checkout_order_remark.tpl'
-        ],
-        [
-            'theme'    => 'flow',
             'template' => 'page/checkout/inc/basketcontents.tpl',
             'block'    => 'checkout_basketcontents_grandtotal',
             'file'     => 'Application/views/blocks/flow/checkout_order_basketcontents_grandtotal.tpl'
@@ -175,12 +169,6 @@ $aModule = [
             'template' => 'page/checkout/order.tpl',
             'block'    => 'checkout_order_errors',
             'file'     => 'Application/views/blocks/wave/checkout_order_errors.tpl'
-        ],
-        [
-            'theme'    => 'wave',
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'checkout_order_remark',
-            'file'     => 'Application/views/blocks/wave/checkout_order_remark.tpl'
         ],
         [
             'theme'    => 'wave',

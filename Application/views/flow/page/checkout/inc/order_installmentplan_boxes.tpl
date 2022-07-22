@@ -44,7 +44,7 @@
                     [{if $finalOrderStep}] $('#changeInstallmentPlan').submit(); [{/if}]"
                 >
                     <div class="AP_InstallmentMonthlyAmount">[{oxprice price=$installment->installmentAmount currency=$currency}]
-                        / Monat
+                        / [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH"}] *
                     </div>
                     <div class="AP_InstallmentMonths">in [{$installment->numberOfInstallments}] Raten</div>
                     <div class="AP_InstallmentSelected">✓</div>

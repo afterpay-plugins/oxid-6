@@ -22,10 +22,6 @@
             [{/if}]
         [{/if}]
 
-        [{if $trackingvalue != "inactive"}]
-            [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
-        [{/if}]
-
         <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
             <div class="form-group">
                 <label class="control-label col-lg-3" for="afterpaydebitnote_1">
@@ -38,15 +34,9 @@
 
             [{include file="wave/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Debit"}]
 
-            <div style="clear:both"></div>
-            [{block name="checkout_payment_longdesc"}]
-                <div class="alert alert-info offset-lg-3 desc">
-                    [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_DEBITNOTE"}]
-                    [{if $paymentmethod->oxpayments__oxlongdesc->value|strip_tags|trim}]
-                        [{$paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
-                    [{/if}]
-                </div>
-            [{/block}]
+            [{if $trackingvalue != "inactive"}]
+                [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
+            [{/if}]
         </div>
     </dd>
 </dl>

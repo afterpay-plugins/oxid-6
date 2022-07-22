@@ -22,10 +22,6 @@
             [{/if}]
         [{/if}]
 
-        [{if $trackingvalue != "inactive"}]
-            [{include file="wave/page/checkout/inc/payment_tracking.tpl"}]
-        [{/if}]
-
         [{if $aAvailableAfterpayInstallmentPlans}]
             <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
                 <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
@@ -53,6 +49,10 @@
                     [{$paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
                 [{/if}]
             </div>
+
+        [{if $trackingvalue != "inactive"}]
+            [{include file="wave/page/checkout/inc/payment_tracking.tpl"}]
+        [{/if}]
 
         [{else}]
             [{block name="checkout_payment_longdesc"}]
