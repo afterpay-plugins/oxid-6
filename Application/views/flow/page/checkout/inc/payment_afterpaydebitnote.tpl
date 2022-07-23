@@ -22,7 +22,7 @@
             [{/if}]
         [{/if}]
 
-        <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
+        <div class="afterpay_content">
             <div class="form-group">
                 <label class="control-label col-lg-3" for="afterpaydebitnote_1">
                     *IBAN

@@ -23,7 +23,7 @@
         [{/if}]
 
         [{if $aAvailableAfterpayInstallmentPlans}]
-            <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
+            <div class="afterpay_content">
                 <div class="clearfix"></div>
 
                 <div class="form-group">

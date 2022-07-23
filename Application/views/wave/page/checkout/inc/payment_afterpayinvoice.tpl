@@ -26,7 +26,7 @@
             [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
         [{/if}]
 
-        <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
+        <div class="afterpay_content">
             [{include file="wave/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Invoice"}]
         </div>
 

@@ -23,7 +23,7 @@
         [{/if}]
 
         [{if $aAvailableAfterpayInstallmentPlans}]
-            <div class="afterpay_content[{if $trackingvalue == "mandatory"}] hidden[{/if}]">
+            <div class="afterpay_content">
                 <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
 
                 [{include file="wave/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
