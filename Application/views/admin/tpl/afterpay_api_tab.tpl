@@ -171,19 +171,6 @@
                         </tr>
                         <tr>
                             <td class="edittext">
-                                <label for="arvatoAfterpayApiKeyNLInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiKeyNLInstallment" }]</label>
-                            </td>
-                            <td class="edittext">
-                                [{oxhasrights object=$edit readonly=$readonly}]
-                            <input type="text" class="editinput" size="50"
-                                   name="confstrs[arvatoAfterpayApiKeyNLInstallment]"
-                                   id="arvatoAfterpayApiKeyNLInstallment"
-                                   value="[{$confstrs.arvatoAfterpayApiKeyNLInstallment}]" [{$readonly}]>
-                                [{/oxhasrights}]
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="edittext">
                                 <label for="arvatoAfterpayApiKeyBE">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiKeyBE" }]</label>
                             </td>
                             <td class="edittext">
@@ -311,19 +298,6 @@
                                            name="confstrs[arvatoAfterpayApiSandboxKeyNL]"
                                            id="arvatoAfterpayApiSandboxKeyNL"
                                            value="[{$confstrs.arvatoAfterpayApiSandboxKeyNL}]" [{$readonly}]>
-                                [{/oxhasrights}]
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="edittext">
-                                <label for="arvatoAfterpayApiSandboxKeyNLInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiSandboxKeyNLInstallment" }]</label>
-                            </td>
-                            <td class="edittext">
-                                [{oxhasrights object=$edit readonly=$readonly}]
-                            <input type="text" class="editinput" size="50"
-                                   name="confstrs[arvatoAfterpayApiSandboxKeyNLInstallment]"
-                                   id="arvatoAfterpayApiSandboxKeyNLInstallment"
-                                   value="[{$confstrs.arvatoAfterpayApiSandboxKeyNLInstallment}]" [{$readonly}]>
                                 [{/oxhasrights}]
                             </td>
                         </tr>
@@ -458,19 +432,6 @@
                                            name="confstrs[arvatoAfterpayApiPartnerKeyNL]"
                                            id="arvatoAfterpayApiPartnerKeyNL"
                                            value="[{$confstrs.arvatoAfterpayApiPartnerKeyNL}]" [{$readonly}]>
-                                [{/oxhasrights}]
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="edittext">
-                                <label for="arvatoAfterpayApiPartnerKeyNLInstallment">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayApiPartnerKeyNLInstallment" }]</label>
-                            </td>
-                            <td class="edittext">
-                                [{oxhasrights object=$edit readonly=$readonly}]
-                            <input type="text" class="editinput" size="50"
-                                   name="confstrs[arvatoAfterpayApiPartnerKeyNLInstallment]"
-                                   id="arvatoAfterpayApiPartnerKeyNLInstallment"
-                                   value="[{$confstrs.arvatoAfterpayApiPartnerKeyNLInstallment}]" [{$readonly}]>
                                 [{/oxhasrights}]
                             </td>
                         </tr>
