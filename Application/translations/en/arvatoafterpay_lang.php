@@ -52,7 +52,7 @@ $aLang = [
                                                             <a target="_new" href="https://www.myafterpay.com/en-de/feature/app">Download our app</a>
                                                             on your smartphone or visit <a target="_new" href="https://www.myafterpay.com/">MyAfterPay</a>
                                                             in your browser to find out the easiest way to keep track of outstanding payments, pause payments for returns or keep track and many more options.',
-    'AFTERPAY__PAYMENTSELECT_INSTALLMENT_INFO'          => '* The shopping cart of ##BASKETAMOUNT## € results in a total loan amount of ##TOTALAMOUNT## € when selecting ##NUMBEROFINSTALLMENTS## installments. * Debit interest is ##INTERESTRATE## % and effective interest rate is ##EFFECTIVEINTERESTRATE## %.',
+    'AFTERPAY__PAYMENTSELECT_INSTALLMENT_INFO'          => '* The shopping cart of ##BASKETAMOUNT## € results in a total loan amount of ##TOTALAMOUNT## € when selecting ##NUMBEROFINSTALLMENTS## installments. Debit interest is ##INTERESTRATE## % and effective interest rate is ##EFFECTIVEINTERESTRATE## %.',
     'AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH'         => 'Month',
     'AFTERPAY__PAYMENTSELECT_INSTALLMENT_NUMBER'        => 'for ##NUMBEROFINSTALLMENTS## installments'
 ];
