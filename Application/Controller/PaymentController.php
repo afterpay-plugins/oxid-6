@@ -78,6 +78,10 @@ class PaymentController extends PaymentController_parent
         // Assign required fields
         $this->assignRequiredDynValue();
 
+        // Set needed Links
+        $this->_setTCLink();
+        $this->_setPrivacyLink();
+
         // Finally resume oxids handling
         return $this->parentRender();
     }
@@ -104,7 +108,6 @@ class PaymentController extends PaymentController_parent
         if (!$this->getUser()) {
             return null;
         }
-        $this->_setPrivacyLink();
 
         $smarty = Registry::getUtilsView()->getSmarty();
         $requirements = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
@@ -544,6 +547,37 @@ class PaymentController extends PaymentController_parent
         );
 
         $smarty->assign('PrivacyLink', $privacyLink);
+    }
+
+    /**
+     * _setTCLink
+     * -----------------------------------------------------------------------------------------------------------------
+     *  set in smarty variable T&C link per payment and country
+     *
+     */
+    protected function _setTCLink()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
+        $lang = $this->getActiveLangAbbr();
+
+        // if Austria
+        if ($user->oxuser__oxcountryid->value == "a7c40f6320aeb2ec2.72885259") {
+            $country = 'at';
+        } else {
+            $country = 'de';
+        }
+
+        $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
+        if ($merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->oxuser__oxcountryid->value)) {
+            $AGBLink = str_replace('##MERCHANT##', $merchantID, $AGBLink);
+        } else {
+            $AGBLink = str_replace('##MERCHANT##', 'muster-merchant', $AGBLink);
+        }
+
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $smarty->assign('AGBLink', $AGBLink);
     }
 
     /**
