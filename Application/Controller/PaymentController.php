@@ -78,7 +78,7 @@ class PaymentController extends PaymentController_parent
         // Assign required fields
         $this->assignRequiredDynValue();
 
-        // Set needed Links
+        // Set required links
         $this->_setTCLink();
         $this->_setPrivacyLink();
 
