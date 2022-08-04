@@ -70,4 +70,24 @@ class AfterpayRequiredfieldsTab extends ShopConfiguration
     {
         return "SHOP_MODULE_GROUP_arvatoAfterpayRequiredFields";
     }
+
+    /**
+     * isFixRequiredField
+     * -----------------------------------------------------------------------------------------------------------------
+     *  check if the field fix required
+     *
+     * @param $FieldNames
+     * @param $country_name
+     *
+     * @return bool
+     */
+    public function isFixRequiredField($FieldNames, $country_name)
+    {
+        $fixRequiredFields = Registry::get(AfterpayIdStorage::class)->getFixRequiredFields();
+
+        if ($fixRequiredFields[$FieldNames][$country_name] == 1 ) {
+            return true;
+        }
+        return false;
+    }
 }

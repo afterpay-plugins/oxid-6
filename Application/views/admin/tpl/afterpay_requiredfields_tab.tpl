@@ -66,44 +66,64 @@
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayInvoiceRequires$FieldNames$country_id"}]
-								<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
-								<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
-									   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								[{if $oView->isFixRequiredField($FieldNames,$country_name)}]
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
+										   value="1" checked disabled [{$readonly}]>
+								[{else}]
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
+										   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								[{/if}]
 								[{/oxhasrights}]
 							</td>
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayDebitRequires$FieldNames$country_id"}]
-								<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
-								<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
-								   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								[{if $oView->isFixRequiredField($FieldNames,$country_name)}]
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
+								   	value="1" checked disabled [{$readonly}]>
+								[{else}]
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
+								   	value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								[{/if}]
 								[{/oxhasrights}]
 							</td>
 
 							<td>
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayInstallmentsRequires$FieldNames$country_id"}]
-							<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
-							<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
-								   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								[{if $oView->isFixRequiredField($FieldNames,$country_name)}]
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
+										   value="1" checked disabled [{$readonly}]>
+								[{else}]
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
+										   value="1" [{if ($confbools.$config_varname) == 1}]checked[{/if}][{$readonly}]>
+								[{/if}]
 								[{/oxhasrights}]
 							</td>
 						</tr>
 					[{/foreach}]
 				</table>
 				<table>
-					<td class="edittext">
-						<label for="[{$config_varname}]">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayMerchantID" }]</label>
-					</td>
-					<td class="edittext">
-						[{oxhasrights object=$edit readonly=$readonly}]
-						[{assign var="config_varname" value="arvatoAfterpayHorizonID$country_id"}]
-					<input type="text" class="editinput" size="40" name=confstrs[[{$config_varname}]]
-						   value="[{$confstrs.$config_varname}]" [{$readonly}] id="[{$config_varname}]">
-						[{/oxhasrights}]
-						[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayHorizonID'}]
-					</td>
+					<tr>
+						<td class="edittext">
+							<label for="[{$config_varname}]">[{oxmultilang ident="SHOP_MODULE_arvatoAfterpayMerchantID" }]</label>
+						</td>
+						<td class="edittext">
+							[{oxhasrights object=$edit readonly=$readonly}]
+							[{assign var="config_varname" value="arvatoAfterpayHorizonID$country_id"}]
+						<input type="text" class="editinput" size="40" name=confstrs[[{$config_varname}]]
+							   value="[{$confstrs.$config_varname}]" [{$readonly}] id="[{$config_varname}]">
+							[{/oxhasrights}]
+							[{oxinputhelp ident='HELP_SHOP_MODULE_arvatoAfterpayHorizonID'}]
+						</td>
+					</tr>
 				</table>
 			</dl>
 		</div>

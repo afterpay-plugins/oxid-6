@@ -69,4 +69,45 @@ class AfterpayIdStorage
             'privacy' => 'https://documents.myafterpay.com/privacy-statement/##LANGCOUNTRY##/##MERCHANT##',
         ];
     }
+
+    /**
+     * getFixRequiredFields
+     * -----------------------------------------------------------------------------------------------------------------
+     * get fix required fields pro Country depending on this Table:
+     * https://developer.afterpay.io/documentation/prepare-checkout/collecting-consumer-information/
+     *
+     * @return array
+     */
+    public function getFixRequiredFields()
+    {
+        $countries = $this->getContries();
+        $fixCountriesFields = [];
+        foreach ($countries as $country) {
+            switch ($country) {
+                case "Switzerland":
+                case "Austria":
+                case "Germany":
+                    $fixCountriesFields["Birthdate"][$country] = 1;
+                    $fixCountriesFields["StreetNumber"][$country] = 1;
+                    break;
+                case "Belgium":
+                case "Netherlands":
+                    $fixCountriesFields["Birthdate"][$country] = 1;
+                    $fixCountriesFields["StreetNumber"][$country] = 1;
+                    $fixCountriesFields["Phone"][$country] = 1;
+                    break;
+                case "Norway":
+                case "Finland":
+                case "Sweden":
+                    $fixCountriesFields["SSN"][$country] = 1;
+                    break;
+                case "Denmark":
+                    $fixCountriesFields["SSN"][$country] = 1;
+                    $fixCountriesFields["Birthdate"][$country] = 1;
+                    $fixCountriesFields["StreetNumber"][$country] = 1;
+                    break;
+            }
+        }
+        return $fixCountriesFields;
+    }
 }
