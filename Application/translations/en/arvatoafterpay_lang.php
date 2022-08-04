@@ -55,5 +55,5 @@ $aLang = [
     'AFTERPAY__PAYMENTSELECT_INSTALLMENT_INFO'          => '* The shopping cart of ##BASKETAMOUNT## € results in a total loan amount of ##TOTALAMOUNT## € when selecting ##NUMBEROFINSTALLMENTS## installments. Debit interest is ##INTERESTRATE## % and effective interest rate is ##EFFECTIVEINTERESTRATE## %.',
     'AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH'         => 'Month',
     'AFTERPAY__PAYMENTSELECT_INSTALLMENT_NUMBER'        => 'for ##NUMBEROFINSTALLMENTS## installments',
-    'AFTERPAY__PAYMENTSELECT_TCPRIVICY'                 => 'The general<a target="_new" href="##AGBLINK##">Terms and Conditions</a> for the AfterPay payment method apply. The privacy policy of AfterPay can be found <a target="_new" href="##PRIVACYLINK##">here</a>'
+    'AFTERPAY__PAYMENTSELECT_TCPRIVICY'                 => 'The general <a target="_new" href="##AGBLINK##">Terms and Conditions</a> for the AfterPay payment method apply. The privacy policy of AfterPay can be found <a target="_new" href="##PRIVACYLINK##">here</a>'
 ];
