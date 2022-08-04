@@ -31,15 +31,15 @@ class PaymentController extends PaymentController_parent
      * @var string[]
      */
     protected $userMapping = [
-        'apsal'         => 'OXSAL',
-        'apfname'       => 'OXFNAME',
-        'aplname'       => 'OXLNAME',
-        'apbirthday'    => 'OXBIRTHDATE',
-        'apfon'         => 'OXFON',
-        'apstreet'      => 'OXSTREET',
-        'apstreetnr'    => 'OXSTREETNR',
-        'apzip'         => 'OXZIP',
-        'apcity'        => 'OXCITY',
+        'apsal'         => 'oxsal',
+        'apfname'       => 'oxfname',
+        'aplname'       => 'oxlname',
+        'apbirthday'    => 'oxbirthdate',
+        'apfon'         => 'oxfon',
+        'apstreet'      => 'oxstreet',
+        'apstreetnr'    => 'oxstreetnr',
+        'apzip'         => 'oxzip',
+        'apcity'        => 'oxcity',
     ];
 
     /**
@@ -204,26 +204,26 @@ class PaymentController extends PaymentController_parent
 
         $error = 0;
 
-        if ($paymentId == "afterpaydebitnote") {
-            $error = $this->validateDebitNote($dynValue);
-        }
-
-        if ($paymentId == "afterpayinvoice") {
-            $error = $this->validateInvoice($dynValue);
-        }
-
-        if ($paymentId == "afterpayinstallment") {
-            $this->validateAndSaveSelectedInstallmentPforileId($dynValue);
-            $error = $this->validateInstallment($dynValue);
-        }
-
-
         if ($this->getRequestOrSessionParameter('AfterPayTrackingEnabled')) {
             Registry::getSession()->setVariable('AfterPayTrackingEnabled', true);
         }
 
+        // return error directly, if the mandatory Tracking Checkbox not checked
         if ($this->getTrackingOption() == "mandatory" && $this->getRequestOrSessionParameter('AfterPayTrackingEnabled') === true) {
             $error = 1;
+        }
+
+        if ($paymentId == "afterpaydebitnote" && !$error) {
+            $error = $this->validateDebitNote($dynValue);
+        }
+
+        if ($paymentId == "afterpayinvoice" && !$error) {
+            $error = $this->validateInvoice($dynValue);
+        }
+
+        if ($paymentId == "afterpayinstallment" && !$error) {
+            $this->validateAndSaveSelectedInstallmentPforileId($dynValue);
+            $error = $this->validateInstallment($dynValue);
         }
 
         $this->_sPaymentError = $error;

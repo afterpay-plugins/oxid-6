@@ -6,7 +6,13 @@
                 <input class="js-afterpay-optin" type="checkbox" value="1" name="AfterPayTrackingEnabled" id="afterpay-optin-[{$sPaymentID}]" />
                 [{assign var="legal" value="AFTERPAYOPTIN_PAYMENT_LABEL"|oxmultilangassign}]
                 [{assign var="legal" value=$legal|replace:"##PRIVACYLINK##":$PrivacyLink}]
-                <span>[{$legal}]</span>
+
+                [{if $trackingvalue == "mandatory"}]
+                    <span>*[{$legal}]</span>
+                [{else}]
+                    <span>[{$legal}]</span>
+                [{/if}]
+
             </label>
         </div>
     </div>
