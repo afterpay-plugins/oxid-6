@@ -88,7 +88,6 @@ class PaymentController extends PaymentController_parent
 
     public function getTrackingOption()
     {
-
         $possibleStates = ['inactive', 'mandatory', 'optional'];
         if (!in_array(Registry::getConfig()->getConfigParam( 'arvatoAfterpayProfileTrackingEnabled' ), $possibleStates)) {
             return 'inactive';
@@ -204,12 +203,8 @@ class PaymentController extends PaymentController_parent
 
         $error = 0;
 
-        if ($this->getRequestOrSessionParameter('AfterPayTrackingEnabled')) {
-            Registry::getSession()->setVariable('AfterPayTrackingEnabled', true);
-        }
-
         // return error directly, if the mandatory Tracking Checkbox not checked
-        if ($this->getTrackingOption() == "mandatory" && $this->getRequestOrSessionParameter('AfterPayTrackingEnabled') === true) {
+        if ($this->getTrackingOption() == "mandatory" && !$this->getRequestOrSessionParameter('AfterPayTrackingEnabled')) {
             $error = 1;
         }
 
