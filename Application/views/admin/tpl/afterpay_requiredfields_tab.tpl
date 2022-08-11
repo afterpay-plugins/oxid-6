@@ -67,7 +67,7 @@
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayInvoiceRequires$FieldNames$country_id"}]
 								[{if $oView->isFixRequiredField($FieldNames,$country_name)}]
-									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="1"/>
 									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
 										   value="1" checked disabled [{$readonly}]>
 								[{else}]
@@ -82,7 +82,7 @@
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayDebitRequires$FieldNames$country_id"}]
 								[{if $oView->isFixRequiredField($FieldNames,$country_name)}]
-									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="1"/>
 									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
 								   	value="1" checked disabled [{$readonly}]>
 								[{else}]
@@ -97,7 +97,7 @@
 								[{oxhasrights object=$edit readonly=$readonly}]
 								[{assign var="config_varname" value="arvatoAfterpayInstallmentsRequires$FieldNames$country_id"}]
 								[{if $oView->isFixRequiredField($FieldNames,$country_name)}]
-									<input type="hidden" name="confbools[[{$config_varname}]]" value="0"/>
+									<input type="hidden" name="confbools[[{$config_varname}]]" value="1"/>
 									<input type="checkbox" class="editinput" name=confbools[[{$config_varname}]]
 										   value="1" checked disabled [{$readonly}]>
 								[{else}]

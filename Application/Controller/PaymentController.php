@@ -113,48 +113,49 @@ class PaymentController extends PaymentController_parent
 
         /** @var User $user */
         $user = $this->getUser();
-        $alreadyHaveBirthdate = false !== strpos($user->oxuser__oxbirthdate->value, '19');
-        $alreadyHavePhone = $user->oxuser__oxfon->value || $user->oxuser__oxmob->value || $user->oxuser__oxprivfon->value;
-        $alreadyHaveSal = $user->oxuser__oxsal->value;
-        $alreadyHaveZip = $user->oxuser__oxzip->value;
-        $alreadyHaveStreet = $user->oxuser__oxstreet->value;
-        $alreadyHaveStreetNR = $user->oxuser__oxstreetnr->value;
-        $alreadyHaveFName = $user->oxuser__oxfname->value;
-        $alreadyHaveLName = $user->oxuser__oxlname->value;
-        $alreadyHaveCity = $user->oxuser__oxcity->value;
+        $availableFields = [];
+        $availableFields["Birthdate"] = false !== strpos($user->oxuser__oxbirthdate->value, '19');
+        $availableFields["Sal"] = $user->oxuser__oxsal->value;
+        $availableFields["Phone"] = $user->oxuser__oxfon->value || $user->oxuser__oxmob->value || $user->oxuser__oxprivfon->value;
+        $availableFields["Zip"] = $user->oxuser__oxzip->value;
+        $availableFields["Street"] = $user->oxuser__oxstreet->value;
+        $availableFields["StreetNR"] = $user->oxuser__oxstreetnr->value;
+        $availableFields["FName"] = $user->oxuser__oxfname->value;
+        $availableFields["LName"] = $user->oxuser__oxlname->value;
+        $availableFields["City"] = $user->oxuser__oxcity->value;
 
         foreach (array_keys($requirements) as $payment) {
             $stringHelper = 'arvatoAfterpay' . $payment . 'Requires';
 
             $requirements[$payment]['Salutation'] =
-                (!$alreadyHaveSal && Registry::getConfig()->getConfigParam($stringHelper.'Salutation'. $user->getActiveCountry()));
+                (!$availableFields["Sal"] && Registry::getConfig()->getConfigParam($stringHelper.'Salutation'. $user->getActiveCountry()));
 
             $requirements[$payment]['SSN'] =
                 Registry::getConfig()->getConfigParam($stringHelper.'SSN'.$user->getActiveCountry());
 
             $requirements[$payment]['FName'] =
-                (!$alreadyHaveFName && Registry::getConfig()->getConfigParam($stringHelper.'FirstName'. $user->getActiveCountry()));
+                (!$availableFields["FName"] && Registry::getConfig()->getConfigParam($stringHelper.'FirstName'. $user->getActiveCountry()));
 
             $requirements[$payment]['LName'] =
-                (!$alreadyHaveLName && Registry::getConfig()->getConfigParam($stringHelper.'LastName'. $user->getActiveCountry()));
+                (!$availableFields["LName"] && Registry::getConfig()->getConfigParam($stringHelper.'LastName'. $user->getActiveCountry()));
 
             $requirements[$payment]['Fon'] =
-                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam($stringHelper.'Phone'. $user->getActiveCountry()));
+                (!$availableFields["Phone"] && Registry::getConfig()->getConfigParam($stringHelper.'Phone'. $user->getActiveCountry()));
 
             $requirements[$payment]['Birthdate'] =
-                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam($stringHelper.'Birthdate'. $user->getActiveCountry()));
+                (!$availableFields["Birthdate"] && Registry::getConfig()->getConfigParam($stringHelper.'Birthdate'. $user->getActiveCountry()));
 
             $requirements[$payment]['Zip'] =
-                (!$alreadyHaveZip && Registry::getConfig()->getConfigParam($stringHelper.'Zip'. $user->getActiveCountry()));
+                (!$availableFields["Zip"] && Registry::getConfig()->getConfigParam($stringHelper.'Zip'. $user->getActiveCountry()));
 
             $requirements[$payment]['Street'] =
-                (!$alreadyHaveStreet && Registry::getConfig()->getConfigParam($stringHelper.'Street'. $user->getActiveCountry()));
+                (!$availableFields["Street"] && Registry::getConfig()->getConfigParam($stringHelper.'Street'. $user->getActiveCountry()));
 
             $requirements[$payment]['StreetNumber'] =
-                (!$alreadyHaveStreetNR && Registry::getConfig()->getConfigParam($stringHelper.'StreetNumber'. $user->getActiveCountry()));
+                (!$availableFields["StreetNR"] && Registry::getConfig()->getConfigParam($stringHelper.'StreetNumber'. $user->getActiveCountry()));
 
             $requirements[$payment]['City'] =
-                (!$alreadyHaveCity && Registry::getConfig()->getConfigParam($stringHelper.'City'. $user->getActiveCountry()));
+                (!$availableFields["City"] && Registry::getConfig()->getConfigParam($stringHelper.'City'. $user->getActiveCountry()));
         }
 
         $smarty->assign('aAfterpayRequiredFields', $requirements);
