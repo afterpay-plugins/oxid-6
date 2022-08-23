@@ -12,7 +12,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Returns afterpay logo URL based on setting
      *
-     * @see https://developer.afterpay.io/documentation/logo-visual-guidelines/ for logos
+     * @see https://developer.afterpay.io/documentation/logo-and-visual-guidelines/ for logos
      * @return string
      */
     public function getAfterpayLogoUrl()

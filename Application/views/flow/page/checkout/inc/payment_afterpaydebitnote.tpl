@@ -22,37 +22,32 @@
             [{/if}]
         [{/if}]
 
-        <div class="form-group">
-            <label class="control-label col-lg-3" for="afterpaydebitnote_1">
-                *IBAN
-            </label>
-            <div class="col-lg-9">
-                <input id="afterpaydebitnote_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apdebitbankaccount]" value="" aria-invalid="false">
+        <div class="afterpay_content">
+            <div class="form-group">
+                <label class="control-label col-lg-3" for="afterpaydebitnote_1">
+                    *IBAN
+                </label>
+                <div class="col-lg-9">
+                    <input id="afterpaydebitnote_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apdebitbankaccount]" value="" aria-invalid="false">
+                </div>
             </div>
+
+            [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Debit"}]
+
+            <div class="form-group">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-9">
+                    [{assign var="tcp" value="AFTERPAY__PAYMENTSELECT_TCPRIVICY"|oxmultilangassign}]
+                    [{assign var="AGBLink" value=$AGBLink|replace:"##PAYMENT##":"direct_debit"}]
+                    [{assign var="tcp" value=$tcp|replace:"##AGBLINK##":$AGBLink}]
+                    [{assign var="tcp" value=$tcp|replace:"##PRIVACYLINK##":$PrivacyLink}]
+                    <span>[{$tcp}]</span>
+                </div>
+            </div>
+
+            [{if $trackingvalue != "inactive"}]
+                [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
+            [{/if}]
         </div>
-        <div class="form-group">
-            <label class="control-label col-lg-3" for="afterpaydebitnote_2">
-                *BIC
-            </label>
-            <div class="col-lg-9">
-                <input id="afterpaydebitnote_2" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apdebitbankcode]" value="">
-            </div>
-        </div>
-
-        [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Debit"}]
-
-
-
-        <div style="clear:both"></div>
-        [{block name="checkout_payment_longdesc"}]
-            <div class="alert alert-info col-lg-offset-3 desc">
-                [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_DEBITNOTE"}]
-                [{if $paymentmethod->oxpayments__oxlongdesc->value|strip_tags|trim}]
-                    [{$paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
-                [{/if}]
-            </div>
-        [{/block}]
-
-
     </dd>
 </dl>

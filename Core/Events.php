@@ -78,11 +78,21 @@ class Events
     public static function insertAfterpayDebitnote() {
         $insertQueryAfterpayDebitnote = "REPLACE INTO `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
                                                VALUES
-              ('afterpaydebitnote',	1,	'AfterPay Lastschrift',	0,	'abs',	0,	0,	0,	1000000,	'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	0,	
+              ('afterpaydebitnote',	1,	'AfterPay Lastschrift',	0,	'abs',	0,	0,	0,	1000000,	'apdebitbankaccount__@@apbirthday__@@apfon__@@apssn__@@',	0,	
                'AfterPay Direct Debit',
-              'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'',	'','',	'',	'',	3,	'2017-11-08 11:48:51');";
+              'apdebitbankaccount__@@apdebitbankcode__@@apbirthday__@@apfon__@@apssn__@@',	'',	'',	'',	'',	'','',	'',	'',	3,	'2017-11-08 11:48:51');";
 
         self::executeSQL($insertQueryAfterpayDebitnote);
+    }
+
+    /**
+     * removeBankCodeRequirementFromDebit
+     * -----------------------------------------------------------------------------------------------------------------
+     * Removes BIC requirement from debit payment
+     */
+    public static function removeBankCodeRequirementFromDebit()
+    {
+        self::executeSQL('UPDATE oxpayments SET OXVALDESC = "apdebitbankaccount__@@@@apbirthday__@@apfon__@@apssn__@@" WHERE OXID = "afterpaydebitnote"');
     }
 
     /**
@@ -95,8 +105,8 @@ class Events
     public static function insertAfterpayInstallment() {
         $insertQueryAfterpayInstallment = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
                                                 VALUES
-              ('afterpayinstallment',	1,	'AfterPay Ratenzahlung',	0,	'abs',	0,	0,	0,	1000000,	'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Installment',
-              'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apphone__@@apssn__@@',	'',	'',	'',	'','','','',	1,	'',	
+              ('afterpayinstallment',	1,	'AfterPay Ratenzahlung',	0,	'abs',	0,	0,	0,	1000000,	'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apfon__@@apssn__@@',	0,	'AfterPay Installment',
+              'apinstallmentbankaccount__@@apinstallmentbankcode__@@afterpayInstallmentProfileId__@@apbirthday__@@apfon__@@apssn__@@',	'',	'',	'',	'','','','',	1,	'',	
                '2017-11-08 11:48:51')";
 
         self::executeSQL($insertQueryAfterpayInstallment);
@@ -112,7 +122,7 @@ class Events
     public static function insertAfterpayInvoice() {
         $insertQueryAfterpayInvoice = "REPLACE INTO  `oxpayments` (`OXID`, `OXACTIVE`, `OXDESC`, `OXADDSUM`, `OXADDSUMTYPE`, `OXADDSUMRULES`, `OXFROMBONI`, `OXFROMAMOUNT`, `OXTOAMOUNT`, `OXVALDESC`, `OXCHECKED`, `OXDESC_1`, `OXVALDESC_1`, `OXDESC_2`, `OXVALDESC_2`, `OXDESC_3`, `OXVALDESC_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXSORT`, `OXTIMESTAMP`) 
                                              VALUES
-              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apphone__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apphone__@@apssn__@@',	
+              ('afterpayinvoice',	1,	'AfterPay Rechnung',	0,	'abs',	0,	0,	0,	1000000,	'apbirthday__@@apfon__@@apssn__@@',	0,	'AfterPay Invoice',	'apbirthday__@@apfon__@@apssn__@@',	
                   '',	'',	'',	'',	'',	'',	'',		2,	'',	'2017-11-08 11:48:51')";
 
         self::executeSQL($insertQueryAfterpayInvoice);
@@ -241,6 +251,7 @@ class Events
             self::insertAfterpayDebitnote();
             self::afterpayDebitnoteTypeQuery();
         }
+        self::removeBankCodeRequirementFromDebit();
 
         if (self::tableExists($tablePayments) && !$paymentModel->load( 'afterpayinstallment')) {
             self::insertAfterpayInstallment();
@@ -262,6 +273,10 @@ class Events
         $logging = oxNew(\Arvato\AfterpayModule\Core\Logging::class);
 
         self::afterpayPaymentsInsert();
+
+        self::setDefaultSandboxAPIURL();
+
+        self::setDefaultRequiredFields();
 
         self::createTableArvatoAfterpayAfterpayOrder();
 
@@ -310,5 +325,39 @@ class Events
      */
     public static function onDeactivate()
     {
+    }
+
+    /**
+     * setDefaultSandboxAPIURL
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    public static function setDefaultSandboxAPIURL()
+    {
+        Registry::getConfig()->saveShopConfVar('str','arvatoAfterpayApiSandboxUrl',' https://sandbox.afterpay.io/api/v3/',null ,'module:arvatoafterpay');
+    }
+
+    /**
+     * setDefaultRequiredFields
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    public static function setDefaultRequiredFields()
+    {
+        $payments = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
+        foreach (array_keys($payments) as $payment) {
+            $stringHelper = 'arvatoAfterpay' . $payment . 'Requires';
+            foreach (Registry::get(AfterpayIdStorage::class)->getContries() as $key => $contry) {
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'FirstName'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'LastName'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Email'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Country'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Zip'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'Street'.$key,true,null ,'module:arvatoafterpay');
+                Registry::getConfig()->saveShopConfVar('bool',$stringHelper. 'City'.$key,true,null ,'module:arvatoafterpay');
+            }
+        }
     }
 }

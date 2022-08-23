@@ -41,7 +41,7 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
         $orderId = $session->getVariable('OrderControllerId');
         $deladrid = $session->getVariable('deladrid');
         $languageAbbr = $lang->getLanguageAbbr();
-        $billCustomer = $this->getCustomer($user, $languageAbbr);
+        $billCustomer = $this->getCustomer($user, $languageAbbr, (bool) $session->getVariable('AfterPayTrackingEnabled'));
         $orderSummary = $this->getOrderSummeryByBasket($basket, $orderId, $order);
 
         if (isset($deladrid)) {
@@ -97,13 +97,14 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
     /**
      * @param $user
      * @param $languageAbbr
+     * @param $trackingEnabled
      *
      * @return CheckoutCustomerEntity
      * @codeCoverageIngore Mocking helper
      */
-    protected function getCustomer($user, $languageAbbr)
+    protected function getCustomer($user, $languageAbbr, $trackingEnabled)
     {
-        return oxNew(CheckoutCustomerDataProvider::class)->getCustomer($user, $languageAbbr);
+        return oxNew(CheckoutCustomerDataProvider::class)->getCustomer($user, $languageAbbr, $trackingEnabled);
     }
 
     /**
@@ -119,7 +120,6 @@ class AuthorizePaymentDataProvider extends \Arvato\AfterpayModule\Application\Mo
         return oxNew(PaymentDataProvider::class)->getPayment(
             $basket->getPaymentId(),
             $session->getVariable('arvatoAfterpayIBAN'),
-            $session->getVariable('arvatoAfterpayBIC'),
             $selectedInstallmentPlanProfileId
         );
     }

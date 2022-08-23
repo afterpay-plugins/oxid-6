@@ -1,6 +1,6 @@
 # OXID ArvatoAfterPay Module
 
-# Version 2.1.1
+# Version 3.0.0
 
 ## Description
 
@@ -46,6 +46,13 @@ composer update
 * APM-23 Save order on afterpay request
 
 ### Version 2.1.1
+
+* APM-26 Change Sandbox URL
+* APM-28 Renaming in Composer
+* APM-33 Replace logo in module
+* APM-38 Packagist naming for Oxid plugin
+
+### Version 3.0.0
 
 * APM-26 Change Sandbox URL
 * APM-28 Renaming in Composer

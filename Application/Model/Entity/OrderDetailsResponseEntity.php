@@ -74,6 +74,16 @@ class OrderDetailsResponseEntity extends \Arvato\AfterpayModule\Application\Mode
         return 1 === count($this->getCaptures()) && 0 === count($this->getRefunds());
     }
 
+    public function getCaptures()
+    {
+        return $this->getData('captures') ?: [];
+    }
+
+    public function getRefunds()
+    {
+        return $this->getData('refunds') ?: [];
+    }
+
     /**
      * @param $merge
      *

@@ -188,7 +188,7 @@ class OrderAfterpayTest extends UnitTestCase
      */
     public function testrefundException()
     {
-        $this->setExpectedException(StandardException::class);
+        $this->expectException(StandardException::class);
 
         $oxOrder = oxNew(Order::class);
         $oxOrder->load('unitauthorizedorder');

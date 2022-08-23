@@ -12,6 +12,7 @@ use OxidEsales\Eshop\Application\Model\BasketItem;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\DbMetaDataHandler;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Exception\NoArticleException;
 use OxidEsales\Eshop\Core\Exception\OutOfStockException;
@@ -30,6 +31,15 @@ class AuthorizePaymentDataProviderTest extends UnitTestCase
     public function setUp()
     {
         parent::setUp();
+
+        foreach (['oxarticles', 'oxcategories'] as $table) {
+            if (!in_array('OXMAPID', array_keys(Registry::get(DbMetaDataHandler::class)->getFields($table)), true)) {
+                // No auto_increment here: not necessary for our tests
+                DatabaseProvider::getDb()->execute("ALTER TABLE $table ADD COLUMN OXMAPID BIGINT NOT NULL");
+                oxNew(DbMetaDataHandler::class)->updateViews([$table]);
+            }
+        }
+
         $sql = file_get_contents(Registry::getConfig()->getConfigParam('sShopDir') . '/modules/arvato/afterpay/Tests/Fixtures/dataproviders_setUp.sql');
         foreach (explode(';', $sql) as $query) {
             $query = trim($query);

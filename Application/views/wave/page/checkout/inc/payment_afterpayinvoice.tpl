@@ -22,8 +22,24 @@
             [{/if}]
         [{/if}]
 
-        [{include file="wave/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Invoice"}]
+        <div class="afterpay_content">
+            [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Invoice"}]
+        </div>
 
+        <div class="form-group">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-9">
+                [{assign var="tcp" value="AFTERPAY__PAYMENTSELECT_TCPRIVICY"|oxmultilangassign}]
+                [{assign var="AGBLink" value=$AGBLink|replace:"##PAYMENT##":"Invoice"}]
+                [{assign var="tcp" value=$tcp|replace:"##AGBLINK##":$AGBLink}]
+                [{assign var="tcp" value=$tcp|replace:"##PRIVACYLINK##":$PrivacyLink}]
+                <span>[{$tcp}]</span>
+            </div>
+        </div>
+
+        [{if $trackingvalue != "inactive"}]
+            [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
+        [{/if}]
 
         <div style="clear:both"></div>
         [{block name="checkout_payment_longdesc"}]

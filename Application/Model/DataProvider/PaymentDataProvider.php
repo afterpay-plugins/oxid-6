@@ -31,18 +31,16 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
     public function getPayment(
         $paymentId,
         $IBAN = null,
-        $BIC = null,
         $selectedInstallmentPlanProfileId = null,
         $numberOfInstallments = null
     ) {
         if ('afterpayinvoice' === $paymentId) {
             $payment = $this->createInvoicePayment();
         } elseif ('afterpaydebitnote' === $paymentId) {
-            $payment = $this->createDebitNotePayment($IBAN, $BIC);
+            $payment = $this->createDebitNotePayment($IBAN);
         } elseif ('afterpayinstallment' === $paymentId) {
             $payment = $this->createInstallmentPayment(
                 $IBAN,
-                $BIC,
                 $selectedInstallmentPlanProfileId,
                 $numberOfInstallments
             );
@@ -54,20 +52,18 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
 
     /**
      * @param $IBAN
-     * @param $BIC
      *
      * @return PaymentEntity $payment
      */
-    public function createDebitNotePayment($IBAN, $BIC)
+    public function createDebitNotePayment($IBAN)
     {
         $payment = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::class);
 
         $payment->setType(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::TYPE_DEBITNOTE);
 
-        if ($IBAN && $BIC) {
+        if ($IBAN) {
             $directDebit = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\BankAccountEntity::class);
             $directDebit->setBankAccount($IBAN);
-            $directDebit->setBankCode($BIC);
             $payment->setDirectDebit($directDebit);
         }
 
@@ -86,7 +82,6 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
 
     /**
      * @param $IBAN
-     * @param $BIC
      * @param $selectedInstallmentPlanProfileId
      * @param $numberOfInstallments
      *
@@ -94,17 +89,15 @@ class PaymentDataProvider extends \Arvato\AfterpayModule\Application\Model\DataP
      */
     public function createInstallmentPayment(
         $IBAN,
-        $BIC,
         $selectedInstallmentPlanProfileId,
         $numberOfInstallments
     ) {
         $payment = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::class);
         $payment->setType(\Arvato\AfterpayModule\Application\Model\Entity\PaymentEntity::TYPE_INSTALLMENT);
 
-        if ($IBAN && $BIC) {
+        if ($IBAN) {
             $directDebit = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\BankAccountEntity::class);
             $directDebit->setBankAccount($IBAN);
-            $directDebit->setBankCode($BIC);
             $payment->setDirectDebit($directDebit);
         }
 

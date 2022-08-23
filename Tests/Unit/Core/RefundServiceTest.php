@@ -29,7 +29,7 @@ class RefundServiceTest extends UnitTestCase
      */
     public function testRefundException()
     {
-        $this->setExpectedException(CurlException::class);
+        $this->expectException(CurlException::class);
         $sut = oxNew(RefundService::class, oxNew(Order::class));
         $sut->refund(null, 'SomeApiKey');
     }

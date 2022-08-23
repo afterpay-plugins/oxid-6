@@ -23,41 +23,29 @@
         [{/if}]
 
         [{if $aAvailableAfterpayInstallmentPlans}]
-
-            <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
-
-            [{include file="wave/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
-
+        <div class="afterpay_content">
             <div class="clearfix"></div>
 
             <div class="form-group">
                 <label class="control-label col-lg-3" for="afterpayinstallment_1">
-                    *IBAN
+                    [{oxmultilang ident="AFTERPAY_INSTALLMENT_IBAN"}]
                 </label>
                 <div class="col-lg-9">
-                    <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-lg-3" for="afterpayinstallment_2">
-                    *BIC
-                </label>
-                <div class="col-lg-9">
-                    <input id="afterpayinstallment_2" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankcode]" value="">
+                    <input id="afterpayinstallment_1" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apinstallmentbankaccount]" value="" required>
                 </div>
             </div>
 
-            [{include file="wave/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Installments"}]
+            [{include file="flow/page/checkout/inc/afterpay_required_dynvalues.tpl" sPayment="Installments"}]
+            <p>[{oxmultilang ident="MESSAGE_PAYMENT_SELECT_INSTALLMENT_PLAN"}]</p>
+            [{include file="flow/page/checkout/inc/order_installmentplan_boxes.tpl" aAvailableAfterpayInstallmentPlans=$aAvailableAfterpayInstallmentPlans afterpayInstallmentProfileId=$afterpayInstallmentProfileId}]
 
+        </div>
 
-            <div style="clear:both"></div>
+        <div style="clear:both"></div>
 
-            <div class="alert alert-info offset-lg-3 desc">
-                [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT"}]
-                [{if $paymentmethod->oxpayments__oxlongdesc->value|strip_tags|trim}]
-                    [{$paymentmethod->oxpayments__oxlongdesc->getRawValue()}]
-                [{/if}]
-            </div>
+        [{if $trackingvalue != "inactive"}]
+        [{include file="flow/page/checkout/inc/payment_tracking.tpl"}]
+        [{/if}]
 
         [{else}]
             [{block name="checkout_payment_longdesc"}]

@@ -7,14 +7,17 @@
 namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
+use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
 /**
  * Class OrderController : Extends order controller with AfterPay service call.
  *
- * @extends order
+ * @extends OrderController
  *
  *  Naming of the "*Order"-Classes:
  *    - Order:           Extension of order - model
@@ -94,7 +97,7 @@ class OrderController extends OrderController_parent
 
 
         if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
-            foreach ($availableInstallmentPlans  as &$plan) {
+            foreach ($availableInstallmentPlans as &$plan) {
                 unset($plan->effectiveAnnualPercentageRate);
             }
 
@@ -165,7 +168,6 @@ class OrderController extends OrderController_parent
         $availableInstallmentPlans,
         $selectedInstallmentPlanProfileIdInSession
     ) {
-
         $smarty = Registry::getUtilsView()->getSmarty();
 
         // Assign installment plan formatting ...
@@ -179,7 +181,11 @@ class OrderController extends OrderController_parent
             :
             reset( $availableInstallmentPlans);
 
-        $smarty->assign('afterpayReadMoreLink', $selectedInstallmentPlan->readMore);
+        $secciLink = $selectedInstallmentPlan->readMore;
+        if($this->getActiveLangAbbr != 'de') {
+            $secciLink = str_replace("de_de","en_de",$secciLink);
+        }
+        $smarty->assign('afterpayReadMoreLink', $secciLink);
 
         // ... and price info for interests ...
         $smarty->assign('afterpayTotalInterestAmount', $selectedInstallmentPlan->totalInterestAmount);
@@ -220,13 +226,18 @@ class OrderController extends OrderController_parent
      * @return bool
      * @phpcs:disable
      */
-    public function _validateTermsAndConditions()
+    protected function _validateTermsAndConditions()
     {
         $paymentId = $this->getSession()->getVariable('paymentid');
         $isAfterpay = (false !== strpos($paymentId, 'afterpay'));
+        $ouser = $this->getUser();
+        $configString = "arvatoAfterpayInvoiceRequiresTC" . $ouser->oxuser__oxcountryid->value;
+        $agb = Registry::getConfig()->getConfigParam($configString);
 
-        if ($isAfterpay && !$this->getRequestParameter('ord_afterpay_agb')) {
-            return false;
+        if ($agb) {
+            if ($isAfterpay && !$this->getRequestParameter('ord_afterpay_agb')) {
+                return false;
+            }
         }
 
         return parent::_validateTermsAndConditions();
@@ -285,4 +296,46 @@ class OrderController extends OrderController_parent
     }
 
     // @codeCoverageIgnoreEnd
+
+    /**
+     * getActiveLocale
+     * ----------------------------------------------------------------------------------------------------------------
+     * gets the locale for the current locale (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getActiveLocale()
+    {
+        $user = $this->getUser();
+        $locale = "de_de";
+        if ($user) {
+            $oLang = \OxidEsales\Eshop\Core\Registry::getLang();
+            $sLang = $oLang->getLanguageAbbr($oLang->getTplLanguage());
+            $sql = "SELECT oxisoalpha2 FROM oxcountry where oxid ='" . $user->oxuser__oxcountryid->value . "'";
+            $countryiso = DatabaseProvider::getDb()->getOne($sql);
+
+            $locale = strtolower($sLang . "_" . $countryiso);
+        }
+
+        return $locale;
+    }
+
+    /**
+     * getMerchantId
+     * ----------------------------------------------------------------------------------------------------------------
+     * get Merchant Id from Config (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getMerchantId()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID' . $user->oxuser__oxcountryid->value);
+
+        if ($merchantID) {
+            return $merchantID;
+        }
+        return "muster-merchant";
+    }
 }

@@ -24,10 +24,11 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
      *
      * @param \OxidEsales\Eshop\Application\Model\User $user
      * @param string $language
+     * @param bool $trackingEnabled
      *
      * @return CheckoutCustomerEntity
      */
-    public function getCustomer(\OxidEsales\Eshop\Application\Model\User $user, $language)
+    public function getCustomer(\OxidEsales\Eshop\Application\Model\User $user, $language, $trackingEnabled)
     {
         $dataObject = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::class);
         $dataObject->setCustomerCategory(\Arvato\AfterpayModule\Application\Model\Entity\CheckoutCustomerEntity::CUSTOMER_CATEGORY_PERSON);
@@ -91,8 +92,7 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
         }
 
         // Profile Tracking
-
-        if (!isAdmin() && Registry::getConfig()->getConfigParam('arvatoAfterpayProfileTrackingEnabled')) {
+        if (!isAdmin() && $trackingEnabled) {
             $riskData = new \stdClass();
             $riskData->profileTrackingId = 'md5' . md5(Registry::getSession()->getId());
             $riskData->ipAddress = $_SERVER['REMOTE_ADDR'];

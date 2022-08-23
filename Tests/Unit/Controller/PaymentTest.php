@@ -3,8 +3,13 @@
 namespace Arvato\AfterpayModule\Tests\Unit\Controller;
 
 use Arvato\AfterpayModule\Application\Controller\PaymentController as ArvatoPaymentController;
+use Arvato\AfterpayModule\Application\Model\Article;
 use OxidEsales\Eshop\Application\Controller\PaymentController;
+use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
@@ -40,10 +45,10 @@ class PaymentTest extends UnitTestCase
                     ])
                     ->getMock();
 
-        $sut->expects($this->exactly(2))
+        $sut->expects($this->exactly(3))
             ->method('getRequestOrSessionParameter')
-            ->withConsecutive([$this->stringContains('paymentid')], [$this->stringContains('dynvalue')])
-            ->will($this->onConsecutiveCalls('SomethingElse', ['lorem' => 'ipsum']));
+            ->withConsecutive([$this->stringContains('paymentid')], [$this->stringContains('dynvalue')], [$this->stringContains('AfterPayTrackingEnabled')])
+            ->will($this->onConsecutiveCalls('oxempty', ['lorem' => 'ipsum'], 1));
 
         $sut->expects($this->never())->method('validateDebitNote');
         $sut->expects($this->never())->method('validateAndSaveSelectedInstallmentPforileId');
@@ -66,10 +71,10 @@ class PaymentTest extends UnitTestCase
                     ])
                     ->getMock();
 
-        $sut->expects($this->exactly(2))
+        $sut->expects($this->exactly(3))
             ->method('getRequestOrSessionParameter')
-            ->withConsecutive([$this->stringContains('paymentid')], [$this->stringContains('dynvalue')])
-            ->will($this->onConsecutiveCalls('afterpaydebitnote', ['lorem' => 'ipsum']));
+            ->withConsecutive([$this->stringContains('paymentid')], [$this->stringContains('dynvalue')], [$this->stringContains('AfterPayTrackingEnabled')])
+            ->will($this->onConsecutiveCalls('afterpaydebitnote', ['lorem' => 'ipsum'], 1));
 
         $sut->expects($this->once())->method('validateDebitNote')->will($this->returnValue(0));
         $sut->expects($this->never())->method('validateAndSaveSelectedInstallmentPforileId');
@@ -93,10 +98,10 @@ class PaymentTest extends UnitTestCase
                     ])
                     ->getMock();
 
-        $sut->expects($this->exactly(2))
+        $sut->expects($this->exactly(3))
             ->method('getRequestOrSessionParameter')
-            ->withConsecutive([$this->stringContains('paymentid')], [$this->stringContains('dynvalue')])
-            ->will($this->onConsecutiveCalls('afterpayinstallment', ['lorem' => 'ipsum']));
+            ->withConsecutive([$this->stringContains('paymentid')], [$this->stringContains('dynvalue')], [$this->stringContains('AfterPayTrackingEnabled')])
+            ->will($this->onConsecutiveCalls('afterpayinstallment', ['lorem' => 'ipsum'], 1));
 
         $sut->expects($this->once())->method('validateInstallment')->will($this->returnValue(0));
         $sut->expects($this->once())->method('validateAndSaveSelectedInstallmentPforileId');
@@ -128,7 +133,7 @@ class PaymentTest extends UnitTestCase
         ];
 
         $sut = oxNew(PaymentController::class);
-        $this->assertEquals(1, $sut->validateDebitNote($dynValue));
+        $this->assertEquals(0, $sut->validateDebitNote($dynValue));
     }
 
     public function testvalidateInstallment()
@@ -163,10 +168,32 @@ class PaymentTest extends UnitTestCase
                     ->setMethods(['getUser'])
                     ->getMock();
 
+        $user = $this->getMockBuilder(User::class)
+                     ->setMethods(['getActiveCountry'])
+                     ->getMock();
+        $user->expects($this->atLeastOnce())
+             ->method('getActiveCountry')
+             ->will($this->returnValue('a7c40f6320aeb2ec2.72885259'));
         $sut->method('getUser')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue($user));
 
         $this->assertTrue((bool) $sut->assignRequiredDynValue());
+    }
+
+    public function testallowAfterpayPaymentNotAllowed()
+    {
+        $sut = $this->getSUTallowAfterpay();
+
+        Registry::getConfig()->setConfigParam('arvatoAfterpayExcludedArticleNr', 'test');
+        $this->assertFalse($sut->allowAfterpayPayment());
+    }
+
+    public function testallowAfterpayPaymentSuccess()
+    {
+        $sut = $this->getSUTallowAfterpay();
+
+        Registry::getConfig()->setConfigParam('arvatoAfterpayExcludedArticleNr', '1234');
+        $this->assertTrue($sut->allowAfterpayPayment());
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -300,6 +327,41 @@ class PaymentTest extends UnitTestCase
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));
+
+        return $sut;
+    }
+
+    /**
+     * Will give SUT with mocked getSession (containing basket with article)
+     *
+     * @return PaymentController|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getSUTallowAfterpay()
+    {
+        $basketArticle = $this->getMockBuilder(Article::class)
+                              ->setMethods(['load'])
+                              ->getMock();
+        $basketArticle->oxarticles__oxartnum = new Field('test');
+
+        $basket = $this->getMockBuilder(Basket::class)
+                       ->setMethods(['getBasketArticles'])
+                       ->getMock();
+        $basket->method('getBasketArticles')
+               ->will($this->returnValue([$basketArticle]));
+
+        $session = $this->getMockBuilder(Session::class)
+                        ->disableOriginalConstructor()
+                        ->disableOriginalClone()
+                        ->setMethods(['getBasket'])
+                        ->getMock();
+        $session->method('getBasket')
+                ->will($this->returnValue($basket));
+
+        $sut = $this->getMockBuilder(PaymentController::class)
+                    ->setMethods(['getSession'])
+                    ->getMock();
+        $sut->method('getSession')
+            ->will($this->returnValue($session));
 
         return $sut;
     }

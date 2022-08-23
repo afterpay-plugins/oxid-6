@@ -34,6 +34,12 @@ body.cl-payment form#payment dd dl dd {
   max-width: 750px;
   padding: 10px; }
 
+.AP_Info {
+  margin: 20px 0; }
+
+.AP_Info a {
+  text-decoration: underline; }
+
 .AP_InstallmentOption {
   border: 2px solid #c9c9c9;
   background: #f8f8f8;
@@ -123,10 +129,10 @@ body.cl-payment form#payment dd dl dd {
   float: right;
   font-size: 28px;
   font-weight: 700; }
-  .AP_modalView_close:focus, .AP_modalView_close:hover {
-    color: #006262;
-    text-decoration: none;
-    cursor: pointer; }
+.AP_modalView_close:focus, .AP_modalView_close:hover {
+  color: #006262;
+  text-decoration: none;
+  cursor: pointer; }
 
 #AP_modalView_iframe {
   border: 0;
@@ -139,3 +145,19 @@ body.cl-payment form#payment dd dl dd {
   color: #006262;
   text-decoration: none;
   font-weight: bold; }
+.activePayment .payment-afterpay-optin-wrapper {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+}
+.activePayment .payment-afterpay-optin-wrapper p {
+  color: red;
+  margin-bottom: 0;
+}
+.activePayment .payment-afterpay-optin-wrapper label {
+  padding-top: 0;
+}
+.activePayment .payment-afterpay-optin-wrapper .payment-afterpay-optin-action {
+  display: block;
+  margin-top: 15px;
+}

@@ -28,6 +28,7 @@
                 [{assign var="active" value=false}]
                 [{if $afterpayInstallmentProfileId eq $installment->installmentProfileNumber}]
                     [{assign var="active" value=true}]
+                    [{assign var="InstallLink" value=$installment->readMore}]
                 [{/if}]
                 <div class="AP_InstallmentOption [{if $first}]AP_InstallmentOption_first[{/if}] [{if $active}]AP_InstallmentOption_active[{/if}] [{if $first and $active}]AP_InstallmentOption_first_active[{/if}]"
                      data-ap-installment-profile="[{$installment->installmentProfileNumber}]"
@@ -38,13 +39,17 @@
                     $(this).addClass('AP_InstallmentOption_active');
                     $('#AP_InstallmentDetail_[{$installment->installmentProfileNumber}]').addClass('AP_InstallmentDetail_active');
                     $('#afterpayInstallmentProfileId').val([{$installment->installmentProfileNumber}]);
+                    $('.AP_Info .AP_Installment_Info_Link')[0].href = '[{$installment->readMore}]';
 
                     [{if $finalOrderStep}] $('#changeInstallmentPlan').submit(); [{/if}]"
                 >
                     <div class="AP_InstallmentMonthlyAmount">[{oxprice price=$installment->installmentAmount currency=$currency}]
-                        / Monat
+                        / [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_INSTALLMENT_MONTH"}] *
                     </div>
-                    <div class="AP_InstallmentMonths">in [{$installment->numberOfInstallments}] Raten</div>
+
+                    [{assign var="number" value="AFTERPAY__PAYMENTSELECT_INSTALLMENT_NUMBER"|oxmultilangassign}]
+                    [{assign var="number" value=$number|replace:"##NUMBEROFINSTALLMENTS##":$installment->numberOfInstallments}]
+                    <div class="AP_InstallmentMonths">[{$number}]</div>
                     <div class="AP_InstallmentSelected">✓</div>
                     <div style="clear:both"></div>
                 </div>
@@ -65,34 +70,29 @@
 
                 <div id="AP_InstallmentDetail_[{$installment->installmentProfileNumber}]" class="AP_InstallmentDetail [{if $active}]AP_InstallmentDetail_active[{/if}]"
                      data-ap-installment-profile="[{$installment->installmentProfileNumber}]">
-                    <ul>
-                        <li>Jeden Monat dieselbe Rate, keine Überraschungen</li>
-                        <li>Fester Zinssatz von <b>[{$installment->interestRate}]%</b> p.a.</li>
-                        <li>Effektiver Zinssatz von <b>[{$installment->effectiveInterestRate}]%</b> p.a.</li>
-                        [{if $installment->basketAmount neq $installment->totalAmount}]
-                            <li>Für den Warenkorb von [{oxprice price=$installment->basketAmount currency=$currency}]
-                                ergibt sich bei der Auswahl der Ratenzahlung über [{$installment->numberOfInstallments}]
-                                Monate ein Gesamtkreditbetrag von
-                                <b>[{oxprice price=$installment->totalAmount currency=$currency}]</b>
-                            </li>
-                        [{/if}]
-                    </ul>
-                    [{if $installment->basketAmount >= 200 and $installment->effectiveInterestRate > 0}]
-                        <div class="AP_InstallmentTotalPrice">
-                            Klicke <a href="http://documents-cdn.afterpay-demo.com/docs/t_c/en_de/234/invoice"
-                                      class="AP_linkToModalView">hier</a> um weitere Informationen
-                            , die Standardinformationen für Verbraucherkredite und beispielhafte Tilgungspläne
-                            anzuzeigen.
-                        </div>
-                    [{/if}]
+                        [{assign var="installmentInfo" value="AFTERPAY__PAYMENTSELECT_INSTALLMENT_INFO"|oxmultilangassign}]
+                        [{assign var="installmentInfo" value=$installmentInfo|replace:"##BASKETAMOUNT##":$installment->basketAmount}]
+                        [{assign var="installmentInfo" value=$installmentInfo|replace:"##NUMBEROFINSTALLMENTS##":$installment->numberOfInstallments}]
+                        [{assign var="installmentInfo" value=$installmentInfo|replace:"##INTERESTRATE##":$installment->interestRate}]
+                        [{assign var="installmentInfo" value=$installmentInfo|replace:"##TOTALAMOUNT##":$installment->totalAmount}]
+                        [{assign var="installmentInfo" value=$installmentInfo|replace:"##EFFECTIVEINTERESTRATE##":$installment->effectiveInterestRate}]
+                        <span>[{$installmentInfo}]</span>
                 </div>
             [{/foreach}]
+            <div class="AP_Info">
+                [{assign var=lang_country value=$oView->getActiveLocale()}]
+                [{assign var=merchant_id value=$oView->getMerchantId()}]
+
+                [{assign var="pflichtangabenLink" value="https://documents.myafterpay.com/consumer-terms-conditions/de_DE/default/bgb507"}]
+                [{assign var="kostenLink"         value=$InstallLink}]
+                [{assign var="agbLink"            value="https://documents.myafterpay.com/consumer-terms-conditions/$lang_country/$merchant_id/fix_installments"}]
+                [{assign var="datenschutzLink"    value="https://documents.myafterpay.com/privacy-statement/$lang_country/$merchant_id"}]
+                [{assign var="string"             value=$pflichtangabenLink|cat:","|cat:$kostenLink|cat:","|cat:$datenschutzLink|cat:","|cat:$agbLink}]
+                [{assign var="args"               value=","|explode:$string}]
+
+                [{oxmultilang ident="AFTERPAY__PAYMENTSELECT_LEGAL_INSTALLMENT_ADDITION" args=$args}]
+            </div>
         </div>
-
-    </div>
-
-    <div class="AP_IBANInput">
-        Wir ziehen die Raten bequem und komfortabel von Deinem Konto ein. Bitte gib daher Deine IBAN ein:
     </div>
 </div>
 

@@ -4,6 +4,7 @@ namespace Arvato\AfterpayModule\Tests\Unit\Controller;
 
 use Arvato\AfterpayModule\Application\Controller\OrderController as ArvatoOrderController;
 use OxidEsales\Eshop\Application\Controller\OrderController;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -20,7 +21,7 @@ class OrderTest extends UnitTestCase
     public function testrendernoafterpayinstallment()
     {
         $oxSession = Registry::getSession();
-        $oxSession->setVariable('paymentid', 'definitlynotafterpay');
+        $oxSession->setVariable('paymentid', 'definitelynotafterpay');
 
         $sut = $this->getSUTNoInstallment($oxSession);
         $render = $sut->render();
@@ -85,7 +86,27 @@ class OrderTest extends UnitTestCase
     /**
      * @throws ReflectionException
      */
-    public function testgetNextStepOnError()
+    public function testgetNextStepOnCfmError()
+    {
+        $errorMessage = 'customer facing error message';
+
+        $class = new ReflectionClass(ArvatoOrderController::class);
+        $method = $class->getMethod('_getNextStep');
+        $method->setAccessible(true);
+        $sutReturn = $method->invokeArgs(
+            oxNew(OrderController::class),
+            [$errorMessage] // Needs to be longer than 10 characters
+        );
+        $this->assertEquals('user?cfm=1', $sutReturn);
+
+        $oxSession = Registry::getSession();
+        $this->assertEquals($errorMessage, $oxSession->getVariable('arvatoAfterpayCustomerFacingMessage'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testgetNextStepOnAddressCorrection()
     {
         $class = new ReflectionClass(ArvatoOrderController::class);
         $method = $class->getMethod('_getNextStep');
@@ -173,11 +194,20 @@ class OrderTest extends UnitTestCase
      */
     protected function getSUTNoInstallment($oxSession = null)
     {
+        $user = $this->getMockBuilder(User::class)
+            ->setMethods(['getActiveCountry'])
+            ->getMock();
+        $user->expects($this->atLeastOnce())
+            ->method('getActiveCountry')
+            ->will($this->returnValue('a7c40f6320aeb2ec2.72885259'));
+
         $sut = $this->getMockBuilder(OrderController::class)
-                    ->setMethods(['parentRender', 'getSession'])
+                    ->setMethods(['parentRender', 'getSession', 'getUser'])
                     ->getMock();
         $sut->method('parentRender')
             ->will($this->returnValue('parent_render_called.tpl'));
+        $sut->method('getUser')
+            ->will($this->returnValue($user));
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));
@@ -221,16 +251,26 @@ class OrderTest extends UnitTestCase
      */
     protected function getSUTInstallment($oxSession = null)
     {
+        $user = $this->getMockBuilder(User::class)
+                     ->setMethods(['getActiveCountry'])
+                     ->getMock();
+        $user->expects($this->atLeastOnce())
+             ->method('getActiveCountry')
+             ->will($this->returnValue('a7c40f6320aeb2ec2.72885259'));
+
         $sut = $this->getMockBuilder(OrderController::class)
                     ->setMethods([
                         'parentRender',
                         'getSession',
                         'updateSelectedInstallmentPlanProfileIdInSession',
                         'getAvailableInstallmentPlans',
+                        'getUser'
                     ])
                     ->getMock();
         $sut->method('parentRender')
             ->will($this->returnValue('parent_render_called.tpl'));
+        $sut->method('getUser')
+            ->will($this->returnValue($user));
         $sut->expects($this->atLeastOnce())
             ->method('getSession')
             ->will($this->returnValue($oxSession));

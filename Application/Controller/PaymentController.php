@@ -1,20 +1,20 @@
 <?php
 
-/**
- *
- */
-
 namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
+use OxidEsales\Eshop\Application\Model\ArticleList;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 
 /**
  * Class PaymentController : Extends payment controller with AfterPay validation call.
  *
- * @extends Payment
+ * @extends PaymentController
  *
  */
 class PaymentController extends PaymentController_parent
@@ -23,9 +23,41 @@ class PaymentController extends PaymentController_parent
     const ARVATO_ORDER_STATE_SELECTINSTALLMENT = -13337;
 
     /**
+     * @var string[]
+     */
+    protected $map = [];
+
+    /**
+     * @var string[]
+     */
+    protected $userMapping = [
+        'apsal'         => 'oxsal',
+        'apfname'       => 'oxfname',
+        'aplname'       => 'oxlname',
+        'apbirthday'    => 'oxbirthdate',
+        'apfon'         => 'oxfon',
+        'apstreet'      => 'oxstreet',
+        'apstreetnr'    => 'oxstreetnr',
+        'apzip'         => 'oxzip',
+        'apcity'        => 'oxcity',
+    ];
+
+    /**
      * @var string[] Error messages from the AfterPay service.
      */
     protected $_errorMessages;
+
+    public function getPaymentList()
+    {
+        $paymentList = parent::getPaymentList();
+        if (!$this->allowAfterpayPayment()) {
+            unset($paymentList["afterpayinvoice"]);
+            unset($paymentList["afterpaydebitnote"]);
+            unset($paymentList["afterpayinstallment"]);
+        }
+
+        return $paymentList;
+    }
 
     public function render()
     {
@@ -36,7 +68,7 @@ class PaymentController extends PaymentController_parent
         $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... their formatting ...
-        $availableInstallmentPlanFormattings = oxNew(\Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
+        $availableInstallmentPlanFormattings = oxNew(AvailableInstallmentPlansResponseEntity::class)->getAvailableInstallmentPlanFormattings();
         $smarty->assign('aAvailableAfterpayInstallmentPlanFormattings', $availableInstallmentPlanFormattings);
 
         // ... and currently selected installment plan (if there is a selected one)
@@ -46,8 +78,22 @@ class PaymentController extends PaymentController_parent
         // Assign required fields
         $this->assignRequiredDynValue();
 
+        // Set required links
+        $this->_setTCLink();
+        $this->_setPrivacyLink();
+
         // Finally resume oxids handling
         return $this->parentRender();
+    }
+
+    public function getTrackingOption()
+    {
+        $possibleStates = ['inactive', 'mandatory', 'optional'];
+        if (!in_array(Registry::getConfig()->getConfigParam( 'arvatoAfterpayProfileTrackingEnabled' ), $possibleStates)) {
+            return 'inactive';
+        }
+
+        return Registry::getConfig()->getConfigParam( 'arvatoAfterpayProfileTrackingEnabled' );
     }
 
     public function getOrderStateSelectInstallmentConstant()
@@ -65,27 +111,81 @@ class PaymentController extends PaymentController_parent
         $smarty = Registry::getUtilsView()->getSmarty();
         $requirements = ['Invoice' => [], 'Debit' => [], 'Installments' => []];
 
-        // SSN
-
-        $oxcmp_user = $this->getUser();
-        $alreadyHaveBirthdate = false !== strpos($oxcmp_user->oxuser__oxbirthdate->value, '19');
-        $alreadyHavePhone = $oxcmp_user->oxuser__oxfon->value || $oxcmp_user->oxuser__oxmob->value || $oxcmp_user->oxuser__oxprivfon->value;
+        /** @var User $user */
+        $user = $this->getUser();
+        $availableFields = [];
+        $availableFields["Birthdate"] = false !== strpos($user->oxuser__oxbirthdate->value, '19');
+        $availableFields["Sal"] = $user->oxuser__oxsal->value;
+        $availableFields["Phone"] = $user->oxuser__oxfon->value || $user->oxuser__oxmob->value || $user->oxuser__oxprivfon->value;
+        $availableFields["Zip"] = $user->oxuser__oxzip->value;
+        $availableFields["Street"] = $user->oxuser__oxstreet->value;
+        $availableFields["StreetNR"] = $user->oxuser__oxstreetnr->value;
+        $availableFields["FName"] = $user->oxuser__oxfname->value;
+        $availableFields["LName"] = $user->oxuser__oxlname->value;
+        $availableFields["City"] = $user->oxuser__oxcity->value;
 
         foreach (array_keys($requirements) as $payment) {
-            $requirements[$payment]['SSN'] =
-                Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresSSN');
+            $stringHelper = 'arvatoAfterpay' . $payment . 'Requires';
 
-            $requirements[$payment]['Birthdate'] =
-                (!$alreadyHaveBirthdate && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresBirthdate'));
+            $requirements[$payment]['Salutation'] =
+                (!$availableFields["Sal"] && Registry::getConfig()->getConfigParam($stringHelper.'Salutation'. $user->getActiveCountry()));
+
+            $requirements[$payment]['SSN'] =
+                Registry::getConfig()->getConfigParam($stringHelper.'SSN'.$user->getActiveCountry());
+
+            $requirements[$payment]['FName'] =
+                (!$availableFields["FName"] && Registry::getConfig()->getConfigParam($stringHelper.'FirstName'. $user->getActiveCountry()));
+
+            $requirements[$payment]['LName'] =
+                (!$availableFields["LName"] && Registry::getConfig()->getConfigParam($stringHelper.'LastName'. $user->getActiveCountry()));
 
             $requirements[$payment]['Fon'] =
-                (!$alreadyHavePhone && Registry::getConfig()->getConfigParam('arvatoAfterpay' . $payment . 'RequiresBirthdate'));
+                (!$availableFields["Phone"] && Registry::getConfig()->getConfigParam($stringHelper.'Phone'. $user->getActiveCountry()));
+
+            $requirements[$payment]['Birthdate'] =
+                (!$availableFields["Birthdate"] && Registry::getConfig()->getConfigParam($stringHelper.'Birthdate'. $user->getActiveCountry()));
+
+            $requirements[$payment]['Zip'] =
+                (!$availableFields["Zip"] && Registry::getConfig()->getConfigParam($stringHelper.'Zip'. $user->getActiveCountry()));
+
+            $requirements[$payment]['Street'] =
+                (!$availableFields["Street"] && Registry::getConfig()->getConfigParam($stringHelper.'Street'. $user->getActiveCountry()));
+
+            $requirements[$payment]['StreetNumber'] =
+                (!$availableFields["StreetNR"] && Registry::getConfig()->getConfigParam($stringHelper.'StreetNumber'. $user->getActiveCountry()));
+
+            $requirements[$payment]['City'] =
+                (!$availableFields["City"] && Registry::getConfig()->getConfigParam($stringHelper.'City'. $user->getActiveCountry()));
         }
 
         $smarty->assign('aAfterpayRequiredFields', $requirements);
+        $this->_assignMap();
 
         // Return value solely for unit testing
         return $requirements;
+    }
+
+    /**
+     * _assignMap
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     */
+    protected function _assignMap()
+    {
+        $this->map = [
+            // dynvalue field => required field "name"
+            'apsal'         => 'Salutation',
+            'apssn'         => 'SSN',
+            'apfname'       => 'FName',
+            'aplname'       => 'LName',
+            'apbirthday'    => 'Birthdate',
+            'apfon'         => 'Fon',
+            'apstreet'      => 'Street',
+            'apstreetnr'    => 'StreetNumber',
+            'apzip'         => 'Zip',
+            'apcity'        => 'City',
+        ];
     }
 
     /**
@@ -104,11 +204,20 @@ class PaymentController extends PaymentController_parent
 
         $error = 0;
 
-        if ($paymentId == "afterpaydebitnote") {
+        // return error directly, if the mandatory Tracking Checkbox not checked
+        if ($this->getTrackingOption() == "mandatory" && !$this->getRequestOrSessionParameter('AfterPayTrackingEnabled')) {
+            $error = 1;
+        }
+
+        if ($paymentId == "afterpaydebitnote" && !$error) {
             $error = $this->validateDebitNote($dynValue);
         }
 
-        if ($paymentId == "afterpayinstallment") {
+        if ($paymentId == "afterpayinvoice" && !$error) {
+            $error = $this->validateInvoice($dynValue);
+        }
+
+        if ($paymentId == "afterpayinstallment" && !$error) {
             $this->validateAndSaveSelectedInstallmentPforileId($dynValue);
             $error = $this->validateInstallment($dynValue);
         }
@@ -134,7 +243,7 @@ class PaymentController extends PaymentController_parent
 
         $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
         $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-        $availableInstallmentPlans  = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
+        $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
         if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
             foreach ($availableInstallmentPlans as &$plan) {
@@ -174,14 +283,17 @@ class PaymentController extends PaymentController_parent
      */
     protected function validateDebitNote($dynValue)
     {
-        if (
-            !isset($dynValue['apdebitbankaccount'])
-            || !isset($dynValue['apdebitbankcode'])
+        $payment = 'Debit';
+        $requiredFields = $this->assignRequiredDynValue()[$payment];
+        if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
+            return 1;
+        }
+        if (!isset($dynValue['apdebitbankaccount'])
             || !$dynValue['apdebitbankaccount']
-            || !$dynValue['apdebitbankcode']
         ) {
             return 1; //Complete fields correctly
         }
+        $this->_setDynUserValues($dynValue, $requiredFields, $payment);
         return 0;
     }
 
@@ -194,14 +306,18 @@ class PaymentController extends PaymentController_parent
      */
     protected function validateInstallment($dynValue)
     {
-        if (
-            !isset($dynValue['apinstallmentbankaccount'])
-            || !isset($dynValue['apinstallmentbankcode'])
+        $payment = 'Installments';
+        $requiredFields = $this->assignRequiredDynValue()[$payment];
+
+        if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
+            return 1;
+        }
+        if (!isset($dynValue['apinstallmentbankaccount'])
             || !$dynValue['apinstallmentbankaccount']
-            || !$dynValue['apinstallmentbankcode']
         ) {
             return 1; //Complete fields correctly
         }
+        $this->_setDynUserValues($dynValue, $requiredFields, $payment);
         return 0;
     }
 
@@ -274,5 +390,217 @@ class PaymentController extends PaymentController_parent
     {
         $requestReturn = Registry::get(Request::class)->getRequestEscapedParameter($paramName);
         return $requestReturn ?: $this->getSession()->getVariable($paramName);
+    }
+
+    /**
+     * allowAfterpayPayment
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @return bool
+     */
+    public function allowAfterpayPayment() : bool
+    {
+        $excludedArticlesNrs = Registry::getConfig()->getConfigParam("arvatoAfterpayExcludedArticleNr");
+
+        /** @var ArticleList $basketArticles */
+        $basketArticles = $this->getSession()->getBasket()->getBasketArticles();
+
+        foreach ($basketArticles as $article) {
+            $article->load($article->oxarticles__oxid->value);
+            $articleNum = $article->oxarticles__oxartnum->value;
+
+            if (strpos($excludedArticlesNrs, $articleNum) !== false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * validateInvoice
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @param mixed $dynValue
+     *
+     * @return int
+     */
+    protected function validateInvoice($dynValue)
+    {
+        $payment = 'Invoice';
+        $requiredFields = $this->assignRequiredDynValue()[$payment];
+        $validationResult = $this->_validateRequiredFields($requiredFields,$payment,$dynValue);
+        if (!$validationResult) {
+            $this->_setDynUserValues($dynValue, $requiredFields, $payment);
+        }
+        return $validationResult;
+    }
+
+    /**
+     * _validateRequiredFields
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     *
+     * @param array  $requiredFields
+     * @param string $payment
+     * @param array  $dynValue
+     *
+     * @return int
+     */
+    protected function _validateRequiredFields($requiredFields, $payment, &$dynValue)
+    {
+        foreach ($this->map as $dynField => $requiredField) {
+            if ($requiredFields[$requiredField]
+                && (!isset($dynValue[$dynField][$payment]) || !$dynValue[$dynField][$payment])
+            ) {
+                return 1; //Complete fields correctly
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * getActiveLocale
+     * ----------------------------------------------------------------------------------------------------------------
+     * gets the locale for the current locale (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getActiveLocale()
+    {
+        $user = $this->getUser();
+        $locale = "de_de";
+        if ($user) {
+            $oLang = \OxidEsales\Eshop\Core\Registry::getLang();
+            $sLang = $oLang->getLanguageAbbr($oLang->getTplLanguage());
+            $sql = "SELECT oxisoalpha2 FROM oxcountry where oxid ='" . $user->oxuser__oxcountryid->value . "'";
+            $countryiso = DatabaseProvider::getDb()->getOne($sql);
+
+            $locale = strtolower($sLang . "_" . $countryiso);
+        }
+
+        return $locale;
+    }
+
+    /**
+     * getMerchantId
+     * ----------------------------------------------------------------------------------------------------------------
+     * get Merchant Id from Config (needed for link in tpl)
+     *
+     * @return string
+     */
+    public function getMerchantId()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID' . $user->oxuser__oxcountryid->value);
+
+        if ($merchantID) {
+            return $merchantID;
+        }
+        return "muster-merchant";
+    }
+
+    /**
+     * _setPrivacyLink
+     * -----------------------------------------------------------------------------------------------------------------
+     * set in smarty variable privacy link per payment and country
+     *
+     */
+    protected function _setPrivacyLink()
+    {
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
+        $lang = $this->getActiveLangAbbr();
+
+        $user = $this->getUser();
+
+        switch ($user->oxuser__oxcountryid->value) {
+            case "a7c40f631fc920687.20179984":      //Germany
+                $country = 'de';
+                break;
+            case "a7c40f6320aeb2ec2.72885259":      //Austria
+                $country = 'at';
+                break;
+            case "a7c40f632cdd63c52.64272623":      //Netherlands
+                $country = 'nl';
+                break;
+            case "a7c40f632e04633c9.47194042":      //Belgium
+                $country = 'be';
+                break;
+            default:
+                $country = 'de';
+                $lang = 'en';
+                break;
+        }
+
+        $privacyLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['privacy']);
+        $privacyLink = str_replace(
+            '##MERCHANT##',
+            Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->getActiveCountry()),
+            $privacyLink
+        );
+
+        $smarty->assign('PrivacyLink', $privacyLink);
+    }
+
+    /**
+     * _setTCLink
+     * -----------------------------------------------------------------------------------------------------------------
+     *  set in smarty variable T&C link per payment and country
+     *
+     */
+    protected function _setTCLink()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $links = Registry::get(AfterpayIdStorage::class)->getTCPrivacyLinks();
+        $lang = $this->getActiveLangAbbr();
+
+        // if Austria
+        if ($user->oxuser__oxcountryid->value == "a7c40f6320aeb2ec2.72885259") {
+            $country = 'at';
+        } else {
+            $country = 'de';
+        }
+
+        $AGBLink = str_replace('##LANGCOUNTRY##',$lang.'_'.$country,$links['TC']);
+        if ($merchantID = Registry::getConfig()->getConfigParam('arvatoAfterpayHorizonID'.$user->oxuser__oxcountryid->value)) {
+            $AGBLink = str_replace('##MERCHANT##', $merchantID, $AGBLink);
+        } else {
+            $AGBLink = str_replace('##MERCHANT##', 'muster-merchant', $AGBLink);
+        }
+
+        $smarty = Registry::getUtilsView()->getSmarty();
+        $smarty->assign('AGBLink', $AGBLink);
+    }
+
+    /**
+     * _setDynUserValues
+     * -----------------------------------------------------------------------------------------------------------------
+     * check if we have user values in the dynvalues and adds them to the user
+     *
+     * @param array  $dynValues      dynamic Values from the session or post request
+     * @param array  $requiredFields fields required in this case salutation, or other things
+     * @param string $payment        payment name
+     */
+    protected function _setDynUserValues($dynValues, $requiredFields, $payment)
+    {
+        $userValues = [];
+        foreach ($this->map as $dynField => $requiredField) {
+            if ($requiredFields[$requiredField]
+                && isset($dynValues[$dynField][$payment])
+                && isset($this->userMapping[$dynField])
+            ) {
+                $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
+            }
+        }
+        if (!empty($userValues)) {
+            /** @var User $user */
+            $user = $this->getUser();
+            $user->assign($userValues);
+            $user->save();
+        }
     }
 }

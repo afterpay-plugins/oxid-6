@@ -161,20 +161,16 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     {
         // Bank account ok? - Redundant to former call but makes process tamper-proof
 
-        $apdebitbankaccount = $apdebitbankcode = null;
+        $apdebitbankaccount = null;
         foreach ($this->_oPaymentInfo->_aDynValues as $dynValue) {
             if ('apdebitbankaccount' === $dynValue->name) {
                 $apdebitbankaccount = $dynValue->value;
-            }
-            if ('apdebitbankcode' === $dynValue->name) {
-                $apdebitbankcode = $dynValue->value;
             }
         }
 
         if (
             !$apdebitbankaccount ||
-            !$apdebitbankcode ||
-            !$this->getValidateBankAccountService()->isValid($apdebitbankaccount, $apdebitbankcode)
+            !$this->getValidateBankAccountService()->isValid($apdebitbankaccount, '')
         ) {
             return false;
         }
@@ -186,7 +182,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         }
 
         $this->getSession()->setVariable('arvatoAfterpayIBAN', $apdebitbankaccount);
-        $this->getSession()->setVariable('arvatoAfterpayBIC', $apdebitbankcode);
 
 
         return true;
@@ -202,14 +197,13 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
 
         // Bank account ok? - Redundant to former call but makes process tamper-proof
 
-        list($BIC, $IBAN) = $this->gatherIBANandBIC();
+        list($IBAN) = $this->gatherIBAN();
 
-        if (!$IBAN || !$BIC || !$this->getValidateBankAccountService()->isValid($IBAN, $BIC)) {
+        if (!$IBAN || !$this->getValidateBankAccountService()->isValid($IBAN)) {
             return false;
         }
 
         $this->getSession()->setVariable('arvatoAfterpayIBAN', $IBAN);
-        $this->getSession()->setVariable('arvatoAfterpayBIC', $BIC);
 
         // Installment profile selected?
 
@@ -294,7 +288,6 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
         $session->deleteVariable('arvatoAfterpayCheckoutId');
         $session->deleteVariable('arvatoAfterpayContractId');
         $session->deleteVariable('arvatoAfterpayIBAN');
-        $session->deleteVariable('arvatoAfterpayBIC');
         $session->deleteVariable('arvatoAfterpayApiKey');
         $session->deleteVariable('arvatoAfterpayCustomerFacingMessage');
     }
@@ -302,18 +295,15 @@ class PaymentGateway extends \OxidEsales\Eshop\Application\Model\PaymentGateway 
     /**
      * @return array
      */
-    protected function gatherIBANandBIC()
+    protected function gatherIBAN()
     {
-        $IBAN = $BIC = null;
+        $IBAN = null;
 
         foreach ($this->_oPaymentInfo->_aDynValues as $dynValue) {
             if ('apinstallmentbankaccount' === $dynValue->name) {
                 $IBAN = $dynValue->value;
             }
-            if ('apinstallmentbankcode' === $dynValue->name) {
-                $BIC = $dynValue->value;
-            }
         }
-        return [$BIC, $IBAN];
+        return [$IBAN];
     }
 }
