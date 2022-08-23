@@ -54,7 +54,12 @@ composer update
 
 ### Version 3.0.0
 
-* APM-26 Change Sandbox URL
-* APM-28 Renaming in Composer
-* APM-33 Replace logo in module
-* APM-38 Packagist naming for Oxid plugin
+* APM-51 Exchange "Secci" link
+* APM-46 Mandatory fields configurable by country
+* APM-45 Instalments Checkout Improvements for DACH (Germany and Austria)
+* APM-42 Removal of BIC for Debit
+* APM-36 Admin Checkout - Payment Info Display
+* APM-34 Configuration on own page
+* APM-31 Removal of BIC for payment by instalments
+* APM-30 Exclusion Afterpay for certain items (cash vouchers)
+* APM-24 Optin Profile Tracking
