@@ -161,6 +161,6 @@ body.cl-payment form#payment dd dl dd {
   display: block;
   margin-top: 15px;
 }
-.activePayment .afterpay_content input[id*='_bd']+.error-block > span {
+.afterpay_content input[id*='_bd']+.error-block > span {
   display: none;
 }
