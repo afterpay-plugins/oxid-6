@@ -175,6 +175,14 @@ body.cl-payment form#payment dd dl dd {
     font-weight: bold;
 }
 
-.afterpay_content input[id*='_bd']+.error-block > span {
+.afterpay_content {
     display: none;
+    
+    input[id*='_bd']+.error-block > span {
+        display: none;
+    }
+}
+
+.activePayment .afterpay_content {
+    display: block;
 }

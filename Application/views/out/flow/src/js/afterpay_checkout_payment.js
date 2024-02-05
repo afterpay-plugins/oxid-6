@@ -84,18 +84,30 @@ NORISK_payment.inputOnlyNumbers = function (e) {
 NORISK_payment.checkBirthdayField = function (e) {
     e.preventDefault();
     if ($(".afterpay_content input[id*='_bd']:visible").length) {
-        var regexDate = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/);
         var birthdayField = $(".afterpay_content input[id*='_bd']:visible");
+        /** DE with dots **/
+        var regexDateDE = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/);
+        /** EN with slashes **/
+        var regexDateEN = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\/(1[012]|0?[1-9])\/((?:19|20)\d{2})\s*$/);
         var aBirthDate = birthdayField.val().split('.');
+        if (!birthdayField.data('lang-locale').includes('de_')) {
+            aBirthDate = birthdayField.val().split('/');
+        }
         var bdYear = aBirthDate[2];
         var bdMonth = aBirthDate[1];
         var bdDay = aBirthDate[0];
         var cutOffDate = new Date(parseInt(bdYear) + 18, bdMonth, bdDay);
-        var validDateformat = regexDate.test(birthdayField.val());
         var validLegalage = true;
         var blSubmit = true;
         if (cutOffDate > Date.now()) {
             validLegalage = false;
+        }
+
+        var validDateformat = regexDateDE.test(birthdayField.val());
+
+        /** Slahes in EN **/
+        if (!birthdayField.data('lang-locale').includes('de_')) {
+            validDateformat = regexDateEN.test(birthdayField.val());
         }
 
         /** Day/Month/Year length **/
@@ -115,9 +127,10 @@ NORISK_payment.checkBirthdayField = function (e) {
         if (birthdayField.val() === null && birthdayField.val() === "" || !validDateformat || (bdMonth == "02" && bdDay > "29")) {
             birthdayField.next().find('.age').hide();
             birthdayField.next().find('.date').show();
+            blSubmit = false;
         }
 
-        if (blSubmit){
+        if (blSubmit) {
             $(this).closest('form').submit();
         }
     }
