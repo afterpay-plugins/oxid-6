@@ -48,10 +48,14 @@
             * [{oxmultilang ident="ORDER_OVERVIEW_APBIRTHDAY"}]
         </label>
         <div class="col-lg-9">
-            <input id="afterpay[{$sPayment}]_bd" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apbirthday][[{$sPayment}]]" value="">
+            <input id="afterpay[{$sPayment}]_bd" type="text" class="form-control textbox" size="20" maxlength="64" name="dynvalue[apbirthday][[{$sPayment}]]" value="" required>
+            <div class="error-block">
+                <span class="date text-danger">[{oxmultilang ident="ORDER_OVERVIEW_APBIRTHDAY_ERROR_DATE"}]</span>
+                <span class="age text-danger">[{oxmultilang ident="ORDER_OVERVIEW_APBIRTHDAY_ERROR_AGE"}]</span>
+            </div>
         </div>
     </div>
-    [{/if}]
+[{/if}]
 
 [{if $aAfterpayRequiredFields.$sPayment.Fon}]
     <div class="form-group">
