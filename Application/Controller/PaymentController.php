@@ -589,13 +589,16 @@ class PaymentController extends PaymentController_parent
     {
         $userValues = [];
         foreach ($this->map as $dynField => $requiredField) {
-            if ($requiredFields[$requiredField]
-                && isset($dynValues[$dynField][$payment])
-                && isset($this->userMapping[$dynField])
-            ) {
-                $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
+            if ($requiredFields[$requiredField] && isset($dynValues[$dynField][$payment]) && isset($this->userMapping[$dynField])) {
+                if ($dynField == 'apbirthday') {
+                    $userValues[$this->userMapping[$dynField]] = date("Y-m-d", strtotime($dynValues[$dynField][$payment]));
+                }
+                else {
+                    $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
+                }
             }
         }
+
         if (!empty($userValues)) {
             /** @var User $user */
             $user = $this->getUser();
