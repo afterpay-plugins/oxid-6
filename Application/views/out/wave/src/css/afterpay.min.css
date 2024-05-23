@@ -145,3 +145,12 @@ body.cl-payment form#payment dd dl dd {
   color: #006262;
   text-decoration: none;
   font-weight: bold; }
+.afterpay_content {
+  display: none;
+}
+.activePayment .afterpay_content {
+  display: block;
+}
+.afterpay_content input[id*='_bd']+.error-block > span {
+  display: none;
+}

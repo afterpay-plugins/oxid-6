@@ -1,5 +1,3 @@
-[{oxstyle include=$oViewConf->getModuleUrl('arvatoafterpay','Application/views/out/flow/src/css/afterpay.min.css') }]
-
 [{if $finalOrderStep}]
     <form action="[{$oViewConf->getSslSelfLink()}]" method="post" id="changeInstallmentPlan">
         <div class="hidden">

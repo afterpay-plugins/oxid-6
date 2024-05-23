@@ -1,4 +1,5 @@
-[{ oxscript include=$oViewConf->getModuleUrl('arvatoafterpay')|cat:"Application/views/out/flow/src/js/afterpay_checkout_payment.js" }]
+[{oxstyle include=$oViewConf->getModuleUrl('arvatoafterpay','Application/views/out/flow/src/css/afterpay.min.css') }]
+[{oxscript include=$oViewConf->getModuleUrl('arvatoafterpay')|cat:"Application/views/out/flow/src/js/afterpay_checkout_payment.js"}]
 
 [{if $sPaymentID == "afterpayinstallment"}]
     [{include file="flow/page/checkout/inc/payment_afterpayinstallment.tpl" trackingvalue=$oView->getTrackingOption()}]
