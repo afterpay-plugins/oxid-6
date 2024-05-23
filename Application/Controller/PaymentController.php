@@ -46,6 +46,28 @@ class PaymentController extends PaymentController_parent
      * @var string[] Error messages from the AfterPay service.
      */
     protected $_errorMessages;
+    protected $arvatoInstallmentActive;
+
+    /**
+     * installmentPaymentActive
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     */
+    public function installmentPaymentActive()
+    {
+        if (isset($this->arvatoInstallmentActive)) {
+            return $this->arvatoInstallmentActive;
+        }
+
+        try {
+            $select = "SELECT oxactive FROM oxpayments WHERE oxid = ?";
+            $this->arvatoInstallmentActive = (bool) DatabaseProvider::getDb()->getOne($select, ['afterpayinstallment']);
+        } catch (\Exception $exception) {
+            $this->arvatoInstallmentActive = false;
+        }
+
+        return $this->arvatoInstallmentActive;
+    }
 
     public function getPaymentList()
     {
@@ -233,34 +255,37 @@ class PaymentController extends PaymentController_parent
      */
     public function getAvailableInstallmentPlans()
     {
+        if ($this->installmentPaymentActive()) {
+            $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
 
-        $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
-
-        if (!$amount) {
-            // Session lost.
-            return false;
-        }
-
-        $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-        $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-        $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
-
-        if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
-            foreach ($availableInstallmentPlans as &$plan) {
-                unset($plan->effectiveAnnualPercentageRate);
+            if (!$amount) {
+                // Session lost.
+                return false;
             }
 
-            // Make Array keys equal profile Id
-            $availableInstallmentPlansWithProfileIdAsKey = [];
+            $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
+            $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
+            $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
 
-            foreach ($availableInstallmentPlans as &$plan) {
-                $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
+            if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
+                foreach ($availableInstallmentPlans as &$plan) {
+                    unset($plan->effectiveAnnualPercentageRate);
+                }
+
+                // Make Array keys equal profile Id
+                $availableInstallmentPlansWithProfileIdAsKey = [];
+
+                foreach ($availableInstallmentPlans as &$plan) {
+                    $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
+                }
+
+                return $availableInstallmentPlansWithProfileIdAsKey;
             }
 
-            return $availableInstallmentPlansWithProfileIdAsKey;
+            return null;
         }
 
-        return null;
+        return false;
     }
 
     /**
