@@ -164,7 +164,8 @@ class PaymentController extends PaymentController_parent
             $requirements[$payment]['Fon'] =
                 (!$availableFields["Phone"] && Registry::getConfig()->getConfigParam($stringHelper.'Phone'. $user->getActiveCountry()));
 
-            $requirements[$payment]['Birthdate'] = true; //NIK!
+            $requirements[$payment]['Birthdate'] =
+                (!$availableFields["Birthdate"] && Registry::getConfig()->getConfigParam($stringHelper.'Birthdate'. $user->getActiveCountry()));
 
             $requirements[$payment]['Zip'] =
                 (!$availableFields["Zip"] && Registry::getConfig()->getConfigParam($stringHelper.'Zip'. $user->getActiveCountry()));
@@ -615,7 +616,7 @@ class PaymentController extends PaymentController_parent
         foreach ($this->map as $dynField => $requiredField) {
             if ($requiredFields[$requiredField] && isset($dynValues[$dynField][$payment]) && isset($this->userMapping[$dynField])) {
                 if ($dynField == 'apbirthday') {
-                    $userValues[$this->userMapping[$dynField]] = date("d/m/Y", strtotime($dynValues[$dynField][$payment]));
+                    $userValues[$this->userMapping[$dynField]] = date("Y-m-d", strtotime($dynValues[$dynField][$payment]));
                 }
                 else {
                     $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
