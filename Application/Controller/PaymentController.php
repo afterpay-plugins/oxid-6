@@ -6,6 +6,7 @@ use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResp
 use Arvato\AfterpayModule\Core\AfterpayIdStorage;
 use Arvato\AfterpayModule\Core\AvailablePaymentMethodsService;
 use OxidEsales\Eshop\Application\Model\ArticleList;
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
@@ -64,7 +65,16 @@ class PaymentController extends PaymentController_parent
         $smarty = Registry::getUtilsView()->getSmarty();
 
         // Gather available installment plans...
-        $availableInstallmentPlans = oxNew(AvailablePaymentMethodsService::class)->getAvailableInstallmentPlans();
+        $orderId = Registry::getSession()->getBasket()->getOrderId();
+        $order = oxNew(Order::class);
+        $order->load($orderId);
+
+        $availableInstallmentPlans = oxNew(
+            AvailablePaymentMethodsService::class,
+            Registry::getSession(),
+            Registry::getLang(),
+            $order
+        )->getAvailableInstallmentPlans();
         $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... their formatting ...
