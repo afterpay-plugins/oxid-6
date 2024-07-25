@@ -6,6 +6,7 @@
 
 namespace Arvato\AfterpayModule\Core;
 
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Session;
 use stdClass;
@@ -20,6 +21,7 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
      * @var array mapping of installmentPfofileId to numberOfInstallments
      */
     protected $_mappingInstallmentPfofileId2NumberOfInstallments = [];
+    protected $arvatoInstallmentActive;
 
     /**
      * Standard constructor.
@@ -167,5 +169,74 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
         }
 
         return parent::getLastErrorNo();
+    }
+
+    /**
+     * installmentPaymentActive
+     * -----------------------------------------------------------------------------------------------------------------
+     *
+     */
+    public function installmentPaymentActive(): bool
+    {
+        if (isset($this->arvatoInstallmentActive)) {
+            return $this->arvatoInstallmentActive;
+        }
+
+        try {
+            $select = "SELECT oxactive FROM oxpayments WHERE oxid = ?";
+            $this->arvatoInstallmentActive = (bool) DatabaseProvider::getDb()->getOne($select, ['afterpayinstallment']);
+        } catch (\Exception $exception) {
+            $this->arvatoInstallmentActive = false;
+        }
+
+        return $this->arvatoInstallmentActive;
+    }
+
+    /**
+     * @codeCoverageIgnore Deliberately untested, since mocked
+     * @return AvailableInstallmentPlansService
+     */
+    protected function getAvailableInstallmentPlansService(): AvailableInstallmentPlansService
+    {
+        return oxNew(\Arvato\AfterpayModule\Core\AvailableInstallmentPlansService::class);
+    }
+
+    /**
+     * @return bool|array [AvailableInstallmentPlansResponseEntity]
+     */
+    public function getAvailableInstallmentPlans(): bool|array
+    {
+        if ($this->installmentPaymentActive()) {
+            $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
+
+            if (!$amount) {
+                // Session lost.
+                return false;
+            }
+
+            $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
+            $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
+            $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
+
+
+            if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
+                foreach ($availableInstallmentPlans as &$plan) {
+                    unset($plan->effectiveAnnualPercentageRate);
+                }
+
+                // Make Array keys equal profile Id
+                $availableInstallmentPlansWithProfileIdAsKey = [];
+
+                foreach ($availableInstallmentPlans as &$plan) {
+                    $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
+                }
+
+                return $availableInstallmentPlansWithProfileIdAsKey;
+            }
+
+            return false;
+        }
+
+        return false;
     }
 }

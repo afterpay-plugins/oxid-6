@@ -4,7 +4,7 @@ namespace Arvato\AfterpayModule\Application\Controller;
 
 use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
 use Arvato\AfterpayModule\Core\AfterpayIdStorage;
-use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
+use Arvato\AfterpayModule\Core\AvailablePaymentMethodsService;
 use OxidEsales\Eshop\Application\Model\ArticleList;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
@@ -46,28 +46,6 @@ class PaymentController extends PaymentController_parent
      * @var string[] Error messages from the AfterPay service.
      */
     protected $_errorMessages;
-    protected $arvatoInstallmentActive;
-
-    /**
-     * installmentPaymentActive
-     * -----------------------------------------------------------------------------------------------------------------
-     *
-     */
-    public function installmentPaymentActive()
-    {
-        if (isset($this->arvatoInstallmentActive)) {
-            return $this->arvatoInstallmentActive;
-        }
-
-        try {
-            $select = "SELECT oxactive FROM oxpayments WHERE oxid = ?";
-            $this->arvatoInstallmentActive = (bool) DatabaseProvider::getDb()->getOne($select, ['afterpayinstallment']);
-        } catch (\Exception $exception) {
-            $this->arvatoInstallmentActive = false;
-        }
-
-        return $this->arvatoInstallmentActive;
-    }
 
     public function getPaymentList()
     {
@@ -86,7 +64,7 @@ class PaymentController extends PaymentController_parent
         $smarty = Registry::getUtilsView()->getSmarty();
 
         // Gather available installment plans...
-        $availableInstallmentPlans = $this->getAvailableInstallmentPlans();
+        $availableInstallmentPlans = oxNew(AvailablePaymentMethodsService::class)->getAvailableInstallmentPlans();
         $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... their formatting ...
@@ -251,44 +229,6 @@ class PaymentController extends PaymentController_parent
     }
 
     /**
-     * @return bool|AvailableInstallmentPlansResponseEntity[]
-     */
-    public function getAvailableInstallmentPlans()
-    {
-        if ($this->installmentPaymentActive()) {
-            $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
-
-            if (!$amount) {
-                // Session lost.
-                return false;
-            }
-
-            $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-            $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-            $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
-
-            if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
-                foreach ($availableInstallmentPlans as &$plan) {
-                    unset($plan->effectiveAnnualPercentageRate);
-                }
-
-                // Make Array keys equal profile Id
-                $availableInstallmentPlansWithProfileIdAsKey = [];
-
-                foreach ($availableInstallmentPlans as &$plan) {
-                    $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
-                }
-
-                return $availableInstallmentPlansWithProfileIdAsKey;
-            }
-
-            return null;
-        }
-
-        return false;
-    }
-
-    /**
      * Update InstallmentPlan Id
      *
      * @return int afterpayInstallmentProfileId
@@ -395,15 +335,6 @@ class PaymentController extends PaymentController_parent
     protected function parentValidatePayment()
     {
         return parent::validatePayment();
-    }
-
-    /**
-     * @codeCoverageIgnore Deliberately untested, since mocked
-     * @return AvailableInstallmentPlansService|object
-     */
-    protected function getAvailableInstallmentPlansService()
-    {
-        return oxNew(\Arvato\AfterpayModule\Core\AvailableInstallmentPlansService::class);
     }
 
     /**
