@@ -6,8 +6,6 @@
 
 namespace Arvato\AfterpayModule\Core;
 
-use Arvato\AfterpayModule\Core\Exception\CurlException;
-use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Session;
@@ -30,7 +28,6 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
      *
      * @param Session $session
      * @param Language $lang
-     * @param Order $order
      */
     public function __construct(\OxidEsales\Eshop\Core\Session $session, \OxidEsales\Eshop\Core\Language $lang, \OxidEsales\Eshop\Application\Model\Order $order)
     {
@@ -205,13 +202,12 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
     }
 
     /**
-     * @return bool|array
-     * @throws CurlException
+     * @return bool|array [AvailableInstallmentPlansResponseEntity]
      */
     public function getAvailableInstallmentPlans(): bool|array
     {
         if ($this->installmentPaymentActive()) {
-            $amount = $this->_session->getBasket()->getPrice()->getBruttoPrice();
+            $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
 
             if (!$amount) {
                 // Session lost.
