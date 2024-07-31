@@ -114,20 +114,24 @@ class Service
      */
     protected function parseResponse($response)
     {
-        $base = $this->getBaseClassName();
-        if (is_array($response)) {
-            $entity = oxNew('\\Arvato\\AfterpayModule\\Application\\Model\\Entity\\' . $base . 'ResponseEntity');
-            $messages = [];
-            foreach ($response as $item) {
-                $messages[] = oxNew(\Arvato\AfterpayModule\Application\Model\Parser\ResponseMessageParser::class)->parse($item);
+        try {
+            $base = $this->getBaseClassName();
+            if (is_array($response)) {
+                $entity = oxNew('\\Arvato\\AfterpayModule\\Application\\Model\\Entity\\' . $base . 'ResponseEntity');
+                $messages = [];
+                foreach ($response as $item) {
+                    $messages[] = oxNew(\Arvato\AfterpayModule\Application\Model\Parser\ResponseMessageParser::class)->parse($item);
+                }
+                $entity->setErrors($messages);
+            } elseif (is_object($response)) {
+                $entity = oxNew('\\Arvato\\AfterpayModule\\Application\\Model\\Parser\\' . $base . 'ResponseParser')->parse($response);
+            } else {
+                throw new \Arvato\AfterpayModule\Core\Exception\CurlException('Cannot parse non-StdClass response ' . serialize($response));
             }
-            $entity->setErrors($messages);
-        } elseif (is_object($response)) {
-            $entity = oxNew('\\Arvato\\AfterpayModule\\Application\\Model\\Parser\\' . $base . 'ResponseParser')->parse($response);
-        } else {
-            throw new \Arvato\AfterpayModule\Core\Exception\CurlException('Cannot parse non-StdClass response ' . serialize($response));
+            return $entity;
+        } catch (\Exception $e) {
+            return false;
         }
-        return $entity;
     }
 
     protected function getBaseClassName()

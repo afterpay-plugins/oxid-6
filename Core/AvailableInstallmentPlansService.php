@@ -32,9 +32,7 @@ class AvailableInstallmentPlansService extends \Arvato\AfterpayModule\Core\Servi
         $client = $this->getAvailableInstallmentPlansClient();
         $response = $client->execute($data);
 
-        if($response != null) {
-            $this->_entity = $this->parseResponse($response);
-        }
+        $this->_entity = $this->parseResponse($response);
 
         return $this->getEntity();
     }
