@@ -130,7 +130,7 @@ class Service
             }
             return $entity;
         } catch (\Exception $e) {
-            return false;
+            return oxNew('\\Arvato\\AfterpayModule\\Application\\Model\\Entity\\' . $base . 'ResponseEntity');
         }
     }
 
