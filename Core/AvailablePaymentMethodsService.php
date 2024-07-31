@@ -208,7 +208,7 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
      * @return bool|array
      * @throws CurlException
      */
-    public function getAvailableInstallmentPlans(): mixed
+    public function getAvailableInstallmentPlans()
     {
         if ($this->installmentPaymentActive()) {
             $amount = $this->_session->getBasket()->getPrice()->getBruttoPrice();
