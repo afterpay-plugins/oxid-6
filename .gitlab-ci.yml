@@ -4,7 +4,7 @@ stages:
 deploy_to_nrsweb08:
   stage: deploy
   only:
-    - 'dev2.x'
+    - 'dev3.x'
   script:
     # copy to webserver and unpack
     - 'tar --exclude="./node_modules" -zcf /home/gitlab-runner/releases/$CI_BUILD_REF.tar.gz . --exclude-vcs'
