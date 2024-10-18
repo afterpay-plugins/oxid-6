@@ -146,7 +146,7 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
         $delimiter = '';
         foreach($symbols as $symbol) {
-            if (str_contains($birthdate, $symbol)) {
+            if (strpos($birthdate, $symbol) !== false) {
                 $delimiter = $symbol;
                 break;
             }
