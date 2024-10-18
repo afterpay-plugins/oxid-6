@@ -97,13 +97,10 @@ NORISK_payment.checkBirthdayField = function (e) {
     if ($(".afterpay_content input[id*='_bd']:visible").length) {
         var birthdayField = $(".afterpay_content input[id*='_bd']:visible");
         /** DE with dots **/
-        var regexDateDE = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/);
+        var regexDateDot = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/);
         /** EN with slashes **/
-        var regexDateEN = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\/(1[012]|0?[1-9])\/((?:19|20)\d{2})\s*$/);
-        var aBirthDate = birthdayField.val().split('.');
-        if (!birthdayField.data('lang-locale').includes('de_')) {
-            aBirthDate = birthdayField.val().split('/');
-        }
+        var regexDateSlash = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\/(1[012]|0?[1-9])\/((?:19|20)\d{2})\s*$/);
+        var aBirthDate = birthdayField.val().split('/');
         var bdYear = aBirthDate[2];
         var bdMonth = aBirthDate[1];
         var bdDay = aBirthDate[0];
@@ -114,12 +111,7 @@ NORISK_payment.checkBirthdayField = function (e) {
             validLegalage = false;
         }
 
-        var validDateformat = regexDateDE.test(birthdayField.val());
-
-        /** Slahes in EN **/
-        if (!birthdayField.data('lang-locale').includes('de_')) {
-            validDateformat = regexDateEN.test(birthdayField.val());
-        }
+        var validDateformat = regexDateSlash.test(birthdayField.val());
 
         /** Day/Month/Year length **/
         if (bdDay.length !== 2 || bdMonth.length !== 2 || bdYear.length !== 4) {
