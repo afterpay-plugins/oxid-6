@@ -69,15 +69,7 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
             $birthdate = $dynValues['apbirthday'][$paymentId];
 
             // Target: yyyy-mm-dd
-
-            $birthdateEN = explode('-', $birthdate); //mm-dd-yyyy
-            $birthdateDE = explode('.', $birthdate); //dd.mm.yyyy
-
-            if ($birthdateEN && is_array($birthdateEN) && 3 == count($birthdateEN)) {
-                $birthdate = $birthdateEN[2] . '-' . $birthdateEN[0] . '-' . $birthdateEN[1];
-            } elseif ($birthdateDE && is_array($birthdateDE) && 3 == count($birthdateDE)) {
-                $birthdate = $birthdateDE[2] . '-' . $birthdateDE[1] . '-' . $birthdateDE[0];
-            }
+            $birthdate = $this->_prepareBirthDate($birthdate);
         }
 
         if (!empty($birthdate) && $birthdate != '0000-00-00') {
@@ -136,5 +128,36 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
         } else {
             return $this->getCustomer($user, $language);
         }
+    }
+
+    /**
+     * Convert birth Date to YYYY-MM-DD
+     *
+     * @param string $birthdate
+     * @return string
+     */
+    protected function _prepareBirthDate(string $birthdate): string
+    {
+        $symbols = [
+            '-', //mm-dd-yyyy
+            '.', //dd.mm.yyyy
+            '/'  //dd/mm/yyyy
+        ];
+
+        $delimiter = '';
+        foreach($symbols as $symbol) {
+            if (str_contains($birthdate, $symbol)) {
+                $delimiter = $symbol;
+                break;
+            }
+        }
+
+        $birthdateArray = explode($delimiter, $birthdate); //mm-dd-yyyy
+
+        if ($birthdateArray && is_array($birthdateArray) && 3 == count($birthdateArray)) {
+            $birthdate = $birthdateArray[2] . '-' . $birthdateArray[0] . '-' . $birthdateArray[1];
+        }
+
+        return $birthdate;
     }
 }
