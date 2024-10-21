@@ -59,7 +59,7 @@ NORISK_payment.init = function () {
         $(".afterpay_content input[id*='_bd']").on('keydown', NORISK_payment.inputOnlyNumbers);
     }
 
-    $("#afterpayInvoice_bd").keyup(function (e) {
+    $(".afterpaybday").keyup(function (e) {
         if (e.keyCode != 8) {
             if ($(this).val().length == 2) {
                 $(this).val($(this).val() + "/");
