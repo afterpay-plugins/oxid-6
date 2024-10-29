@@ -136,28 +136,39 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
      * @param string $birthdate
      * @return string
      */
-    protected function _prepareBirthDate(string $birthdate): string
+    protected function _prepareBirthDate(string $birthdate): ?string
     {
         $symbols = [
-            '-', //mm-dd-yyyy
-            '.', //dd.mm.yyyy
-            '/'  //dd/mm/yyyy
+            '-' => 'mdy', // mm-dd-yyyy
+            '.' => 'dmy', // dd.mm.yyyy
+            '/' => 'dmy'  // dd/mm/yyyy
         ];
 
         $delimiter = '';
-        foreach($symbols as $symbol) {
+        $format = '';
+
+        foreach ($symbols as $symbol => $fmt) {
             if (strpos($birthdate, $symbol) !== false) {
                 $delimiter = $symbol;
+                $format = $fmt;
                 break;
             }
         }
 
-        $birthdateArray = explode($delimiter, $birthdate); //mm-dd-yyyy
-
-        if ($birthdateArray && is_array($birthdateArray) && 3 == count($birthdateArray)) {
-            $birthdate = $birthdateArray[2] . '-' . $birthdateArray[0] . '-' . $birthdateArray[1];
+        if (!$delimiter) {
+            return null;
         }
 
-        return $birthdate;
+        $birthdateArray = explode($delimiter, $birthdate);
+
+        if ($birthdateArray && count($birthdateArray) === 3) {
+            if ($format === 'mdy') {
+                return "{$birthdateArray[2]}-{$birthdateArray[0]}-{$birthdateArray[1]}";
+            } elseif ($format === 'dmy') {
+                return "{$birthdateArray[2]}-{$birthdateArray[1]}-{$birthdateArray[0]}";
+            }
+        }
+
+        return null;
     }
 }
