@@ -56,8 +56,8 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
         // Phone
 
         ($phone = $user->oxuser__oxmobfon->value) || ($phone = $user->oxuser__oxfon->value) || ($phone = $user->oxuser__oxprivfon->value);
-        if (isset($dynValues['apfon'][$paymentId])) {
-            $phone = $dynValues['apfon'][$paymentId];
+        if (isset($dynValues['apfon'])) {
+            $phone = $dynValues['apfon'];
         }
         $dataObject->setPhone($phone);
 
@@ -65,8 +65,8 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
         $birthdate = $user->oxuser__oxbirthdate->value;
 
-        if (isset($dynValues['apbirthday'][$paymentId])) {
-            $birthdate = $dynValues['apbirthday'][$paymentId];
+        if (isset($dynValues['apbirthday'])) {
+            $birthdate = $dynValues['apbirthday'];
 
             // Target: yyyy-mm-dd
             $birthdate = $this->_prepareBirthDate($birthdate);
@@ -78,8 +78,8 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
         // SSN
 
-        if (isset($dynValues['apssn'][$paymentId])) {
-            $ssn = $dynValues['apssn'][$paymentId];
+        if (isset($dynValues['apssn'])) {
+            $ssn = $dynValues['apssn'];
             $dataObject->setIdentificationNumber($ssn);
         }
 
