@@ -70,6 +70,8 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
 
             // Target: yyyy-mm-dd
             $birthdate = $this->_prepareBirthDate($birthdate);
+            $user->oxuser__oxbirthdate = new \OxidEsales\Eshop\Core\Field($birthdate);
+            $user->save();
         }
 
         if (!empty($birthdate) && $birthdate != '0000-00-00') {
