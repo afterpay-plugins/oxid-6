@@ -6,8 +6,9 @@
 
 namespace Arvato\AfterpayModule\Application\Controller;
 
-use Arvato\AfterpayModule\Core\AvailablePaymentMethodsService;
-use OxidEsales\Eshop\Application\Model\Order;
+use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
+use Arvato\AfterpayModule\Core\AfterpayIdStorage;
+use Arvato\AfterpayModule\Core\AvailableInstallmentPlansService;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Registry;
@@ -62,16 +63,7 @@ class OrderController extends OrderController_parent
         $smarty->assign('afterpayInstallmentProfileId', $selectedInstallmentPlanProfileIdInSession);
 
         // ... and available installment plans...
-        $orderId = Registry::getSession()->getBasket()->getOrderId();
-        $order = oxNew(Order::class);
-        $order->load($orderId);
-
-        $availableInstallmentPlans = oxNew(
-            AvailablePaymentMethodsService::class,
-            Registry::getSession(),
-            Registry::getLang(),
-            $order
-        )->getAvailableInstallmentPlans();
+        $availableInstallmentPlans = $this->getAvailableInstallmentPlans();
         $smarty->assign('aAvailableAfterpayInstallmentPlans', $availableInstallmentPlans);
 
         // ... make sure we redirectToPaymentIfNoInstallmentPlanAvailableAlthoughSelected ...
@@ -84,6 +76,42 @@ class OrderController extends OrderController_parent
                 $selectedInstallmentPlanProfileIdInSession
             );
         }
+    }
+
+    /**
+     * @return bool|AvailableInstallmentPlansResponseEntity
+     */
+    public function getAvailableInstallmentPlans()
+    {
+
+        $amount = $this->getSession()->getBasket()->getPrice()->getBruttoPrice();
+
+        if (!$amount) {
+            // Session lost.
+            return false;
+        }
+
+        $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
+        $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
+        $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
+
+
+        if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
+            foreach ($availableInstallmentPlans as &$plan) {
+                unset($plan->effectiveAnnualPercentageRate);
+            }
+
+            // Make Array keys equal profile Id
+            $availableInstallmentPlansWithProfileIdAsKey = [];
+
+            foreach ($availableInstallmentPlans as &$plan) {
+                $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
+            }
+
+            return $availableInstallmentPlansWithProfileIdAsKey;
+        }
+
+        return null;
     }
 
     /**
@@ -227,6 +255,15 @@ class OrderController extends OrderController_parent
     protected function parentRender()
     {
         return parent::render();
+    }
+
+    /**
+     * @codeCoverageIgnore Deliberately untested, since mocked
+     * @return AvailableInstallmentPlansService
+     */
+    protected function getAvailableInstallmentPlansService()
+    {
+        return oxNew(\Arvato\AfterpayModule\Core\AvailableInstallmentPlansService::class);
     }
 
     /**

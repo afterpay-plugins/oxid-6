@@ -6,9 +6,6 @@
 
 namespace Arvato\AfterpayModule\Core;
 
-use Arvato\AfterpayModule\Core\Exception\CurlException;
-use OxidEsales\Eshop\Application\Model\Order;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Language;
 use OxidEsales\Eshop\Core\Session;
 use stdClass;
@@ -23,14 +20,12 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
      * @var array mapping of installmentPfofileId to numberOfInstallments
      */
     protected $_mappingInstallmentPfofileId2NumberOfInstallments = [];
-    protected $arvatoInstallmentActive;
 
     /**
      * Standard constructor.
      *
      * @param Session $session
      * @param Language $lang
-     * @param Order $order
      */
     public function __construct(\OxidEsales\Eshop\Core\Session $session, \OxidEsales\Eshop\Core\Language $lang, \OxidEsales\Eshop\Application\Model\Order $order)
     {
@@ -172,75 +167,5 @@ class AvailablePaymentMethodsService extends \Arvato\AfterpayModule\Core\Service
         }
 
         return parent::getLastErrorNo();
-    }
-
-    /**
-     * installmentPaymentActive
-     * -----------------------------------------------------------------------------------------------------------------
-     *
-     */
-    public function installmentPaymentActive(): bool
-    {
-        if (isset($this->arvatoInstallmentActive)) {
-            return $this->arvatoInstallmentActive;
-        }
-
-        try {
-            $select = "SELECT oxactive FROM oxpayments WHERE oxid = ?";
-            $this->arvatoInstallmentActive = (bool) DatabaseProvider::getDb()->getOne($select, ['afterpayinstallment']);
-        } catch (\Exception $exception) {
-            $this->arvatoInstallmentActive = false;
-        }
-
-        return $this->arvatoInstallmentActive;
-    }
-
-    /**
-     * @codeCoverageIgnore Deliberately untested, since mocked
-     * @return AvailableInstallmentPlansService
-     */
-    protected function getAvailableInstallmentPlansService(): AvailableInstallmentPlansService
-    {
-        return oxNew(\Arvato\AfterpayModule\Core\AvailableInstallmentPlansService::class);
-    }
-
-    /**
-     * @return bool|array
-     * @throws CurlException
-     */
-    public function getAvailableInstallmentPlans()
-    {
-        if ($this->installmentPaymentActive()) {
-            $amount = $this->_session->getBasket()->getPrice()->getBruttoPrice();
-
-            if (!$amount) {
-                // Session lost.
-                return false;
-            }
-
-            $availableInstallmentPlansService = $this->getAvailableInstallmentPlansService();
-            $objAvailableInstallmentPlans = $availableInstallmentPlansService->getAvailableInstallmentPlans($amount);
-            $availableInstallmentPlans = $objAvailableInstallmentPlans->getAvailableInstallmentPlans();
-
-
-            if (is_array($availableInstallmentPlans) && count($availableInstallmentPlans)) {
-                foreach ($availableInstallmentPlans as &$plan) {
-                    unset($plan->effectiveAnnualPercentageRate);
-                }
-
-                // Make Array keys equal profile Id
-                $availableInstallmentPlansWithProfileIdAsKey = [];
-
-                foreach ($availableInstallmentPlans as &$plan) {
-                    $availableInstallmentPlansWithProfileIdAsKey[$plan->installmentProfileNumber] = $plan;
-                }
-
-                return $availableInstallmentPlansWithProfileIdAsKey;
-            }
-
-            return false;
-        }
-
-        return false;
     }
 }

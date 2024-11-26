@@ -7,8 +7,7 @@
 namespace Arvato\AfterpayModule\Core;
 
 use Arvato\AfterpayModule\Application\Model\DataProvider\AvailableInstallmentPlansDataProvider;
-use Arvato\AfterpayModule\Application\Model\Entity\Entity;
-use Arvato\AfterpayModule\Core\Exception\CurlException;
+use Arvato\AfterpayModule\Application\Model\Entity\AvailableInstallmentPlansResponseEntity;
 
 /**
  * Class AvailableInstallmentPlansService
@@ -19,13 +18,12 @@ class AvailableInstallmentPlansService extends \Arvato\AfterpayModule\Core\Servi
     /**
      * @param double $amount
      *
-     * @return Entity
-     * @throws CurlException
+     * @return AvailableInstallmentPlansResponseEntity
+     * @internal param string $IBAN
      * @internal param string $BIC
      *
-     * @internal param string $IBAN
      */
-    public function getAvailableInstallmentPlans(float $amount): Entity
+    public function getAvailableInstallmentPlans($amount)
     {
         $dataObject = $this->getAvailableInstallmentPlansDataProvider()->getDataObject($amount);
         $data = $dataObject->exportData();
