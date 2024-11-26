@@ -1,6 +1,6 @@
 # OXID ArvatoAfterPay Module
 
-# Version 3.0.0
+# Version 3.0.1
 
 ## Description
 
@@ -63,3 +63,9 @@ composer update
 * APM-31 Removal of BIC for payment by instalments
 * APM-30 Exclusion Afterpay for certain items (cash vouchers)
 * APM-24 Optin Profile Tracking
+* 
+### Version 3.0.1
+
+* APM-64 Fixes for Mandatory fields
+* APM-66 Include a frontend check for the birth date
+* APM-69 fixes for error handling Rejected case
