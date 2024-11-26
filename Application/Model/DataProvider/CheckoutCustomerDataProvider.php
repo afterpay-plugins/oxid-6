@@ -69,15 +69,9 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
             $birthdate = $dynValues['apbirthday'][$paymentId];
 
             // Target: yyyy-mm-dd
-
-            $birthdateEN = explode('-', $birthdate); //mm-dd-yyyy
-            $birthdateDE = explode('.', $birthdate); //dd.mm.yyyy
-
-            if ($birthdateEN && is_array($birthdateEN) && 3 == count($birthdateEN)) {
-                $birthdate = $birthdateEN[2] . '-' . $birthdateEN[0] . '-' . $birthdateEN[1];
-            } elseif ($birthdateDE && is_array($birthdateDE) && 3 == count($birthdateDE)) {
-                $birthdate = $birthdateDE[2] . '-' . $birthdateDE[1] . '-' . $birthdateDE[0];
-            }
+            $birthdate = $this->_prepareBirthDate($birthdate);
+            $user->oxuser__oxbirthdate = new \OxidEsales\Eshop\Core\Field($birthdate);
+            $user->save();
         }
 
         if (!empty($birthdate) && $birthdate != '0000-00-00') {
@@ -136,5 +130,47 @@ class CheckoutCustomerDataProvider extends \Arvato\AfterpayModule\Application\Mo
         } else {
             return $this->getCustomer($user, $language);
         }
+    }
+
+    /**
+     * Convert birth Date to YYYY-MM-DD
+     *
+     * @param string $birthdate
+     * @return string
+     */
+    protected function _prepareBirthDate(string $birthdate): ?string
+    {
+        $symbols = [
+            '-' => 'mdy', // mm-dd-yyyy
+            '.' => 'dmy', // dd.mm.yyyy
+            '/' => 'dmy'  // dd/mm/yyyy
+        ];
+
+        $delimiter = '';
+        $format = '';
+
+        foreach ($symbols as $symbol => $fmt) {
+            if (strpos($birthdate, $symbol) !== false) {
+                $delimiter = $symbol;
+                $format = $fmt;
+                break;
+            }
+        }
+
+        if (!$delimiter) {
+            return null;
+        }
+
+        $birthdateArray = explode($delimiter, $birthdate);
+
+        if ($birthdateArray && count($birthdateArray) === 3) {
+            if ($format === 'mdy') {
+                return "{$birthdateArray[2]}-{$birthdateArray[0]}-{$birthdateArray[1]}";
+            } elseif ($format === 'dmy') {
+                return "{$birthdateArray[2]}-{$birthdateArray[1]}-{$birthdateArray[0]}";
+            }
+        }
+
+        return null;
     }
 }

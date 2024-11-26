@@ -285,7 +285,7 @@ class PaymentController extends PaymentController_parent
     {
         $payment = 'Debit';
         $requiredFields = $this->assignRequiredDynValue()[$payment];
-        if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
+        if ($this->_validateRequiredFields($requiredFields,$dynValue) == 1) {
             return 1;
         }
         if (!isset($dynValue['apdebitbankaccount'])
@@ -309,7 +309,7 @@ class PaymentController extends PaymentController_parent
         $payment = 'Installments';
         $requiredFields = $this->assignRequiredDynValue()[$payment];
 
-        if ($this->_validateRequiredFields($requiredFields,$payment,$dynValue) == 1) {
+        if ($this->_validateRequiredFields($requiredFields,$dynValue) == 1) {
             return 1;
         }
         if (!isset($dynValue['apinstallmentbankaccount'])
@@ -430,7 +430,7 @@ class PaymentController extends PaymentController_parent
     {
         $payment = 'Invoice';
         $requiredFields = $this->assignRequiredDynValue()[$payment];
-        $validationResult = $this->_validateRequiredFields($requiredFields,$payment,$dynValue);
+        $validationResult = $this->_validateRequiredFields($requiredFields,$dynValue);
         if (!$validationResult) {
             $this->_setDynUserValues($dynValue, $requiredFields, $payment);
         }
@@ -448,11 +448,11 @@ class PaymentController extends PaymentController_parent
      *
      * @return int
      */
-    protected function _validateRequiredFields($requiredFields, $payment, &$dynValue)
+    protected function _validateRequiredFields($requiredFields, &$dynValue)
     {
         foreach ($this->map as $dynField => $requiredField) {
             if ($requiredFields[$requiredField]
-                && (!isset($dynValue[$dynField][$payment]) || !$dynValue[$dynField][$payment])
+                && (!isset($dynValue[$dynField]) || !$dynValue[$dynField])
             ) {
                 return 1; //Complete fields correctly
             }
@@ -589,13 +589,16 @@ class PaymentController extends PaymentController_parent
     {
         $userValues = [];
         foreach ($this->map as $dynField => $requiredField) {
-            if ($requiredFields[$requiredField]
-                && isset($dynValues[$dynField][$payment])
-                && isset($this->userMapping[$dynField])
-            ) {
-                $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
+            if ($requiredFields[$requiredField] && isset($dynValues[$dynField][$payment]) && isset($this->userMapping[$dynField])) {
+                if ($dynField == 'apbirthday') {
+                    $userValues[$this->userMapping[$dynField]] = date("Y-m-d", strtotime($dynValues[$dynField][$payment]));
+                }
+                else {
+                    $userValues[$this->userMapping[$dynField]] = $dynValues[$dynField][$payment];
+                }
             }
         }
+
         if (!empty($userValues)) {
             /** @var User $user */
             $user = $this->getUser();
